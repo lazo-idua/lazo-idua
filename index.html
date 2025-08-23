@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>GADASSA - Каталог продукції</title>
     <style>
         * {
@@ -17,28 +17,27 @@
             display: flex;
             flex-direction: column;
             background: #000;
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
         
         .header {
             text-align: center;
-            padding: 20px;
+            padding: 12px;
             background: #000;
             color: white;
             flex-shrink: 0;
-            border-bottom: 2px solid #333;
+            border-bottom: 1px solid #333;
         }
         
         .header h1 {
-            font-size: clamp(20px, 4vw, 32px);
-            margin-bottom: 8px;
+            font-size: 18px;
             font-weight: 600;
             color: #fff;
-        }
-        
-        .header p {
-            font-size: clamp(14px, 3vw, 18px);
-            opacity: 0.8;
-            color: #ccc;
+            margin: 0;
         }
         
         .main-content {
@@ -74,112 +73,113 @@
             max-width: 95%;
             max-height: 90vh;
             object-fit: contain;
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
-            border: 1px solid #333;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+            border: 1px solid #222;
         }
         
         .nav-btn {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
             color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            width: 60px;
-            height: 60px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            font-size: 24px;
+            font-size: 20px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 100;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(5px);
         }
         
         .nav-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.5);
-            transform: translateY(-50%) scale(1.1);
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.4);
         }
         
         .nav-btn:disabled {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
             cursor: not-allowed;
-            transform: translateY(-50%);
-            opacity: 0.5;
+            opacity: 0.4;
         }
         
         .prev-btn {
-            left: 30px;
+            left: 20px;
         }
         
         .next-btn {
-            right: 30px;
+            right: 20px;
         }
         
         .footer {
             text-align: center;
-            padding: 15px;
+            padding: 8px;
             background: #000;
-            color: white;
+            color: rgba(255, 255, 255, 0.4);
             flex-shrink: 0;
-            font-size: 16px;
-            border-top: 2px solid #333;
+            font-size: 11px;
+            border-top: 1px solid #222;
         }
         
         .footer span {
-            opacity: 0.8;
-            letter-spacing: 1px;
-            color: #ccc;
+            letter-spacing: 0.5px;
         }
         
         /* Мобільна адаптація */
         @media (max-width: 768px) {
+            .header {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 16px;
+            }
+            
             .nav-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
             }
             
             .prev-btn {
-                left: 15px;
+                left: 12px;
             }
             
             .next-btn {
-                right: 15px;
+                right: 12px;
             }
             
             canvas {
                 max-width: 98%;
                 max-height: 85vh;
             }
+            
+            .footer {
+                padding: 6px;
+                font-size: 10px;
+            }
         }
         
         @media (max-width: 480px) {
-            .header {
-                padding: 15px;
-            }
-            
             .header h1 {
-                font-size: 18px;
-            }
-            
-            .header p {
-                font-size: 12px;
+                font-size: 14px;
             }
             
             .nav-btn {
                 width: 40px;
                 height: 40px;
-                font-size: 18px;
+                font-size: 16px;
             }
             
             .footer {
-                padding: 12px;
-                font-size: 14px;
+                font-size: 9px;
+                padding: 5px;
             }
         }
         
@@ -187,19 +187,24 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #666;
-            font-size: 20px;
+            color: #444;
+            font-size: 16px;
         }
         
         .hidden {
             display: none;
+        }
+        
+        /* Заборонити виділення тексту */
+        body {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
         }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>Каталог продукції GADASSA</h1>
-        <p>Використовуйте кнопки з боків для перемикання сторінок</p>
     </div>
     
     <div class="main-content">
@@ -222,6 +227,32 @@
     <!-- PDF.js библиотека -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
+        // Заборонити лівий клік миші
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Заборонити масштабування скролом
+        document.addEventListener('wheel', function(e) {
+            if (e.ctrlKey) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Заборонити масштабування тач-жестами
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchmove', function(e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
         // Ініціалізація PDF.js
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
         
@@ -229,7 +260,7 @@
         let pageNum = 1;
         let pageRendering = false;
         let pageNumPending = null;
-        const scale = 2.5; // Збільшено масштаб для кращої якості
+        const scale = 2.5;
         const canvas = document.getElementById('pdf-canvas');
         const ctx = canvas.getContext('2d');
         const prevBtn = document.querySelector('.prev-btn');
@@ -245,7 +276,6 @@
             pdfjsLib.getDocument(url).promise.then(function(pdf) {
                 pdfDoc = pdf;
                 
-                // Оновлення стану кнопок
                 prevBtn.disabled = pageNum <= 1;
                 nextBtn.disabled = pageNum >= pdf.numPages;
                 
@@ -282,7 +312,6 @@
                         pageNumPending = null;
                     }
                     
-                    // Оновлення стану кнопок
                     prevBtn.disabled = num <= 1;
                     nextBtn.disabled = num >= pdfDoc.numPages;
                 });
