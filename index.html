@@ -30,28 +30,6 @@
             height: -webkit-fill-available;
         }
         
-        .header {
-            text-align: center;
-            padding: 6px;
-            background: #000;
-            color: white;
-            flex-shrink: 0;
-            border-bottom: 1px solid #333;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 30px;
-        }
-        
-        .header h1 {
-            font-size: 20px;
-            font-weight: 400;
-            color: #fff;
-            margin: 0;
-            font-family: 'Vivaldi', cursive;
-            font-style: italic;
-        }
-        
         .main-content {
             flex: 1;
             display: flex;
@@ -89,13 +67,13 @@
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.15);
             color: white;
             border: none;
-            width: 44px;
-            height: 44px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            font-size: 20px;
+            font-size: 24px;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
@@ -103,108 +81,155 @@
             justify-content: center;
             z-index: 100;
             padding: 0;
+            backdrop-filter: blur(5px);
         }
         
         .nav-btn:hover {
-            background: rgba(255, 255, 255, 0.12);
-            transform: translateY(-50%) scale(1.05);
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-50%) scale(1.1);
         }
         
         .nav-btn:disabled {
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.06);
             cursor: not-allowed;
-            opacity: 0.3;
+            opacity: 0.4;
             transform: translateY(-50%);
         }
         
         .prev-btn {
-            left: 10px;
+            left: 20px;
         }
         
         .next-btn {
-            right: 10px;
+            right: 20px;
         }
         
         .footer {
             text-align: center;
-            padding: 4px;
+            padding: 8px;
             background: #000;
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.4);
             flex-shrink: 0;
-            font-size: 9px;
+            font-size: 11px;
             border-top: 1px solid #222;
-            min-height: 18px;
+            min-height: 20px;
         }
         
         .footer span {
-            letter-spacing: 0.3px;
+            letter-spacing: 0.5px;
         }
         
         .loading {
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #666;
+            color: #888;
+            font-size: 16px;
+        }
+        
+        .error-message {
+            text-align: center;
+            color: #ff6b6b;
+            padding: 30px;
+            font-size: 16px;
+        }
+        
+        .error-message small {
+            display: block;
+            margin-top: 10px;
+            color: #999;
             font-size: 14px;
         }
         
         /* Мобільна адаптація */
         @media (max-width: 768px) {
-            .header {
-                padding: 4px;
-            }
-            
-            .header h1 {
-                font-size: 18px;
-            }
-            
             .nav-btn {
-                width: 38px;
-                height: 38px;
-                font-size: 18px;
+                width: 42px;
+                height: 42px;
+                font-size: 20px;
+                background: rgba(255, 255, 255, 0.12);
             }
             
             .prev-btn {
-                left: 5px;
+                left: 10px;
             }
             
             .next-btn {
-                right: 5px;
+                right: 10px;
             }
             
             .footer {
-                padding: 3px;
-                font-size: 8px;
+                padding: 6px;
+                font-size: 10px;
+            }
+            
+            .loading {
+                font-size: 14px;
             }
         }
         
         @media (max-width: 480px) {
-            .header {
-                padding: 3px;
-            }
-            
-            .header h1 {
-                font-size: 16px;
-            }
-            
             .nav-btn {
-                width: 34px;
-                height: 34px;
-                font-size: 16px;
-                background: rgba(255, 255, 255, 0.06);
+                width: 38px;
+                height: 38px;
+                font-size: 18px;
+                background: rgba(255, 255, 255, 0.1);
             }
             
             .prev-btn {
-                left: 3px;
+                left: 8px;
             }
             
             .next-btn {
-                right: 3px;
+                right: 8px;
             }
             
             .footer {
-                font-size: 7px;
-                padding: 2px;
+                font-size: 9px;
+                padding: 5px;
+            }
+            
+            .loading {
+                font-size: 13px;
+            }
+        }
+        
+        /* Стилі для великих моніторів */
+        @media (min-width: 1200px) {
+            .nav-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 28px;
+                background: rgba(255, 255, 255, 0.18);
+            }
+            
+            .prev-btn {
+                left: 30px;
+            }
+            
+            .next-btn {
+                right: 30px;
+            }
+            
+            .footer {
+                padding: 12px;
+                font-size: 12px;
+            }
+        }
+        
+        @media (min-width: 1920px) {
+            .nav-btn {
+                width: 70px;
+                height: 70px;
+                font-size: 32px;
+            }
+            
+            .prev-btn {
+                left: 40px;
+            }
+            
+            .next-btn {
+                right: 40px;
             }
         }
         
@@ -213,21 +238,14 @@
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
         }
-        
-        /* Шрифт Vivaldi */
-        @import url('https://fonts.googleapis.com/css2?family=Vivaldi&display=swap');
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>КАТАЛОГ ПРОДУКЦІЇ</h1>
-    </div>
-    
     <div class="main-content">
         <button class="nav-btn prev-btn" onclick="prevPage()" disabled>〈</button>
         
         <div class="pdf-container">
-            <div class="loading">Завантаження PDF...</div>
+            <div class="loading">Завантаження...</div>
             <canvas id="pdf-canvas"></canvas>
         </div>
         
@@ -239,7 +257,7 @@
     </div>
 
     <!-- PDF.js библиотека -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script>
         // Заборонити лівий клік миші
         document.addEventListener('contextmenu', function(e) {
@@ -255,14 +273,8 @@
         }, { passive: false });
 
         // Заборонити масштабування тач-жестами
-        let touchStartDistance = 0;
-        
         document.addEventListener('touchstart', function(e) {
             if (e.touches.length > 1) {
-                touchStartDistance = Math.hypot(
-                    e.touches[0].clientX - e.touches[1].clientX,
-                    e.touches[0].clientY - e.touches[1].clientY
-                );
                 e.preventDefault();
             }
         }, { passive: false });
@@ -274,7 +286,7 @@
         }, { passive: false });
 
         // Ініціалізація PDF.js
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
         
         let pdfDoc = null;
         let pageNum = 1;
@@ -285,23 +297,34 @@
         const prevBtn = document.querySelector('.prev-btn');
         const nextBtn = document.querySelector('.next-btn');
         const loading = document.querySelector('.loading');
-        let renderQuality = window.devicePixelRatio > 1.5 ? 2 : 1.5;
         
+        // Максимальна якість для моніторів
+        let renderQuality = Math.max(window.devicePixelRatio || 1, 2);
+        const isLargeScreen = window.innerWidth >= 1200;
+
         // Кеш для сторінок
         const pageCache = new Map();
-        const preloadNextPages = 2; // Кількість сторінок для попереднього завантаження
+        const preloadNextPages = 4;
 
-        // Функція для розрахунку оптимального масштабу
+        // Функція для розрахунку максимального масштабу
         function calculateOptimalScale(page) {
             const container = document.querySelector('.pdf-container');
-            const availableWidth = container.clientWidth;
+            const availableWidth = container.clientWidth - (isLargeScreen ? 80 : 40);
             const availableHeight = container.clientHeight;
             
             const viewport = page.getViewport({ scale: 1 });
             const scaleX = availableWidth / viewport.width;
             const scaleY = availableHeight / viewport.height;
             
-            return Math.min(scaleX, scaleY, 1.5) * renderQuality;
+            // Використовуємо максимально можливий масштаб
+            let scale = Math.min(scaleX, scaleY);
+            
+            // Для великих моніторів додатково збільшуємо масштаб
+            if (isLargeScreen) {
+                scale = Math.min(scale * 1.1, 2.5); // Додаємо 10% та обмежуємо максимум 2.5
+            }
+            
+            return scale * renderQuality;
         }
 
         // Завантаження PDF
@@ -312,8 +335,11 @@
             
             pdfjsLib.getDocument({
                 url: url,
-                cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
-                cMapPacked: true
+                cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/cmaps/',
+                cMapPacked: true,
+                maxImageSize: 2048 * 2048, // Збільшили для кращої якості
+                disableFontFace: false,
+                useSystemFonts: false
             }).promise.then(function(pdf) {
                 pdfDoc = pdf;
                 
@@ -326,8 +352,13 @@
                 // Попереднє завантаження наступних сторінок
                 preloadPages(pageNum + 1, preloadNextPages);
             }).catch(function(error) {
-                loading.textContent = 'Помилка завантаження PDF: ' + error.message;
                 console.error('Помилка завантаження PDF:', error);
+                loading.innerHTML = `
+                    <div class="error-message">
+                        <p>Не вдалося завантажити каталог</p>
+                        <small>${error.message || 'Перевірте підключення до інтернету'}</small>
+                    </div>
+                `;
             });
         }
 
@@ -346,16 +377,12 @@
         function renderPage(num) {
             pageRendering = true;
             
-            // Перевіряємо кеш
             if (pageCache.has(num)) {
                 renderPageFromCache(num);
             } else {
-                // Завантажуємо сторінку
                 pdfDoc.getPage(num).then(function(page) {
                     pageCache.set(num, page);
                     renderPageFromCache(num);
-                    
-                    // Попереднє завантаження наступних сторінок
                     preloadPages(num + 1, preloadNextPages);
                 }).catch(function(error) {
                     console.error('Помилка відображення сторінки:', error);
@@ -370,21 +397,20 @@
             const scale = calculateOptimalScale(page);
             const viewport = page.getViewport({ scale: scale });
             
-            // Встановлюємо розміри canvas з урахуванням pixel ratio
-            const devicePixelRatio = window.devicePixelRatio || 1;
+            // Максимальна роздільна здатність для якості
+            const maxWidth = 4096;
+            const maxHeight = 4096;
             
-            // Обмежуємо максимальну роздільну здатність для продуктивності
-            const maxWidth = 2048;
-            const maxHeight = 2048;
-            
-            let outputScale = Math.min(devicePixelRatio, 
+            let outputScale = Math.min(renderQuality, 
                                      maxWidth / viewport.width, 
                                      maxHeight / viewport.height);
+            
+            // Збільшуємо роздільну здатність для якісного відображення
+            outputScale = Math.min(outputScale, 3);
             
             canvas.width = Math.floor(viewport.width * outputScale);
             canvas.height = Math.floor(viewport.height * outputScale);
             
-            // Зберігаємо оригінальний розмір для CSS
             canvas.style.width = Math.floor(viewport.width) + 'px';
             canvas.style.height = Math.floor(viewport.height) + 'px';
             
@@ -448,6 +474,12 @@
                 prevPage();
             } else if (e.key === 'ArrowRight') {
                 nextPage();
+            } else if (e.key === 'Home') {
+                pageNum = 1;
+                queueRenderPage(pageNum);
+            } else if (e.key === 'End') {
+                pageNum = pdfDoc.numPages;
+                queueRenderPage(pageNum);
             }
         });
 
@@ -457,35 +489,52 @@
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(function() {
                 if (pdfDoc && !pageRendering) {
+                    // Оновлюємо якість для поточного розміру екрану
+                    renderQuality = Math.max(window.devicePixelRatio || 1, 2);
                     renderPage(pageNum);
                 }
-            }, 250);
+            }, 100);
         });
 
-        // Свайп для мобільних пристроїв
+        // Покращений свайп для мобільних пристроїв
         let touchStartX = 0;
-        let touchEndX = 0;
-        
+        let touchStartTime = 0;
+
         document.addEventListener('touchstart', function(e) {
-            touchStartX = e.changedTouches[0].screenX;
-        }, false);
+            if (e.touches.length === 1) {
+                touchStartX = e.touches[0].clientX;
+                touchStartTime = Date.now();
+            }
+        }, { passive: true });
 
         document.addEventListener('touchend', function(e) {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        }, false);
-
-        function handleSwipe() {
-            const minSwipeDistance = 50;
-            
-            if (touchEndX < touchStartX && touchStartX - touchEndX > minSwipeDistance) {
-                nextPage();
+            if (e.changedTouches.length === 1) {
+                const touchEndX = e.changedTouches[0].clientX;
+                const touchEndTime = Date.now();
+                const deltaX = touchEndX - touchStartX;
+                const deltaTime = touchEndTime - touchStartTime;
+                
+                if (deltaTime < 300 && Math.abs(deltaX) > 50) {
+                    if (deltaX > 0) {
+                        prevPage();
+                    } else {
+                        nextPage();
+                    }
+                }
             }
-            
-            if (touchEndX > touchStartX && touchEndX - touchStartX > minSwipeDistance) {
+        }, { passive: true });
+
+        // Додаткові клавіші для навігації
+        document.addEventListener('keydown', function(e) {
+            // Space для наступної сторінки, Shift+Space для попередньої
+            if (e.key === ' ' && !e.shiftKey) {
+                e.preventDefault();
+                nextPage();
+            } else if (e.key === ' ' && e.shiftKey) {
+                e.preventDefault();
                 prevPage();
             }
-        }
+        });
 
         // Фікс для мобільних браузерів
         function setAppHeight() {
