@@ -1,33 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html lang="uk">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GADASSA - Каталог продукції</title>
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
+            box-sizing: border-box;
         }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
         .header {
             text-align: center;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #e9ecef;
+            padding: 10px 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            flex-shrink: 0;
         }
+        
+        .header h1 {
+            font-size: clamp(16px, 4vw, 24px);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            font-size: clamp(12px, 3vw, 14px);
+            opacity: 0.9;
+        }
+        
+        .pdf-container {
+            flex: 1;
+            position: relative;
+            min-height: 0;
+        }
+        
         iframe {
-            border: 0;
-            height: calc(100vh - 60px);
             width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Мобільна адаптація */
+        @media (max-width: 768px) {
+            .header {
+                padding: 8px 12px;
+            }
+            
+            .header h1 {
+                font-size: 18px;
+            }
+            
+            .header p {
+                font-size: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 6px 10px;
+            }
+            
+            .header h1 {
+                font-size: 16px;
+            }
+            
+            .header p {
+                display: none; /* Приховуємо опис на дуже малих екранах */
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Ось той заголовок, який ви написали -->
     <div class="header">
         <h1>Каталог продукції GADASSA</h1>
-        <p>Використовуйте елементи керування вгорі документу для перегляду та завантаження.</p>
+        <p>Використовуйте елементи керування для перегляду та завантаження</p>
     </div>
-    <!-- А це сам PDF-переглядач -->
-    <iframe src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.0.0/web/viewer.html?file=https://lazo-idua.github.io/lazo-idua/gadassa.pdf"></iframe>
+    
+    <div class="pdf-container">
+        <iframe src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.0.0/web/viewer.html?file=https://lazo-idua.github.io/lazo-idua/gadassa.pdf"></iframe>
+    </div>
 </body>
 </html>
