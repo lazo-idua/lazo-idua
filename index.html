@@ -17,6 +17,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            background: #f8f9fa;
         }
         
         .header {
@@ -50,6 +51,21 @@
             border: none;
         }
         
+        .footer {
+            text-align: center;
+            padding: 8px 15px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            flex-shrink: 0;
+            font-size: 12px;
+            font-weight: 300;
+        }
+        
+        .footer span {
+            opacity: 0.8;
+            letter-spacing: 0.5px;
+        }
+        
         /* Мобільна адаптація */
         @media (max-width: 768px) {
             .header {
@@ -63,6 +79,11 @@
             .header p {
                 font-size: 12px;
             }
+            
+            .footer {
+                padding: 6px 12px;
+                font-size: 11px;
+            }
         }
         
         @media (max-width: 480px) {
@@ -75,7 +96,12 @@
             }
             
             .header p {
-                display: none; /* Приховуємо опис на дуже малих екранах */
+                display: none;
+            }
+            
+            .footer {
+                padding: 5px 10px;
+                font-size: 10px;
             }
         }
     </style>
@@ -87,7 +113,11 @@
     </div>
     
     <div class="pdf-container">
-        <iframe src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.0.0/web/viewer.html?file=https://lazo-idua.github.io/lazo-idua/gadassa.pdf"></iframe>
+        <iframe src="https://lazo-idua.github.io/lazo-idua/gadassa.pdf"></iframe>
+    </div>
+    
+    <div class="footer">
+        <span>Created by LAZO</span>
     </div>
 </body>
 </html>
