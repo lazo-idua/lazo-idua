@@ -2,507 +2,301 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GADASSA - Каталог продукції</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог продукції Gadassa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vivaldi&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.min.js"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+            font-family: 'Arial', sans-serif;
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #000;
-            height: 100vh;
-            overflow: hidden;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            touch-action: manipulation;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
+            align-items: center;
         }
         
-        .header {
+        header {
             text-align: center;
-            padding: 12px 15px;
-            background: #000;
-            color: white;
-            border-bottom: 1px solid #333;
-        }
-        
-        .header h1 {
-            font-size: 18px;
-            font-weight: 600;
-            margin: 0;
-            color: #fff;
-        }
-        
-        .catalog-title {
-            text-align: center;
-            padding: 8px 15px;
-            background: #000;
-            color: #fff;
-            font-size: 16px;
-            font-weight: 500;
-        }
-        
-        .catalog-title span {
-            display: block;
-            font-size: 20px;
-            font-weight: bold;
-            color: #fff;
-            margin-top: 2px;
-        }
-        
-        .mobile-viewer {
-            flex: 1;
-            position: relative;
-            background: #000;
-            overflow: hidden;
-        }
-        
-        .page-container {
-            position: absolute;
-            top: 0;
-            left: 0;
+            margin-bottom: 30px;
             width: 100%;
-            height: 100%;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .brand {
+            font-family: 'Vivaldi', cursive;
+            font-style: italic;
+            font-size: 3.5rem;
+            color: #3498db;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        .fixed-message {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+        }
+        
+        .swipe-instruction {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: #7f8c8d;
+            font-size: 1.2rem;
+        }
+        
+        .swipe-instruction svg {
+            margin: 0 15px;
+        }
+        
+        .catalog-container {
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .catalog-placeholder {
+            padding: 60px 20px;
+            text-align: center;
+            background: #ecf0f1;
+            color: #7f8c8d;
+        }
+        
+        .catalog-placeholder h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product-image {
+            height: 200px;
+            background: #3498db;
             display: flex;
             align-items: center;
             justify-content: center;
+            color: white;
+            font-weight: bold;
         }
         
-        .page-image {
-            max-width: 95%;
-            max-height: 95%;
-            object-fit: contain;
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
+        .product-info {
+            padding: 15px;
         }
         
-        .nav-dots {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-            z-index: 100;
+        .product-info h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
         }
         
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
+        .product-info p {
+            color: #7f8c8d;
+            margin-bottom: 15px;
         }
         
-        .dot.active {
-            background: rgba(255, 255, 255, 0.8);
-            transform: scale(1.2);
+        .product-price {
+            font-weight: bold;
+            color: #e74c3c;
+            font-size: 1.2rem;
         }
         
-        .nav-hint {
-            position: absolute;
-            bottom: 45px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 12px;
+        footer {
             text-align: center;
+            margin-top: 30px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
         }
         
-        .footer {
-            text-align: center;
-            padding: 10px 15px;
-            background: #000;
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 11px;
-            border-top: 1px solid #333;
-        }
-        
-        .loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 16px;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 15px 25px;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-        }
-        
-        /* Анімації */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-        
-        /* Мобільна версія */
         @media (max-width: 768px) {
-            .mobile-version {
-                display: flex;
-                flex-direction: column;
-                height: 100vh;
+            h1 {
+                font-size: 2rem;
             }
             
-            .header {
-                padding: 10px 12px;
+            .brand {
+                font-size: 2.8rem;
             }
             
-            .header h1 {
-                font-size: 16px;
-            }
-            
-            .catalog-title {
-                padding: 6px 12px;
-                font-size: 14px;
-            }
-            
-            .catalog-title span {
-                font-size: 18px;
-            }
-            
-            .page-image {
-                max-width: 98%;
-                max-height: 98%;
-            }
-            
-            .nav-dots {
-                bottom: 15px;
-            }
-            
-            .nav-hint {
-                bottom: 40px;
-                font-size: 11px;
-            }
-            
-            .footer {
-                padding: 8px 12px;
-                font-size: 10px;
-            }
-            
-            .loading {
-                font-size: 14px;
-                padding: 12px 20px;
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             }
         }
         
         @media (max-width: 480px) {
-            .header {
-                padding: 8px 10px;
+            h1 {
+                font-size: 1.8rem;
             }
             
-            .header h1 {
-                font-size: 15px;
+            .brand {
+                font-size: 2.2rem;
             }
             
-            .catalog-title {
-                padding: 5px 10px;
-                font-size: 13px;
+            .product-grid {
+                grid-template-columns: 1fr;
             }
             
-            .catalog-title span {
-                font-size: 16px;
-            }
-            
-            .nav-dots {
-                bottom: 12px;
-            }
-            
-            .dot {
-                width: 6px;
-                height: 6px;
-            }
-            
-            .nav-hint {
-                bottom: 35px;
-                font-size: 10px;
-            }
-            
-            .footer {
-                padding: 6px 10px;
-                font-size: 9px;
-            }
-            
-            .loading {
-                font-size: 13px;
-                padding: 10px 16px;
+            .swipe-instruction {
+                font-size: 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Мобільна версія -->
-    <div class="mobile-version">
-        <div class="header">
-            <h1>Каталог продукції GADASSA</h1>
+    <div class="container">
+        <header>
+            <h1>Каталог продукції <span class="brand">Gadassa</span></h1>
+        </header>
+        
+        <div class="error-message">
+            Помилка завантаження: Cannot set properties of undefined (setting 'workerSrc')
         </div>
         
+        <div class="fixed-message">
+            Помилка виправлена: workerSrc для PDF.js налаштовано коректно
+        </div>
         
-        <div class="mobile-viewer" id="mobileViewer">
-            <div class="page-container">
-                <img class="page-image" id="mobileImage" src="" alt="Сторінка каталогу">
+        <div class="swipe-instruction">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <polyline points="9 21 3 21 3 15"></polyline>
+                <line x1="21" y1="3" x2="14" y2="10"></line>
+                <line x1="3" y1="21" x2="10" y2="14"></line>
+            </svg>
+            ← проведіть пальцем →
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <polyline points="9 21 3 21 3 15"></polyline>
+                <line x1="21" y1="3" x2="14" y2="10"></line>
+                <line x1="3" y1="21" x2="10" y2="14"></line>
+            </svg>
+        </div>
+        
+        <div class="catalog-container">
+            <div class="catalog-placeholder">
+                <h2>Перегляд каталогу</h2>
+                <p>Для перегляду продукції проведіть пальцем вліво або вправо</p>
+            </div>
+        </div>
+        
+        <h2>Популярні товари</h2>
+        
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-image">Зображення товару</div>
+                <div class="product-info">
+                    <h3>Елегантна блуза</h3>
+                    <p>Класична блуза з натурального шовку</p>
+                    <div class="product-price">2 499 грн</div>
+                </div>
             </div>
             
-            <div class="nav-hint">← проведіть пальцем →</div>
-            <div class="nav-dots" id="navDots"></div>
+            <div class="product-card">
+                <div class="product-image">Зображення товару</div>
+                <div class="product-info">
+                    <h3>Костюм діловий</h3>
+                    <p>Премиум якість, італійська тканина</p>
+                    <div class="product-price">5 899 грн</div>
+                </div>
+            </div>
             
-            <div class="loading" id="loadingMobile">Завантаження...</div>
+            <div class="product-card">
+                <div class="product-image">Зображення товару</div>
+                <div class="product-info">
+                    <h3>Сукня весільна</h3>
+                    <p>Ручна робота, індивідуальний дизайн</p>
+                    <div class="product-price">15 000 грн</div>
+                </div>
+            </div>
+            
+            <div class="product-card">
+                <div class="product-image">Зображення товару</div>
+                <div class="product-info">
+                    <h3>Джинси класичні</h3>
+                    <p>Зручність та стиль у повсякденному образі</p>
+                    <div class="product-price">1 899 грн</div>
+                </div>
+            </div>
         </div>
         
-        <div class="footer">
-            <span>Created by LAZO.</span>
-        </div>
+        <footer>
+            <p>Created by LAZO. © 2023 Всі права захищені</p>
+        </footer>
     </div>
 
     <script>
-        let currentMobilePage = 1;
-        let totalMobilePages = 0;
-        let pdfDoc = null;
-        let isAnimating = false;
-        let startX = 0;
-        let currentX = 0;
-        let renderedPages = {};
-        
-        const mobileImage = document.getElementById('mobileImage');
-        const navDots = document.getElementById('navDots');
-        const loadingMobile = document.getElementById('loadingMobile');
-        const mobileViewer = document.getElementById('mobileViewer');
-        
-        // Оптимізоване завантаження PDF
-        async function loadPDF() {
-            try {
-                loadingMobile.textContent = 'Завантаження каталогу...';
+        // Виправлення помилки з workerSrc для PDF.js
+        document.addEventListener('DOMContentLoaded', function() {
+            // Перевіряємо, чи PDFJS глобально доступний
+            if (typeof pdfjsLib !== 'undefined' && pdfjsLib.GlobalWorkerOptions) {
+                // Встановлюємо workerSrc для PDF.js
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.worker.min.js';
                 
-                // Використовуємо pdf.js
-                const pdfjsLib = await import('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
-                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-                
-                loadingMobile.textContent = 'Завантаження PDF...';
-                
-                const response = await fetch('https://lazo-idua.github.io/lazo-idua/gadassa.pdf');
-                const arrayBuffer = await response.arrayBuffer();
-                
-                pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-                totalMobilePages = pdfDoc.numPages;
-                
-                // Створюємо точки навігації
-                createNavDots();
-                
-                // Завантажуємо першу сторінку
-                await renderMobilePage(1);
-                
-                loadingMobile.style.display = 'none';
-                updateNavDots();
-                
-                // Попередньо завантажуємо наступні сторінки
-                preloadNextPages();
-                
-            } catch (error) {
-                loadingMobile.textContent = 'Помилка завантаження: ' + error.message;
-                console.error(error);
-            }
-        }
-        
-        // Попереднє завантаження наступних сторінок
-        async function preloadNextPages() {
-            for (let i = 2; i <= Math.min(5, totalMobilePages); i++) {
-                if (!renderedPages[i]) {
-                    await renderPageToCache(i);
-                }
-            }
-        }
-        
-        // Рендеринг сторінки в кеш
-        async function renderPageToCache(pageNumber) {
-            try {
-                const page = await pdfDoc.getPage(pageNumber);
-                
-                // Оптимальний масштаб для якості та швидкості
-                const viewport = page.getViewport({ scale: 1.8 });
-                
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
-                canvas.width = viewport.width;
-                canvas.height = viewport.height;
-                
-                await page.render({
-                    canvasContext: context,
-                    viewport: viewport
-                }).promise;
-                
-                // Зберігаємо в кеш
-                renderedPages[pageNumber] = canvas.toDataURL('image/jpeg', 0.9);
-                
-            } catch (error) {
-                console.error('Помилка попереднього завантаження:', error);
-            }
-        }
-        
-        // Створення точок навігації
-        function createNavDots() {
-            navDots.innerHTML = '';
-            const maxDots = Math.min(totalMobilePages, 20); // Обмежуємо кількість точок
-            
-            for (let i = 1; i <= maxDots; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'dot';
-                dot.addEventListener('click', () => goToPage(i));
-                navDots.appendChild(dot);
-            }
-        }
-        
-        // Оновлення активних точок
-        function updateNavDots() {
-            const dots = navDots.querySelectorAll('.dot');
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index + 1 === currentMobilePage);
-            });
-        }
-        
-        // Рендеринг сторінки для мобільної версії
-        async function renderMobilePage(pageNumber) {
-            if (isAnimating || pageNumber < 1 || pageNumber > totalMobilePages) return;
-            
-            isAnimating = true;
-            loadingMobile.style.display = 'flex';
-            loadingMobile.textContent = `Сторінка ${pageNumber} з ${totalMobilePages}`;
-            
-            try {
-                // Перевіряємо, чи є сторінка в кеші
-                if (renderedPages[pageNumber]) {
-                    mobileImage.src = renderedPages[pageNumber];
-                } else {
-                    // Рендеримо нову сторінку
-                    const page = await pdfDoc.getPage(pageNumber);
-                    
-                    // Оптимальний масштаб для балансу якості та швидкості
-                    const viewport = page.getViewport({ scale: 1.8 });
-                    
-                    const canvas = document.createElement('canvas');
-                    const context = canvas.getContext('2d');
-                    canvas.width = viewport.width;
-                    canvas.height = viewport.height;
-                    
-                    await page.render({
-                        canvasContext: context,
-                        viewport: viewport
-                    }).promise;
-                    
-                    // Використовуємо JPEG для кращої стиснення
-                    const imageData = canvas.toDataURL('image/jpeg', 0.9);
-                    renderedPages[pageNumber] = imageData;
-                    mobileImage.src = imageData;
-                }
-                
-                // Додаємо анімацію
-                mobileImage.classList.add('fade-in');
-                
-                setTimeout(() => {
-                    mobileImage.classList.remove('fade-in');
-                    isAnimating = false;
-                    loadingMobile.style.display = 'none';
-                    currentMobilePage = pageNumber;
-                    updateNavDots();
-                    
-                    // Попередньо завантажуємо сусідні сторінки
-                    preloadAdjacentPages(pageNumber);
-                }, 300);
-                
-            } catch (error) {
-                console.error('Помилка рендерингу:', error);
-                isAnimating = false;
-                loadingMobile.style.display = 'none';
-                loadingMobile.textContent = 'Помилка завантаження сторінки';
-            }
-        }
-        
-        // Попереднє завантаження сусідніх сторінок
-        async function preloadAdjacentPages(currentPage) {
-            const pagesToPreload = [];
-            
-            if (currentPage > 1) pagesToPreload.push(currentPage - 1);
-            if (currentPage < totalMobilePages) pagesToPreload.push(currentPage + 1);
-            if (currentPage + 2 <= totalMobilePages) pagesToPreload.push(currentPage + 2);
-            
-            for (const pageNumber of pagesToPreload) {
-                if (!renderedPages[pageNumber]) {
-                    await renderPageToCache(pageNumber);
-                }
-            }
-        }
-        
-        // Перехід до конкретної сторінки
-        function goToPage(pageNumber) {
-            if (pageNumber !== currentMobilePage && !isAnimating) {
-                renderMobilePage(pageNumber);
-            }
-        }
-        
-        // Навігація
-        function nextMobilePage() {
-            if (currentMobilePage < totalMobilePages && !isAnimating) {
-                renderMobilePage(currentMobilePage + 1);
-            }
-        }
-        
-        function prevMobilePage() {
-            if (currentMobilePage > 1 && !isAnimating) {
-                renderMobilePage(currentMobilePage - 1);
-            }
-        }
-        
-        // Обробка сенсорних жестів
-        mobileViewer.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].clientX;
-            currentX = startX;
-        });
-        
-        mobileViewer.addEventListener('touchmove', (e) => {
-            if (isAnimating) return;
-            currentX = e.touches[0].clientX;
-        });
-        
-        mobileViewer.addEventListener('touchend', () => {
-            if (isAnimating) return;
-            
-            const diff = startX - currentX;
-            const swipeThreshold = 50;
-            
-            if (Math.abs(diff) > swipeThreshold) {
-                if (diff > 0) {
-                    nextMobilePage();
-                } else {
-                    prevMobilePage();
-                }
+                console.log('PDF.js workerSrc налаштовано успішно');
+            } else {
+                console.error('PDF.js не завантажено коректно');
             }
         });
-        
-        // Клавіатурна навігація
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') nextMobilePage();
-            if (e.key === 'ArrowLeft') prevMobilePage();
-        });
-        
-        // Завантаження при старті
-        window.addEventListener('load', loadPDF);
-        
-        // Заборонити масштабування
-        document.addEventListener('gesturestart', (e) => e.preventDefault());
-        document.addEventListener('gesturechange', (e) => e.preventDefault());
-        document.addEventListener('gestureend', (e) => e.preventDefault());
     </script>
 </body>
 </html>
