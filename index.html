@@ -61,6 +61,12 @@
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .canvas-hidden {
+            opacity: 0;
         }
         
         .nav-btn {
@@ -102,6 +108,32 @@
         
         .next-btn {
             right: 20px;
+        }
+        
+        .home-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 0;
+            backdrop-filter: blur(5px);
+        }
+        
+        .home-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.1);
         }
         
         .footer {
@@ -150,6 +182,15 @@
                 background: rgba(255, 255, 255, 0.12);
             }
             
+            .home-btn {
+                width: 42px;
+                height: 42px;
+                font-size: 20px;
+                top: 15px;
+                right: 15px;
+                background: rgba(255, 255, 255, 0.12);
+            }
+            
             .prev-btn {
                 left: 10px;
             }
@@ -173,6 +214,15 @@
                 width: 38px;
                 height: 38px;
                 font-size: 18px;
+                background: rgba(255, 255, 255, 0.1);
+            }
+            
+            .home-btn {
+                width: 38px;
+                height: 38px;
+                font-size: 18px;
+                top: 12px;
+                right: 12px;
                 background: rgba(255, 255, 255, 0.1);
             }
             
@@ -203,6 +253,15 @@
                 background: rgba(255, 255, 255, 0.18);
             }
             
+            .home-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 28px;
+                top: 25px;
+                right: 25px;
+                background: rgba(255, 255, 255, 0.18);
+            }
+            
             .prev-btn {
                 left: 30px;
             }
@@ -222,6 +281,14 @@
                 width: 70px;
                 height: 70px;
                 font-size: 32px;
+            }
+            
+            .home-btn {
+                width: 70px;
+                height: 70px;
+                font-size: 32px;
+                top: 30px;
+                right: 30px;
             }
             
             .prev-btn {
@@ -250,6 +317,7 @@
         </div>
         
         <button class="nav-btn next-btn" onclick="nextPage()">〉</button>
+        <button class="home-btn" onclick="goHome()" title="На першу сторінку">⌂</button>
     </div>
     
     <div class="footer">
@@ -296,15 +364,16 @@
         const ctx = canvas.getContext('2d');
         const prevBtn = document.querySelector('.prev-btn');
         const nextBtn = document.querySelector('.next-btn');
+        const homeBtn = document.querySelector('.home-btn');
         const loading = document.querySelector('.loading');
         
         // Максимальна якість для моніторів
         let renderQuality = Math.max(window.devicePixelRatio || 1, 2);
         const isLargeScreen = window.innerWidth >= 1200;
 
-        // Кеш для сторінок
+        // Кеш для сторінок - збільшено до 10 сторінок
         const pageCache = new Map();
-        const preloadNextPages = 4;
+        const preloadNextPages = 10;
 
         // Функція для розрахунку максимального масштабу
         function calculateOptimalScale(page) {
@@ -345,11 +414,12 @@
                 
                 prevBtn.disabled = pageNum <= 1;
                 nextBtn.disabled = pageNum >= pdf.numPages;
+                homeBtn.disabled = pageNum === 1;
                 
                 loading.style.display = 'none';
                 renderPage(pageNum);
                 
-                // Попереднє завантаження наступних сторінок
+                // Попереднє завантаження наступних сторінок (збільшено до 10)
                 preloadPages(pageNum + 1, preloadNextPages);
             }).catch(function(error) {
                 console.error('Помилка завантаження PDF:', error);
@@ -377,16 +447,21 @@
         function renderPage(num) {
             pageRendering = true;
             
+            // Додаємо клас для приховування canvas під час завантаження
+            canvas.classList.add('canvas-hidden');
+            
             if (pageCache.has(num)) {
                 renderPageFromCache(num);
             } else {
                 pdfDoc.getPage(num).then(function(page) {
                     pageCache.set(num, page);
                     renderPageFromCache(num);
+                    // Попереднє завантаження наступних сторінок (збільшено до 10)
                     preloadPages(num + 1, preloadNextPages);
                 }).catch(function(error) {
                     console.error('Помилка відображення сторінки:', error);
                     pageRendering = false;
+                    canvas.classList.remove('canvas-hidden');
                 });
             }
         }
@@ -429,6 +504,11 @@
             renderTask.promise.then(function() {
                 pageRendering = false;
                 
+                // Показуємо canvas з анімацією
+                setTimeout(function() {
+                    canvas.classList.remove('canvas-hidden');
+                }, 10);
+                
                 if (pageNumPending !== null) {
                     renderPage(pageNumPending);
                     pageNumPending = null;
@@ -436,9 +516,11 @@
                 
                 prevBtn.disabled = num <= 1;
                 nextBtn.disabled = num >= pdfDoc.numPages;
+                homeBtn.disabled = num === 1;
             }).catch(function(error) {
                 console.error('Помилка рендерингу сторінки:', error);
                 pageRendering = false;
+                canvas.classList.remove('canvas-hidden');
             });
         }
 
@@ -462,6 +544,12 @@
             pageNum++;
             queueRenderPage(pageNum);
         }
+        
+        function goHome() {
+            if (pageNum === 1) return;
+            pageNum = 1;
+            queueRenderPage(pageNum);
+        }
 
         // Завантаження PDF при старті
         window.addEventListener('load', function() {
@@ -475,8 +563,7 @@
             } else if (e.key === 'ArrowRight') {
                 nextPage();
             } else if (e.key === 'Home') {
-                pageNum = 1;
-                queueRenderPage(pageNum);
+                goHome();
             } else if (e.key === 'End') {
                 pageNum = pdfDoc.numPages;
                 queueRenderPage(pageNum);
