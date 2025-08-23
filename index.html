@@ -11,9 +11,13 @@
             box-sizing: border-box;
         }
         
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            height: 100vh;
             display: flex;
             flex-direction: column;
             background: #000;
@@ -22,6 +26,8 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
+            height: 100vh;
+            height: -webkit-fill-available;
         }
         
         .header {
@@ -48,73 +54,94 @@
             position: relative;
             background: #000;
             overflow: hidden;
-        }
-        
-        .pdf-viewer {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
+            min-height: 0;
         }
         
         .pdf-container {
             position: relative;
-            background: #000;
             display: flex;
             align-items: center;
             justify-content: center;
             width: 100%;
             height: 100%;
+            max-width: 100%;
+            max-height: 100%;
         }
         
         canvas {
             display: block;
-            max-width: 95%;
-            max-height: 90vh;
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
             object-fit: contain;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
-            border: 1px solid #222;
         }
         
         .nav-btn {
             position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            font-size: 20px;
+            top: 0;
+            height: 100%;
+            width: 20%;
+            max-width: 100px;
+            background: transparent;
+            border: none;
             cursor: pointer;
-            transition: all 0.2s ease;
+            z-index: 100;
+            transition: background-color 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 100;
-            backdrop-filter: blur(5px);
         }
         
         .nav-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.05);
         }
         
         .nav-btn:disabled {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.15);
             cursor: not-allowed;
-            opacity: 0.4;
+            opacity: 0.3;
+        }
+        
+        .nav-btn:disabled:hover {
+            background: transparent;
+        }
+        
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            transition: all 0.2s ease;
         }
         
         .prev-btn {
-            left: 20px;
+            left: 0;
+        }
+        
+        .prev-btn::before {
+            content: '〈';
         }
         
         .next-btn {
-            right: 20px;
+            right: 0;
+        }
+        
+        .next-btn::before {
+            content: '〉';
+        }
+        
+        .nav-btn:hover::before {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-50%) scale(1.1);
         }
         
         .footer {
@@ -131,6 +158,14 @@
             letter-spacing: 0.5px;
         }
         
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #444;
+            font-size: 16px;
+        }
+        
         /* Мобільна адаптація */
         @media (max-width: 768px) {
             .header {
@@ -142,22 +177,13 @@
             }
             
             .nav-btn {
-                width: 45px;
-                height: 45px;
+                width: 25%;
+            }
+            
+            .nav-btn::before {
+                width: 35px;
+                height: 35px;
                 font-size: 18px;
-            }
-            
-            .prev-btn {
-                left: 12px;
-            }
-            
-            .next-btn {
-                right: 12px;
-            }
-            
-            canvas {
-                max-width: 98%;
-                max-height: 85vh;
             }
             
             .footer {
@@ -167,13 +193,21 @@
         }
         
         @media (max-width: 480px) {
+            .header {
+                padding: 8px;
+            }
+            
             .header h1 {
                 font-size: 14px;
             }
             
             .nav-btn {
-                width: 40px;
-                height: 40px;
+                width: 30%;
+            }
+            
+            .nav-btn::before {
+                width: 30px;
+                height: 30px;
                 font-size: 16px;
             }
             
@@ -183,22 +217,26 @@
             }
         }
         
-        .loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #444;
-            font-size: 16px;
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
         /* Заборонити виділення тексту */
         body {
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
+        }
+        
+        /* Фікс для мобільних браузерів */
+        @media (max-height: 600px) {
+            .header {
+                padding: 8px;
+            }
+            
+            .header h1 {
+                font-size: 14px;
+            }
+            
+            .footer {
+                padding: 4px;
+                font-size: 9px;
+            }
         }
     </style>
 </head>
@@ -208,16 +246,14 @@
     </div>
     
     <div class="main-content">
-        <button class="nav-btn prev-btn" onclick="prevPage()" disabled>〈</button>
+        <button class="nav-btn prev-btn" onclick="prevPage()" disabled></button>
         
-        <div class="pdf-viewer">
-            <div class="pdf-container">
-                <div class="loading">Завантаження PDF...</div>
-                <canvas id="pdf-canvas"></canvas>
-            </div>
+        <div class="pdf-container">
+            <div class="loading">Завантаження PDF...</div>
+            <canvas id="pdf-canvas"></canvas>
         </div>
         
-        <button class="nav-btn next-btn" onclick="nextPage()">〉</button>
+        <button class="nav-btn next-btn" onclick="nextPage()"></button>
     </div>
     
     <div class="footer">
@@ -253,6 +289,16 @@
             }
         }, { passive: false });
 
+        // Фікс висоти для мобільних браузерів
+        function setAppHeight() {
+            const doc = document.documentElement;
+            doc.style.setProperty('--app-height', `${window.innerHeight}px`);
+        }
+        
+        window.addEventListener('resize', setAppHeight);
+        window.addEventListener('orientationchange', setAppHeight);
+        setAppHeight();
+
         // Ініціалізація PDF.js
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
         
@@ -260,7 +306,6 @@
         let pageNum = 1;
         let pageRendering = false;
         let pageNumPending = null;
-        const scale = 2.5;
         const canvas = document.getElementById('pdf-canvas');
         const ctx = canvas.getContext('2d');
         const prevBtn = document.querySelector('.prev-btn');
@@ -292,14 +337,25 @@
             pageRendering = true;
             
             pdfDoc.getPage(num).then(function(page) {
-                const viewport = page.getViewport({ scale: scale });
+                const container = document.querySelector('.pdf-container');
+                const containerWidth = container.clientWidth - 40; // Враховуємо відступи для кнопок
+                const containerHeight = container.clientHeight - 40;
                 
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
+                const viewport = page.getViewport({ scale: 1 });
+                const scale = Math.min(
+                    containerWidth / viewport.width,
+                    containerHeight / viewport.height,
+                    2.5 // Максимальний масштаб
+                );
+                
+                const scaledViewport = page.getViewport({ scale: scale });
+                
+                canvas.width = scaledViewport.width;
+                canvas.height = scaledViewport.height;
                 
                 const renderContext = {
                     canvasContext: ctx,
-                    viewport: viewport
+                    viewport: scaledViewport
                 };
                 
                 const renderTask = page.render(renderContext);
@@ -340,7 +396,15 @@
         }
 
         // Завантаження PDF при старті
-        window.onload = loadPdf;
+        window.addEventListener('load', function() {
+            loadPdf();
+            // Перерахунок розмірів при повному завантаженні сторінки
+            setTimeout(() => {
+                if (pdfDoc) {
+                    renderPage(pageNum);
+                }
+            }, 100);
+        });
 
         // Клавіатурна навігація
         document.addEventListener('keydown', function(e) {
@@ -348,6 +412,13 @@
                 prevPage();
             } else if (e.key === 'ArrowRight') {
                 nextPage();
+            }
+        });
+
+        // Адаптація при зміні розміру вікна
+        window.addEventListener('resize', function() {
+            if (pdfDoc && !pageRendering) {
+                renderPage(pageNum);
             }
         });
     </script>
