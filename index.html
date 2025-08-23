@@ -32,7 +32,7 @@
         
         .header {
             text-align: center;
-            padding: 12px;
+            padding: 8px;
             background: #000;
             color: white;
             flex-shrink: 0;
@@ -40,7 +40,7 @@
         }
         
         .header h1 {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             color: #fff;
             margin: 0;
@@ -55,6 +55,7 @@
             background: #000;
             overflow: hidden;
             min-height: 0;
+            padding: 5px 0;
         }
         
         .pdf-container {
@@ -72,85 +73,57 @@
             display: block;
             width: auto;
             height: auto;
-            max-width: 100%;
-            max-height: 100%;
+            max-width: calc(100% - 100px);
+            max-height: calc(100% - 20px);
             object-fit: contain;
         }
         
         .nav-btn {
             position: absolute;
-            top: 0;
-            height: 100%;
-            width: 20%;
-            max-width: 100px;
-            background: transparent;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
             border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 24px;
             cursor: pointer;
-            z-index: 100;
-            transition: background-color 0.2s ease;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 100;
         }
         
         .nav-btn:hover {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-50%) scale(1.05);
         }
         
         .nav-btn:disabled {
+            background: rgba(255, 255, 255, 0.05);
             cursor: not-allowed;
-            opacity: 0.3;
-        }
-        
-        .nav-btn:disabled:hover {
-            background: transparent;
-        }
-        
-        .nav-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
+            opacity: 0.4;
             transform: translateY(-50%);
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            color: white;
-            transition: all 0.2s ease;
         }
         
         .prev-btn {
-            left: 0;
-        }
-        
-        .prev-btn::before {
-            content: '〈';
+            left: 15px;
         }
         
         .next-btn {
-            right: 0;
-        }
-        
-        .next-btn::before {
-            content: '〉';
-        }
-        
-        .nav-btn:hover::before {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-50%) scale(1.1);
+            right: 15px;
         }
         
         .footer {
             text-align: center;
-            padding: 8px;
+            padding: 6px;
             background: #000;
             color: rgba(255, 255, 255, 0.4);
             flex-shrink: 0;
-            font-size: 11px;
+            font-size: 10px;
             border-top: 1px solid #222;
         }
         
@@ -162,39 +135,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #444;
+            color: #666;
             font-size: 16px;
         }
         
         /* Мобільна адаптація */
         @media (max-width: 768px) {
             .header {
-                padding: 10px;
-            }
-            
-            .header h1 {
-                font-size: 16px;
-            }
-            
-            .nav-btn {
-                width: 25%;
-            }
-            
-            .nav-btn::before {
-                width: 35px;
-                height: 35px;
-                font-size: 18px;
-            }
-            
-            .footer {
                 padding: 6px;
-                font-size: 10px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .header {
-                padding: 8px;
             }
             
             .header h1 {
@@ -202,18 +150,59 @@
             }
             
             .nav-btn {
-                width: 30%;
+                width: 45px;
+                height: 45px;
+                font-size: 22px;
             }
             
-            .nav-btn::before {
-                width: 30px;
-                height: 30px;
-                font-size: 16px;
+            .prev-btn {
+                left: 10px;
+            }
+            
+            .next-btn {
+                right: 10px;
+            }
+            
+            canvas {
+                max-width: calc(100% - 80px);
             }
             
             .footer {
-                font-size: 9px;
                 padding: 5px;
+                font-size: 9px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 5px;
+            }
+            
+            .header h1 {
+                font-size: 13px;
+            }
+            
+            .nav-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+            
+            .prev-btn {
+                left: 8px;
+            }
+            
+            .next-btn {
+                right: 8px;
+            }
+            
+            canvas {
+                max-width: calc(100% - 70px);
+            }
+            
+            .footer {
+                font-size: 8px;
+                padding: 4px;
             }
         }
         
@@ -221,22 +210,6 @@
         body {
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
-        }
-        
-        /* Фікс для мобільних браузерів */
-        @media (max-height: 600px) {
-            .header {
-                padding: 8px;
-            }
-            
-            .header h1 {
-                font-size: 14px;
-            }
-            
-            .footer {
-                padding: 4px;
-                font-size: 9px;
-            }
         }
     </style>
 </head>
@@ -246,14 +219,14 @@
     </div>
     
     <div class="main-content">
-        <button class="nav-btn prev-btn" onclick="prevPage()" disabled></button>
+        <button class="nav-btn prev-btn" onclick="prevPage()" disabled>〈</button>
         
         <div class="pdf-container">
             <div class="loading">Завантаження PDF...</div>
             <canvas id="pdf-canvas"></canvas>
         </div>
         
-        <button class="nav-btn next-btn" onclick="nextPage()"></button>
+        <button class="nav-btn next-btn" onclick="nextPage()">〉</button>
     </div>
     
     <div class="footer">
@@ -289,16 +262,6 @@
             }
         }, { passive: false });
 
-        // Фікс висоти для мобільних браузерів
-        function setAppHeight() {
-            const doc = document.documentElement;
-            doc.style.setProperty('--app-height', `${window.innerHeight}px`);
-        }
-        
-        window.addEventListener('resize', setAppHeight);
-        window.addEventListener('orientationchange', setAppHeight);
-        setAppHeight();
-
         // Ініціалізація PDF.js
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
         
@@ -311,6 +274,19 @@
         const prevBtn = document.querySelector('.prev-btn');
         const nextBtn = document.querySelector('.next-btn');
         const loading = document.querySelector('.loading');
+
+        // Функція для розрахунку оптимального масштабу
+        function calculateOptimalScale(page, padding = 100) {
+            const container = document.querySelector('.pdf-container');
+            const availableWidth = container.clientWidth - padding;
+            const availableHeight = container.clientHeight - padding;
+            
+            const viewport = page.getViewport({ scale: 1 });
+            const scaleX = availableWidth / viewport.width;
+            const scaleY = availableHeight / viewport.height;
+            
+            return Math.min(scaleX, scaleY, 3.0); // Максимальний масштаб 3.0 для якості
+        }
 
         // Завантаження PDF
         function loadPdf() {
@@ -332,30 +308,25 @@
             });
         }
 
-        // Відображення сторінки
+        // Відображення сторінки з високою якістю
         function renderPage(num) {
             pageRendering = true;
             
             pdfDoc.getPage(num).then(function(page) {
-                const container = document.querySelector('.pdf-container');
-                const containerWidth = container.clientWidth - 40; // Враховуємо відступи для кнопок
-                const containerHeight = container.clientHeight - 40;
+                const scale = calculateOptimalScale(page, 120); // Більший масштаб для якості
+                const viewport = page.getViewport({ scale: scale });
                 
-                const viewport = page.getViewport({ scale: 1 });
-                const scale = Math.min(
-                    containerWidth / viewport.width,
-                    containerHeight / viewport.height,
-                    2.5 // Максимальний масштаб
-                );
+                // Встановлюємо розміри canvas з високою роздільною здатністю
+                const devicePixelRatio = window.devicePixelRatio || 1;
+                canvas.width = Math.floor(viewport.width * devicePixelRatio);
+                canvas.height = Math.floor(viewport.height * devicePixelRatio);
                 
-                const scaledViewport = page.getViewport({ scale: scale });
-                
-                canvas.width = scaledViewport.width;
-                canvas.height = scaledViewport.height;
+                // Масштабуємо контекст для retina displays
+                ctx.scale(devicePixelRatio, devicePixelRatio);
                 
                 const renderContext = {
                     canvasContext: ctx,
-                    viewport: scaledViewport
+                    viewport: viewport
                 };
                 
                 const renderTask = page.render(renderContext);
@@ -398,12 +369,6 @@
         // Завантаження PDF при старті
         window.addEventListener('load', function() {
             loadPdf();
-            // Перерахунок розмірів при повному завантаженні сторінки
-            setTimeout(() => {
-                if (pdfDoc) {
-                    renderPage(pageNum);
-                }
-            }, 100);
         });
 
         // Клавіатурна навігація
@@ -421,6 +386,15 @@
                 renderPage(pageNum);
             }
         });
+
+        // Фікс для мобільних браузерів
+        function setAppHeight() {
+            document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+        }
+        
+        window.addEventListener('resize', setAppHeight);
+        window.addEventListener('orientationchange', setAppHeight);
+        setAppHeight();
     </script>
 </body>
 </html>
