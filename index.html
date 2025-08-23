@@ -2,301 +2,506 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Каталог продукції Gadassa</title>
-    <link href="https://fonts.googleapis.com/css2?family=Vivaldi&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>gadassa - Каталог продукції</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+        }
+        
+        html, body {
+            height: 100%;
+            overflow: hidden;
         }
         
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            background: #000;
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            height: 100vh;
+            height: -webkit-fill-available;
         }
         
-        header {
+        .header {
             text-align: center;
-            margin-bottom: 30px;
-            width: 100%;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-        
-        h1 {
-            font-size: 2.8rem;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-        
-        .brand {
-            font-family: 'Vivaldi', cursive;
-            font-style: italic;
-            font-size: 3.5rem;
-            color: #3498db;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
-        
-        .error-message {
-            background: #ffebee;
-            color: #c62828;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-            text-align: center;
-            font-weight: bold;
-            max-width: 600px;
-            width: 100%;
-        }
-        
-        .fixed-message {
-            background: #e8f5e9;
-            color: #2e7d32;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-            text-align: center;
-            font-weight: bold;
-            max-width: 600px;
-            width: 100%;
-        }
-        
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            max-width: 1200px;
-        }
-        
-        .swipe-instruction {
-            display: flex;
-            align-items: center;
-            margin: 20px 0;
-            color: #7f8c8d;
-            font-size: 1.2rem;
-        }
-        
-        .swipe-instruction svg {
-            margin: 0 15px;
-        }
-        
-        .catalog-container {
-            width: 100%;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            margin-bottom: 30px;
-        }
-        
-        .catalog-placeholder {
-            padding: 60px 20px;
-            text-align: center;
-            background: #ecf0f1;
-            color: #7f8c8d;
-        }
-        
-        .catalog-placeholder h2 {
-            margin-bottom: 20px;
-            color: #2c3e50;
-        }
-        
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 20px;
-        }
-        
-        .product-card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-        
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        }
-        
-        .product-image {
-            height: 200px;
-            background: #3498db;
+            padding: 6px;
+            background: #000;
+            color: white;
+            flex-shrink: 0;
+            border-bottom: 1px solid #333;
             display: flex;
             align-items: center;
             justify-content: center;
+            min-height: 30px;
+        }
+        
+        .header h1 {
+            font-size: 20px;
+            font-weight: 400;
+            color: #fff;
+            margin: 0;
+            font-family: 'Vivaldi', cursive;
+            font-style: italic;
+        }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: #000;
+            overflow: hidden;
+            min-height: 0;
+            padding: 0;
+        }
+        
+        .pdf-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            padding: 0;
+        }
+        
+        canvas {
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.08);
             color: white;
-            font-weight: bold;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 0;
         }
         
-        .product-info {
-            padding: 15px;
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-50%) scale(1.05);
         }
         
-        .product-info h3 {
-            color: #2c3e50;
-            margin-bottom: 10px;
+        .nav-btn:disabled {
+            background: rgba(255, 255, 255, 0.04);
+            cursor: not-allowed;
+            opacity: 0.3;
+            transform: translateY(-50%);
         }
         
-        .product-info p {
-            color: #7f8c8d;
-            margin-bottom: 15px;
+        .prev-btn {
+            left: 10px;
         }
         
-        .product-price {
-            font-weight: bold;
-            color: #e74c3c;
-            font-size: 1.2rem;
+        .next-btn {
+            right: 10px;
         }
         
-        footer {
+        .footer {
             text-align: center;
-            margin-top: 30px;
-            color: #7f8c8d;
-            font-size: 0.9rem;
+            padding: 4px;
+            background: #000;
+            color: rgba(255, 255, 255, 0.3);
+            flex-shrink: 0;
+            font-size: 9px;
+            border-top: 1px solid #222;
+            min-height: 18px;
         }
         
+        .footer span {
+            letter-spacing: 0.3px;
+        }
+        
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        /* Мобільна адаптація */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
+            .header {
+                padding: 4px;
             }
             
-            .brand {
-                font-size: 2.8rem;
+            .header h1 {
+                font-size: 18px;
             }
             
-            .product-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            .nav-btn {
+                width: 38px;
+                height: 38px;
+                font-size: 18px;
+            }
+            
+            .prev-btn {
+                left: 5px;
+            }
+            
+            .next-btn {
+                right: 5px;
+            }
+            
+            .footer {
+                padding: 3px;
+                font-size: 8px;
             }
         }
         
         @media (max-width: 480px) {
-            h1 {
-                font-size: 1.8rem;
+            .header {
+                padding: 3px;
             }
             
-            .brand {
-                font-size: 2.2rem;
+            .header h1 {
+                font-size: 16px;
             }
             
-            .product-grid {
-                grid-template-columns: 1fr;
+            .nav-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 16px;
+                background: rgba(255, 255, 255, 0.06);
             }
             
-            .swipe-instruction {
-                font-size: 1rem;
+            .prev-btn {
+                left: 3px;
+            }
+            
+            .next-btn {
+                right: 3px;
+            }
+            
+            .footer {
+                font-size: 7px;
+                padding: 2px;
             }
         }
+        
+        /* Заборонити виділення тексту */
+        body {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+        
+        /* Шрифт Vivaldi */
+        @import url('https://fonts.googleapis.com/css2?family=Vivaldi&display=swap');
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Каталог продукції <span class="brand">Gadassa</span></h1>
-        </header>
+    <div class="header">
+        <h1>gadassa</h1>
+    </div>
+    
+    <div class="main-content">
+        <button class="nav-btn prev-btn" onclick="prevPage()" disabled>〈</button>
         
-        <div class="error-message">
-            Помилка завантаження: Cannot set properties of undefined (setting 'workerSrc')
+        <div class="pdf-container">
+            <div class="loading">Завантаження PDF...</div>
+            <canvas id="pdf-canvas"></canvas>
         </div>
         
-        <div class="fixed-message">
-            Помилка виправлена: workerSrc для PDF.js налаштовано коректно
-        </div>
-        
-        <div class="swipe-instruction">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="15 3 21 3 21 9"></polyline>
-                <polyline points="9 21 3 21 3 15"></polyline>
-                <line x1="21" y1="3" x2="14" y2="10"></line>
-                <line x1="3" y1="21" x2="10" y2="14"></line>
-            </svg>
-            ← проведіть пальцем →
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="15 3 21 3 21 9"></polyline>
-                <polyline points="9 21 3 21 3 15"></polyline>
-                <line x1="21" y1="3" x2="14" y2="10"></line>
-                <line x1="3" y1="21" x2="10" y2="14"></line>
-            </svg>
-        </div>
-        
-        <div class="catalog-container">
-            <div class="catalog-placeholder">
-                <h2>Перегляд каталогу</h2>
-                <p>Для перегляду продукції проведіть пальцем вліво або вправо</p>
-            </div>
-        </div>
-        
-        <h2>Популярні товари</h2>
-        
-        <div class="product-grid">
-            <div class="product-card">
-                <div class="product-image">Зображення товару</div>
-                <div class="product-info">
-                    <h3>Елегантна блуза</h3>
-                    <p>Класична блуза з натурального шовку</p>
-                    <div class="product-price">2 499 грн</div>
-                </div>
-            </div>
-            
-            <div class="product-card">
-                <div class="product-image">Зображення товару</div>
-                <div class="product-info">
-                    <h3>Костюм діловий</h3>
-                    <p>Премиум якість, італійська тканина</p>
-                    <div class="product-price">5 899 грн</div>
-                </div>
-            </div>
-            
-            <div class="product-card">
-                <div class="product-image">Зображення товару</div>
-                <div class="product-info">
-                    <h3>Сукня весільна</h3>
-                    <p>Ручна робота, індивідуальний дизайн</p>
-                    <div class="product-price">15 000 грн</div>
-                </div>
-            </div>
-            
-            <div class="product-card">
-                <div class="product-image">Зображення товару</div>
-                <div class="product-info">
-                    <h3>Джинси класичні</h3>
-                    <p>Зручність та стиль у повсякденному образі</p>
-                    <div class="product-price">1 899 грн</div>
-                </div>
-            </div>
-        </div>
-        
-        <footer>
-            <p>Created by LAZO. © 2023 Всі права захищені</p>
-        </footer>
+        <button class="nav-btn next-btn" onclick="nextPage()">〉</button>
+    </div>
+    
+    <div class="footer">
+        <span>Created by LAZO.</span>
     </div>
 
+    <!-- PDF.js библиотека -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
-        // Виправлення помилки з workerSrc для PDF.js
-        document.addEventListener('DOMContentLoaded', function() {
-            // Перевіряємо, чи PDFJS глобально доступний
-            if (typeof pdfjsLib !== 'undefined' && pdfjsLib.GlobalWorkerOptions) {
-                // Встановлюємо workerSrc для PDF.js
-                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.worker.min.js';
+        // Заборонити лівий клік миші
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Заборонити масштабування скролом
+        document.addEventListener('wheel', function(e) {
+            if (e.ctrlKey) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Заборонити масштабування тач-жестами
+        let touchStartDistance = 0;
+        
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) {
+                touchStartDistance = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchmove', function(e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Ініціалізація PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        
+        let pdfDoc = null;
+        let pageNum = 1;
+        let pageRendering = false;
+        let pageNumPending = null;
+        const canvas = document.getElementById('pdf-canvas');
+        const ctx = canvas.getContext('2d');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        const loading = document.querySelector('.loading');
+        let renderQuality = window.devicePixelRatio > 1.5 ? 2 : 1.5;
+        
+        // Кеш для сторінок
+        const pageCache = new Map();
+        const preloadNextPages = 2; // Кількість сторінок для попереднього завантаження
+
+        // Функція для розрахунку оптимального масштабу
+        function calculateOptimalScale(page) {
+            const container = document.querySelector('.pdf-container');
+            const availableWidth = container.clientWidth;
+            const availableHeight = container.clientHeight;
+            
+            const viewport = page.getViewport({ scale: 1 });
+            const scaleX = availableWidth / viewport.width;
+            const scaleY = availableHeight / viewport.height;
+            
+            return Math.min(scaleX, scaleY, 1.5) * renderQuality;
+        }
+
+        // Завантаження PDF
+        function loadPdf() {
+            loading.style.display = 'flex';
+            
+            const url = 'https://lazo-idua.github.io/lazo-idua/gadassa.pdf';
+            
+            pdfjsLib.getDocument({
+                url: url,
+                cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+                cMapPacked: true
+            }).promise.then(function(pdf) {
+                pdfDoc = pdf;
                 
-                console.log('PDF.js workerSrc налаштовано успішно');
+                prevBtn.disabled = pageNum <= 1;
+                nextBtn.disabled = pageNum >= pdf.numPages;
+                
+                loading.style.display = 'none';
+                renderPage(pageNum);
+                
+                // Попереднє завантаження наступних сторінок
+                preloadPages(pageNum + 1, preloadNextPages);
+            }).catch(function(error) {
+                loading.textContent = 'Помилка завантаження PDF: ' + error.message;
+                console.error('Помилка завантаження PDF:', error);
+            });
+        }
+
+        // Попереднє завантаження сторінок
+        function preloadPages(startPage, count) {
+            for (let i = startPage; i < startPage + count && i <= pdfDoc.numPages; i++) {
+                if (!pageCache.has(i)) {
+                    pdfDoc.getPage(i).then(function(page) {
+                        pageCache.set(i, page);
+                    });
+                }
+            }
+        }
+
+        // Відображення сторінки
+        function renderPage(num) {
+            pageRendering = true;
+            
+            // Перевіряємо кеш
+            if (pageCache.has(num)) {
+                renderPageFromCache(num);
             } else {
-                console.error('PDF.js не завантажено коректно');
+                // Завантажуємо сторінку
+                pdfDoc.getPage(num).then(function(page) {
+                    pageCache.set(num, page);
+                    renderPageFromCache(num);
+                    
+                    // Попереднє завантаження наступних сторінок
+                    preloadPages(num + 1, preloadNextPages);
+                }).catch(function(error) {
+                    console.error('Помилка відображення сторінки:', error);
+                    pageRendering = false;
+                });
+            }
+        }
+
+        // Відображення сторінки з кешу
+        function renderPageFromCache(num) {
+            const page = pageCache.get(num);
+            const scale = calculateOptimalScale(page);
+            const viewport = page.getViewport({ scale: scale });
+            
+            // Встановлюємо розміри canvas з урахуванням pixel ratio
+            const devicePixelRatio = window.devicePixelRatio || 1;
+            
+            // Обмежуємо максимальну роздільну здатність для продуктивності
+            const maxWidth = 2048;
+            const maxHeight = 2048;
+            
+            let outputScale = Math.min(devicePixelRatio, 
+                                     maxWidth / viewport.width, 
+                                     maxHeight / viewport.height);
+            
+            canvas.width = Math.floor(viewport.width * outputScale);
+            canvas.height = Math.floor(viewport.height * outputScale);
+            
+            // Зберігаємо оригінальний розмір для CSS
+            canvas.style.width = Math.floor(viewport.width) + 'px';
+            canvas.style.height = Math.floor(viewport.height) + 'px';
+            
+            const transform = outputScale !== 1
+                ? [outputScale, 0, 0, outputScale, 0, 0]
+                : null;
+            
+            const renderContext = {
+                canvasContext: ctx,
+                viewport: viewport,
+                transform: transform
+            };
+            
+            const renderTask = page.render(renderContext);
+            
+            renderTask.promise.then(function() {
+                pageRendering = false;
+                
+                if (pageNumPending !== null) {
+                    renderPage(pageNumPending);
+                    pageNumPending = null;
+                }
+                
+                prevBtn.disabled = num <= 1;
+                nextBtn.disabled = num >= pdfDoc.numPages;
+            }).catch(function(error) {
+                console.error('Помилка рендерингу сторінки:', error);
+                pageRendering = false;
+            });
+        }
+
+        // Навігація по сторінках
+        function queueRenderPage(num) {
+            if (pageRendering) {
+                pageNumPending = num;
+            } else {
+                renderPage(num);
+            }
+        }
+
+        function prevPage() {
+            if (pageNum <= 1) return;
+            pageNum--;
+            queueRenderPage(pageNum);
+        }
+
+        function nextPage() {
+            if (pageNum >= pdfDoc.numPages) return;
+            pageNum++;
+            queueRenderPage(pageNum);
+        }
+
+        // Завантаження PDF при старті
+        window.addEventListener('load', function() {
+            loadPdf();
+        });
+
+        // Клавіатурна навігація
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') {
+                prevPage();
+            } else if (e.key === 'ArrowRight') {
+                nextPage();
             }
         });
+
+        // Адаптація при зміні розміру вікна
+        let resizeTimeout;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(function() {
+                if (pdfDoc && !pageRendering) {
+                    renderPage(pageNum);
+                }
+            }, 250);
+        });
+
+        // Свайп для мобільних пристроїв
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        }, false);
+
+        document.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, false);
+
+        function handleSwipe() {
+            const minSwipeDistance = 50;
+            
+            if (touchEndX < touchStartX && touchStartX - touchEndX > minSwipeDistance) {
+                nextPage();
+            }
+            
+            if (touchEndX > touchStartX && touchEndX - touchStartX > minSwipeDistance) {
+                prevPage();
+            }
+        }
+
+        // Фікс для мобільних браузерів
+        function setAppHeight() {
+            document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+        }
+        
+        window.addEventListener('resize', setAppHeight);
+        window.addEventListener('orientationchange', function() {
+            setTimeout(setAppHeight, 300);
+            if (pdfDoc && !pageRendering) {
+                setTimeout(function() {
+                    renderPage(pageNum);
+                }, 350);
+            }
+        });
+        setAppHeight();
     </script>
 </body>
 </html>
