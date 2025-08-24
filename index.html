@@ -619,9 +619,15 @@
             </div>
             <div class="pdf-item" onclick="openPdf('medunia')">
                 <div class="pdf-thumbnail" id="thumbnail-medunia">
-                    <div class="thumbnail-placeholder">MEDUNIA<br>Каталог</div>
+                    <div class="thumbnail-placeholder">МЕДУНЯ<br>Каталог</div>
                 </div>
-                <div class="pdf-name">MEDUNIA</div>
+                <div class="pdf-name">МЕДУНЯ</div>
+            </div>
+            <div class="pdf-item" onclick="openPdf('dobryi_vechir')">
+                <div class="pdf-thumbnail" id="thumbnail-dobryi_vechir">
+                    <div class="thumbnail-placeholder">ДОБРИЙ ВЕЧІР<br>Каталог</div>
+                </div>
+                <div class="pdf-name">ДОБРИЙ ВЕЧІР</div>
             </div>
         </div>
     </div>
@@ -657,7 +663,7 @@
     </div>
 
     <!-- PDF.js библиотека -->
-    <script src="https://unpkg.com/pdfjs-dist@latest/build/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script>
         // Заборонити лівий клік миші
         document.addEventListener('contextmenu', function(e) {
@@ -686,7 +692,7 @@
         }, { passive: false });
 
         // Ініціалізація PDF.js
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@latest/build/pdf.worker.min.js';
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
         
         let pdfDoc = null;
         let pageNum = 1;
@@ -713,32 +719,44 @@
         // Зберігання обраних сторінок для кожного PDF
         let favoritePages = {
             gadassa: JSON.parse(localStorage.getItem('gadassa_favorites')) || [],
-            medunia: JSON.parse(localStorage.getItem('medunia_favorites')) || []
+            medunia: JSON.parse(localStorage.getItem('medunia_favorites')) || [],
+            dobryi_vechir: JSON.parse(localStorage.getItem('dobryi_vechir_favorites')) || []
         };
         
         // Максимальна якість для моніторів
         let renderQuality = Math.max(window.devicePixelRatio || 1, 2);
         const isLargeScreen = window.innerWidth >= 1200;
 
-        // Кеш для сторінок - збільшено до 20 сторінок
+        // Кеш для сторінок - збільшено до 10 сторінок
         const pageCache = new Map();
-        const preloadNextPages = 20;
-        const preloadPrevPages = 5; // Додано попереднє завантаження назад
+        const preloadNextPages = 10;
 
-        // Функція для створення мініатюр з покращеною обробкою помилок і вищою роздільною здатністю
+        // Функція для отримання URL PDF
+        function getPdfUrl(pdfName) {
+            const pdfUrls = {
+                gadassa: 'https://lazo-idua.github.io/lazo-idua/gadassa.pdf',
+                medunia: 'https://lazo-idua.github.io/lazo-idua/medunia.pdf',
+                dobryi_vechir: 'https://lazo-idua.github.io/lazo-idua/dobryi_vechir.pdf'
+            };
+            return pdfUrls[pdfName] || '';
+        }
+
+        // Функція для створення мініатюр
         function generateThumbnail(pdfName, thumbnailId) {
-            const url = pdfName === 'medunia' 
-                ? 'https://lazo-idua.github.io/lazo-idua/medunia.pdf'
-                : 'https://lazo-idua.github.io/lazo-idua/gadassa.pdf';
+            const url = getPdfUrl(pdfName);
+            if (!url) return;
             
-            pdfjsLib.getDocument({
+            // Попереднє завантаження PDF для мініатюри
+            const loadingTask = pdfjsLib.getDocument({
                 url: url,
-                cMapUrl: 'https://unpkg.com/pdfjs-dist@latest/cmaps/',
+                cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/cmaps/',
                 cMapPacked: true,
                 maxImageSize: 1024 * 1024
-            }).promise.then(function(pdf) {
+            });
+            
+            loadingTask.promise.then(function(pdf) {
                 pdf.getPage(1).then(function(page) {
-                    const viewport = page.getViewport({ scale: 1 }); // Збільшено масштаб для кращої видимості
+                    const viewport = page.getViewport({ scale: 0.5 });
                     const canvas = document.createElement('canvas');
                     const context = canvas.getContext('2d');
                     canvas.width = viewport.width;
@@ -753,13 +771,14 @@
                         const thumbnailContainer = document.getElementById(thumbnailId);
                         const img = document.createElement('img');
                         img.src = canvas.toDataURL();
-                        thumbnailContainer.innerHTML = '';
-                        thumbnailContainer.appendChild(img);
+                        img.onload = function() {
+                            thumbnailContainer.innerHTML = '';
+                            thumbnailContainer.appendChild(img);
+                        };
                     });
                 });
             }).catch(function(error) {
-                console.error('Помилка створення мініатюри для ' + pdfName + ':', error);
-                // Залишити placeholder у разі помилки
+                console.error('Помилка створення мініатюри для', pdfName, ':', error);
             });
         }
 
@@ -820,17 +839,23 @@
             return scale * renderQuality;
         }
 
-        // Завантаження PDF з однаковими параметрами для обох файлів
+        // Завантаження PDF
         function loadPdf() {
             loading.style.display = 'flex';
             
-            const url = currentPdf === 'medunia' 
-                ? 'https://lazo-idua.github.io/lazo-idua/medunia.pdf'
-                : 'https://lazo-idua.github.io/lazo-idua/gadassa.pdf';
+            const url = getPdfUrl(currentPdf);
+            if (!url) {
+                loading.innerHTML = `
+                    <div class="error-message">
+                        <p>Помилка: PDF не знайдено</p>
+                    </div>
+                `;
+                return;
+            }
             
             pdfjsLib.getDocument({
                 url: url,
-                cMapUrl: 'https://unpkg.com/pdfjs-dist@latest/cmaps/',
+                cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/cmaps/',
                 cMapPacked: true,
                 maxImageSize: 4096 * 4096,
                 disableFontFace: false,
@@ -843,9 +868,8 @@
                 loading.style.display = 'none';
                 renderPage(pageNum);
                 
-                // Попереднє завантаження наступних і попередніх сторінок
-                preloadPages(pageNum + 1, preloadNextPages, 1);
-                preloadPages(pageNum - 1, preloadPrevPages, -1);
+                // Попереднє завантаження наступних сторінок
+                preloadPages(pageNum + 1, preloadNextPages);
             }).catch(function(error) {
                 console.error('Помилка завантаження PDF:', error);
                 loading.innerHTML = `
@@ -857,14 +881,13 @@
             });
         }
 
-        // Попереднє завантаження сторінок (тепер з напрямком)
-        function preloadPages(startPage, count, direction) {
-            for (let i = 0; i < count; i++) {
-                let pageToLoad = startPage + (i * direction);
-                if (pageToLoad >= 1 && pageToLoad <= pdfDoc.numPages && !pageCache.has(pageToLoad)) {
-                    pdfDoc.getPage(pageToLoad).then(function(page) {
-                        pageCache.set(pageToLoad, page);
-                    }).catch(console.error);
+        // Попереднє завантаження сторінок
+        function preloadPages(startPage, count) {
+            for (let i = startPage; i < startPage + count && i <= pdfDoc.numPages; i++) {
+                if (!pageCache.has(i)) {
+                    pdfDoc.getPage(i).then(function(page) {
+                        pageCache.set(i, page);
+                    });
                 }
             }
         }
@@ -879,9 +902,8 @@
                 pdfDoc.getPage(num).then(function(page) {
                     pageCache.set(num, page);
                     renderPageFromCache(num);
-                    // Попереднє завантаження
-                    preloadPages(num + 1, preloadNextPages, 1);
-                    preloadPages(num - 1, preloadPrevPages, -1);
+                    // Попереднє завантаження наступних сторінок
+                    preloadPages(num + 1, preloadNextPages);
                 }).catch(function(error) {
                     console.error('Помилка відображення сторінки:', error);
                     pageRendering = false;
@@ -907,8 +929,8 @@
             outputScale = Math.min(outputScale, 3);
             
             // Використовуємо допоміжний canvas для рендерингу
-            const targetCanvas = canvas;
-            const targetCtx = ctx;
+            const targetCanvas = canvasNext;
+            const targetCtx = ctxNext;
             
             targetCanvas.width = Math.floor(viewport.width * outputScale);
             targetCanvas.height = Math.floor(viewport.height * outputScale);
@@ -925,17 +947,31 @@
                 viewport: viewport,
                 transform: transform,
                 enableWebGL: true,
-                renderInteractiveForms: false // Оптимізація для швидкості
+                textLayer: true,
+                enhanceTextSelection: true
             };
-            
-            targetCtx.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
             
             const renderTask = page.render(renderContext);
             
             renderTask.promise.then(function() {
                 pageRendering = false;
                 
-                canvas.classList.add('high-quality');
+                // Плавна зміна canvas після завершення рендерингу
+                canvas.classList.add('canvas-hidden');
+                setTimeout(() => {
+                    // Переносимо зображення з допоміжного canvas на основний
+                    canvas.width = targetCanvas.width;
+                    canvas.height = targetCanvas.height;
+                    canvas.style.width = targetCanvas.style.width;
+                    canvas.style.height = targetCanvas.style.height;
+                    
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(targetCanvas, 0, 0);
+                    
+                    canvas.classList.remove('canvas-hidden');
+                    canvas.classList.add('high-quality');
+                    targetCanvas.classList.add('canvas-next');
+                }, 50);
                 
                 if (pageNumPending !== null) {
                     renderPage(pageNumPending);
@@ -945,64 +981,10 @@
                 updateNavigation();
                 updateHeartButton();
                 updateClearFavoritesButton();
-                
-                // Попередній рендеринг наступної сторінки для швидкого перемикання
-                preRenderNextPage();
             }).catch(function(error) {
                 console.error('Помилка рендерингу сторінки:', error);
                 pageRendering = false;
             });
-        }
-
-        // Нова функція для попереднього рендерингу наступної сторінки
-        function preRenderNextPage() {
-            let nextNum;
-            if (favoritesMode) {
-                const favoritePagesList = getFavoritePagesList();
-                const currentIndex = favoritePagesList.indexOf(pageNum);
-                nextNum = favoritePagesList[currentIndex + 1];
-            } else {
-                nextNum = pageNum + 1;
-            }
-            
-            if (nextNum && nextNum <= pdfDoc.numPages) {
-                if (pageCache.has(nextNum)) {
-                    const page = pageCache.get(nextNum);
-                    const scale = calculateOptimalScale(page);
-                    const viewport = page.getViewport({ scale: scale });
-                    
-                    let outputScale = Math.min(renderQuality, 
-                                             4096 / viewport.width, 
-                                             4096 / viewport.height);
-                    outputScale = Math.min(outputScale, 3);
-                    
-                    canvasNext.width = Math.floor(viewport.width * outputScale);
-                    canvasNext.height = Math.floor(viewport.height * outputScale);
-                    
-                    canvasNext.style.width = Math.floor(viewport.width) + 'px';
-                    canvasNext.style.height = Math.floor(viewport.height) + 'px';
-                    
-                    const transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
-                    
-                    const renderContext = {
-                        canvasContext: ctxNext,
-                        viewport: viewport,
-                        transform: transform,
-                        enableWebGL: true,
-                        renderInteractiveForms: false
-                    };
-                    
-                    ctxNext.clearRect(0, 0, canvasNext.width, canvasNext.height);
-                    page.render(renderContext).promise.catch(console.error);
-                } else {
-                    // Якщо сторінка не в кеші, завантажити її спочатку
-                    pdfDoc.getPage(nextNum).then(function(page) {
-                        pageCache.set(nextNum, page);
-                        // Рекурсивно викликати pre-render після завантаження
-                        preRenderNextPage();
-                    }).catch(console.error);
-                }
-            }
         }
 
         // Оновлення стану кнопок навігації
@@ -1121,7 +1103,7 @@
             
             if (navigator.share) {
                 navigator.share({
-                    title: 'TD MELNYK - ' + (currentPdf === 'medunia' ? 'MEDUNIA' : 'GADASSA') + ' - Сторінка ' + pageNum,
+                    title: 'TD MELNYK - ' + currentPdf.toUpperCase() + ' - Сторінка ' + pageNum,
                     url: pageUrl
                 }).catch(console.error);
             } else {
@@ -1171,44 +1153,12 @@
                 
                 if (currentIndex < favoritePagesList.length - 1) {
                     pageNum = favoritePagesList[currentIndex + 1];
-                    // Якщо наступна сторінка вже пререндерена, швидко показати її
-                    if (canvasNext.width > 0) {
-                        // Копіювати з next до main
-                        canvas.width = canvasNext.width;
-                        canvas.height = canvasNext.height;
-                        canvas.style.width = canvasNext.style.width;
-                        canvas.style.height = canvasNext.style.height;
-                        ctx.drawImage(canvasNext, 0, 0);
-                        // Очистити next
-                        canvasNext.width = 0;
-                        // Оновити
-                        updateNavigation();
-                        updateHeartButton();
-                        updateClearFavoritesButton();
-                        // Pre-render нової next
-                        preRenderNextPage();
-                    } else {
-                        queueRenderPage(pageNum);
-                    }
+                    queueRenderPage(pageNum);
                 }
             } else {
                 if (pageNum >= pdfDoc.numPages) return;
                 pageNum++;
-                // Аналогічно для нормального режиму
-                if (canvasNext.width > 0) {
-                    canvas.width = canvasNext.width;
-                    canvas.height = canvasNext.height;
-                    canvas.style.width = canvasNext.style.width;
-                    canvas.style.height = canvasNext.style.height;
-                    ctx.drawImage(canvasNext, 0, 0);
-                    canvasNext.width = 0;
-                    updateNavigation();
-                    updateHeartButton();
-                    updateClearFavoritesButton();
-                    preRenderNextPage();
-                } else {
-                    queueRenderPage(pageNum);
-                }
+                queueRenderPage(pageNum);
             }
         }
         
@@ -1231,6 +1181,7 @@
             // Створюємо мініатюри для PDF
             generateThumbnail('gadassa', 'thumbnail-gadassa');
             generateThumbnail('medunia', 'thumbnail-medunia');
+            generateThumbnail('dobryi_vechir', 'thumbnail-dobryi_vechir');
 
             // Перевіряємо чи є номер сторінки та PDF в URL
             const hash = window.location.hash;
@@ -1238,7 +1189,7 @@
                 const params = new URLSearchParams(hash.substring(1));
                 const page = parseInt(params.get('page'));
                 const pdfName = params.get('pdf');
-                if (!isNaN(page) && page > 0 && (pdfName === 'gadassa' || pdfName === 'medunia')) {
+                if (!isNaN(page) && page > 0 && (pdfName === 'gadassa' || pdfName === 'medunia' || pdfName === 'dobryi_vechir')) {
                     pageNum = page;
                     openPdf(pdfName);
                 }
