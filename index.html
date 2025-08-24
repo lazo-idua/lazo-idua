@@ -67,6 +67,13 @@
         
         .canvas-hidden {
             opacity: 0;
+            pointer-events: none;
+        }
+        
+        .canvas-next {
+            position: absolute;
+            opacity: 0;
+            z-index: -1;
         }
         
         .nav-btn {
@@ -131,9 +138,65 @@
             backdrop-filter: blur(5px);
         }
         
-        .home-btn:hover {
+        .favorites-btn {
+            position: absolute;
+            top: 80px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 0;
+            backdrop-filter: blur(5px);
+        }
+        
+        .home-btn:hover, .favorites-btn:hover {
             background: rgba(255, 255, 255, 0.25);
             transform: scale(1.1);
+        }
+        
+        .favorites-btn.active {
+            background: rgba(255, 0, 0, 0.3);
+            color: #ff5252;
+        }
+        
+        .heart-btn {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 101;
+            padding: 0;
+            backdrop-filter: blur(5px);
+        }
+        
+        .heart-btn:hover {
+            background: rgba(0, 0, 0, 0.6);
+            transform: scale(1.1);
+        }
+        
+        .heart-btn.favorited {
+            color: #ff5252;
         }
         
         .footer {
@@ -182,13 +245,23 @@
                 background: rgba(255, 255, 255, 0.12);
             }
             
-            .home-btn {
+            .home-btn, .favorites-btn {
                 width: 42px;
                 height: 42px;
                 font-size: 20px;
-                top: 15px;
-                right: 15px;
                 background: rgba(255, 255, 255, 0.12);
+            }
+            
+            .home-btn {
+                top: auto;
+                bottom: 20px;
+                right: 60px;
+            }
+            
+            .favorites-btn {
+                top: auto;
+                bottom: 20px;
+                right: 15px;
             }
             
             .prev-btn {
@@ -196,6 +269,14 @@
             }
             
             .next-btn {
+                right: 10px;
+            }
+            
+            .heart-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 18px;
+                bottom: 10px;
                 right: 10px;
             }
             
@@ -217,13 +298,21 @@
                 background: rgba(255, 255, 255, 0.1);
             }
             
-            .home-btn {
+            .home-btn, .favorites-btn {
                 width: 38px;
                 height: 38px;
                 font-size: 18px;
-                top: 12px;
-                right: 12px;
                 background: rgba(255, 255, 255, 0.1);
+            }
+            
+            .home-btn {
+                bottom: 15px;
+                right: 55px;
+            }
+            
+            .favorites-btn {
+                bottom: 15px;
+                right: 12px;
             }
             
             .prev-btn {
@@ -231,6 +320,14 @@
             }
             
             .next-btn {
+                right: 8px;
+            }
+            
+            .heart-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
+                bottom: 8px;
                 right: 8px;
             }
             
@@ -253,13 +350,21 @@
                 background: rgba(255, 255, 255, 0.18);
             }
             
-            .home-btn {
+            .home-btn, .favorites-btn {
                 width: 60px;
                 height: 60px;
                 font-size: 28px;
+                background: rgba(255, 255, 255, 0.18);
+            }
+            
+            .home-btn {
                 top: 25px;
                 right: 25px;
-                background: rgba(255, 255, 255, 0.18);
+            }
+            
+            .favorites-btn {
+                top: 95px;
+                right: 25px;
             }
             
             .prev-btn {
@@ -268,6 +373,14 @@
             
             .next-btn {
                 right: 30px;
+            }
+            
+            .heart-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+                bottom: 20px;
+                right: 20px;
             }
             
             .footer {
@@ -283,11 +396,19 @@
                 font-size: 32px;
             }
             
-            .home-btn {
+            .home-btn, .favorites-btn {
                 width: 70px;
                 height: 70px;
                 font-size: 32px;
+            }
+            
+            .home-btn {
                 top: 30px;
+                right: 30px;
+            }
+            
+            .favorites-btn {
+                top: 110px;
                 right: 30px;
             }
             
@@ -297,6 +418,14 @@
             
             .next-btn {
                 right: 40px;
+            }
+            
+            .heart-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 28px;
+                bottom: 25px;
+                right: 25px;
             }
         }
         
@@ -314,10 +443,13 @@
         <div class="pdf-container">
             <div class="loading">Завантаження...</div>
             <canvas id="pdf-canvas"></canvas>
+            <canvas id="pdf-canvas-next" class="canvas-next"></canvas>
+            <button class="heart-btn" onclick="toggleFavorite()">♡</button>
         </div>
         
         <button class="nav-btn next-btn" onclick="nextPage()">〉</button>
         <button class="home-btn" onclick="goHome()" title="На першу сторінку">⌂</button>
+        <button class="favorites-btn" onclick="toggleFavoritesView()" title="Показати обрані">♥</button>
     </div>
     
     <div class="footer">
@@ -360,12 +492,20 @@
         let pageNum = 1;
         let pageRendering = false;
         let pageNumPending = null;
+        let favoritesMode = false;
         const canvas = document.getElementById('pdf-canvas');
+        const canvasNext = document.getElementById('pdf-canvas-next');
         const ctx = canvas.getContext('2d');
+        const ctxNext = canvasNext.getContext('2d');
         const prevBtn = document.querySelector('.prev-btn');
         const nextBtn = document.querySelector('.next-btn');
         const homeBtn = document.querySelector('.home-btn');
+        const favoritesBtn = document.querySelector('.favorites-btn');
+        const heartBtn = document.querySelector('.heart-btn');
         const loading = document.querySelector('.loading');
+        
+        // Зберігання обраних сторінок
+        let favoritePages = JSON.parse(localStorage.getItem('gadassa_favorites')) || [];
         
         // Максимальна якість для моніторів
         let renderQuality = Math.max(window.devicePixelRatio || 1, 2);
@@ -412,9 +552,7 @@
             }).promise.then(function(pdf) {
                 pdfDoc = pdf;
                 
-                prevBtn.disabled = pageNum <= 1;
-                nextBtn.disabled = pageNum >= pdf.numPages;
-                homeBtn.disabled = pageNum === 1;
+                updateNavigation();
                 
                 loading.style.display = 'none';
                 renderPage(pageNum);
@@ -447,9 +585,6 @@
         function renderPage(num) {
             pageRendering = true;
             
-            // Додаємо клас для приховування canvas під час завантаження
-            canvas.classList.add('canvas-hidden');
-            
             if (pageCache.has(num)) {
                 renderPageFromCache(num);
             } else {
@@ -461,7 +596,6 @@
                 }).catch(function(error) {
                     console.error('Помилка відображення сторінки:', error);
                     pageRendering = false;
-                    canvas.classList.remove('canvas-hidden');
                 });
             }
         }
@@ -483,18 +617,22 @@
             // Збільшуємо роздільну здатність для якісного відображення
             outputScale = Math.min(outputScale, 3);
             
-            canvas.width = Math.floor(viewport.width * outputScale);
-            canvas.height = Math.floor(viewport.height * outputScale);
+            // Використовуємо допоміжний canvas для рендерингу
+            const targetCanvas = canvasNext;
+            const targetCtx = ctxNext;
             
-            canvas.style.width = Math.floor(viewport.width) + 'px';
-            canvas.style.height = Math.floor(viewport.height) + 'px';
+            targetCanvas.width = Math.floor(viewport.width * outputScale);
+            targetCanvas.height = Math.floor(viewport.height * outputScale);
+            
+            targetCanvas.style.width = Math.floor(viewport.width) + 'px';
+            targetCanvas.style.height = Math.floor(viewport.height) + 'px';
             
             const transform = outputScale !== 1
                 ? [outputScale, 0, 0, outputScale, 0, 0]
                 : null;
             
             const renderContext = {
-                canvasContext: ctx,
+                canvasContext: targetCtx,
                 viewport: viewport,
                 transform: transform
             };
@@ -504,24 +642,123 @@
             renderTask.promise.then(function() {
                 pageRendering = false;
                 
-                // Показуємо canvas з анімацією
-                setTimeout(function() {
+                // Плавна зміна canvas після завершення рендерингу
+                canvas.classList.add('canvas-hidden');
+                setTimeout(() => {
+                    // Переносимо зображення з допоміжного canvas на основний
+                    canvas.width = targetCanvas.width;
+                    canvas.height = targetCanvas.height;
+                    canvas.style.width = targetCanvas.style.width;
+                    canvas.style.height = targetCanvas.style.height;
+                    
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(targetCanvas, 0, 0);
+                    
                     canvas.classList.remove('canvas-hidden');
-                }, 10);
+                    targetCanvas.classList.add('canvas-next');
+                }, 50);
                 
                 if (pageNumPending !== null) {
                     renderPage(pageNumPending);
                     pageNumPending = null;
                 }
                 
-                prevBtn.disabled = num <= 1;
-                nextBtn.disabled = num >= pdfDoc.numPages;
-                homeBtn.disabled = num === 1;
+                updateNavigation();
+                updateHeartButton();
             }).catch(function(error) {
                 console.error('Помилка рендерингу сторінки:', error);
                 pageRendering = false;
-                canvas.classList.remove('canvas-hidden');
             });
+        }
+
+        // Оновлення стану кнопок навігації
+        function updateNavigation() {
+            if (favoritesMode) {
+                const favoritePagesList = getFavoritePagesList();
+                const currentIndex = favoritePagesList.indexOf(pageNum);
+                
+                prevBtn.disabled = currentIndex <= 0;
+                nextBtn.disabled = currentIndex >= favoritePagesList.length - 1;
+                homeBtn.disabled = currentIndex === 0;
+            } else {
+                prevBtn.disabled = pageNum <= 1;
+                nextBtn.disabled = pageNum >= pdfDoc.numPages;
+                homeBtn.disabled = pageNum === 1;
+            }
+            
+            favoritesBtn.classList.toggle('active', favoritesMode);
+        }
+        
+        // Оновлення стану кнопки сердечка
+        function updateHeartButton() {
+            heartBtn.classList.toggle('favorited', favoritePages.includes(pageNum));
+        }
+        
+        // Перемикання обраного стану для поточної сторінки
+        function toggleFavorite() {
+            const index = favoritePages.indexOf(pageNum);
+            
+            if (index === -1) {
+                // Додати до обраних
+                favoritePages.push(pageNum);
+                heartBtn.classList.add('favorited');
+            } else {
+                // Видалити з обраних
+                favoritePages.splice(index, 1);
+                heartBtn.classList.remove('favorited');
+            }
+            
+            // Зберегти в localStorage
+            localStorage.setItem('gadassa_favorites', JSON.stringify(favoritePages));
+            
+            // Якщо ми в режимі перегляду обраних і вилучили сторінку, перейти до наступної
+            if (favoritesMode && index !== -1) {
+                const favoritePagesList = getFavoritePagesList();
+                if (favoritePagesList.length === 0) {
+                    // Якщо більше немає обраних сторінок, вимкнути режим обраних
+                    toggleFavoritesView();
+                } else {
+                    // Перейти до наступної доступної сторінки
+                    const nextPageIndex = Math.min(index, favoritePagesList.length - 1);
+                    pageNum = favoritePagesList[nextPageIndex];
+                    queueRenderPage(pageNum);
+                }
+            }
+        }
+        
+        // Перемикання режиму перегляду обраних
+        function toggleFavoritesView() {
+            favoritesMode = !favoritesMode;
+            
+            if (favoritesMode) {
+                // Увімкнути режим обраних
+                const favoritePagesList = getFavoritePagesList();
+                
+                if (favoritePagesList.length === 0) {
+                    // Якщо немає обраних сторінок, залишитися в звичайному режимі
+                    favoritesMode = false;
+                    alert('У вас немає обраних сторінок');
+                    return;
+                }
+                
+                // Перейти до першої обраної сторінки
+                if (!favoritePagesList.includes(pageNum)) {
+                    pageNum = favoritePagesList[0];
+                    queueRenderPage(pageNum);
+                }
+            } else {
+                // Вимкнути режим обраних
+                pageNum = 1;
+                queueRenderPage(pageNum);
+            }
+            
+            updateNavigation();
+            favoritesBtn.classList.toggle('active', favoritesMode);
+        }
+        
+        // Отримати відсортований список обраних сторінок
+        function getFavoritePagesList() {
+            return [...favoritePages].sort((a, b) => a - b);
         }
 
         // Навігація по сторінках
@@ -534,21 +771,49 @@
         }
 
         function prevPage() {
-            if (pageNum <= 1) return;
-            pageNum--;
-            queueRenderPage(pageNum);
+            if (favoritesMode) {
+                const favoritePagesList = getFavoritePagesList();
+                const currentIndex = favoritePagesList.indexOf(pageNum);
+                
+                if (currentIndex > 0) {
+                    pageNum = favoritePagesList[currentIndex - 1];
+                    queueRenderPage(pageNum);
+                }
+            } else {
+                if (pageNum <= 1) return;
+                pageNum--;
+                queueRenderPage(pageNum);
+            }
         }
 
         function nextPage() {
-            if (pageNum >= pdfDoc.numPages) return;
-            pageNum++;
-            queueRenderPage(pageNum);
+            if (favoritesMode) {
+                const favoritePagesList = getFavoritePagesList();
+                const currentIndex = favoritePagesList.indexOf(pageNum);
+                
+                if (currentIndex < favoritePagesList.length - 1) {
+                    pageNum = favoritePagesList[currentIndex + 1];
+                    queueRenderPage(pageNum);
+                }
+            } else {
+                if (pageNum >= pdfDoc.numPages) return;
+                pageNum++;
+                queueRenderPage(pageNum);
+            }
         }
         
         function goHome() {
-            if (pageNum === 1) return;
-            pageNum = 1;
-            queueRenderPage(pageNum);
+            if (favoritesMode) {
+                const favoritePagesList = getFavoritePagesList();
+                if (favoritePagesList.length > 0) {
+                    pageNum = favoritePagesList[0];
+                    queueRenderPage(pageNum);
+                }
+            } else {
+                if (pageNum === 1) return;
+                pageNum = 1;
+                queueRenderPage(pageNum);
+            }
         }
 
         // Завантаження PDF при старті
@@ -565,8 +830,12 @@
             } else if (e.key === 'Home') {
                 goHome();
             } else if (e.key === 'End') {
-                pageNum = pdfDoc.numPages;
-                queueRenderPage(pageNum);
+                if (!favoritesMode) {
+                    pageNum = pdfDoc.numPages;
+                    queueRenderPage(pageNum);
+                }
+            } else if (e.key === 'f' || e.key === 'F') {
+                toggleFavoritesView();
             }
         });
 
