@@ -30,6 +30,16 @@
             user-select: none;
             height: 100vh;
             height: -webkit-fill-available;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
         }
         
         .main-menu {
@@ -119,7 +129,7 @@
         }
         
         .main-content.opening {
-            animation: fadeInSlideUp 0.5s ease-out forwards;
+            animation: fadeInSlideUp 0.7s ease-out forwards;
         }
         
         @keyframes fadeInSlideUp {
@@ -212,6 +222,13 @@
             z-index: 100;
         }
         
+        .favorite-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        
         .favorite-label {
             color: rgba(255, 255, 255, 0.4);
             font-size: 11px;
@@ -237,6 +254,7 @@
             justify-content: center;
             padding: 0;
             backdrop-filter: blur(5px);
+            z-index: 102;
         }
         
         .back-btn:hover {
@@ -327,14 +345,6 @@
         
         .footer span {
             letter-spacing: 0.5px;
-        }
-        
-        .loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #888;
-            font-size: 16px;
         }
         
         .error-message {
@@ -652,15 +662,21 @@
             </div>
             <div class="pdf-item" onclick="openPdf('medunia')">
                 <div class="pdf-thumbnail" id="thumbnail-medunia">
-                    <div class="thumbnail-placeholder">MEDUNIA<br>Каталог</div>
+                    <div class="thumbnail-placeholder">МЕДУНЯ<br>Каталог</div>
                 </div>
-                <div class="pdf-name">MEDUNIA</div>
+                <div class="pdf-name">МЕДУНЯ</div>
             </div>
             <div class="pdf-item" onclick="openPdf('dobryi_vechir')">
                 <div class="pdf-thumbnail" id="thumbnail-dobryi_vechir">
-                    <div class="thumbnail-placeholder">DOBRYI VECHIR<br>Каталог</div>
+                    <div class="thumbnail-placeholder">ДОБРИЙ ВЕЧІР<br>Каталог</div>
                 </div>
-                <div class="pdf-name">DOBRYI VECHIR</div>
+                <div class="pdf-name">ДОБРИЙ ВЕЧІР</div>
+            </div>
+            <div class="pdf-item" onclick="openPdf('biscotti')">
+                <div class="pdf-thumbnail" id="thumbnail-biscotti">
+                    <div class="thumbnail-placeholder">BISCOTTI<br>Каталог</div>
+                </div>
+                <div class="pdf-name">BISCOTTI</div>
             </div>
         </div>
     </div>
@@ -669,13 +685,14 @@
         <button class="nav-btn prev-btn" onclick="prevPage()" disabled>〈</button>
         
         <div class="pdf-container">
-            <div class="loading">Завантаження...</div>
             <canvas id="pdf-canvas"></canvas>
             <canvas id="pdf-canvas-next" class="canvas-next"></canvas>
             
             <div class="top-buttons">
-                <button class="heart-btn" onclick="toggleFavorite()">♡</button>
-                <span class="favorite-label">Додати до обраного</span>
+                <div class="favorite-container" onclick="toggleFavorite()">
+                    <button class="heart-btn">♡</button>
+                    <span class="favorite-label">Додати до обраного</span>
+                </div>
                 <button class="clear-favorites-btn" onclick="clearAllFavorites()" title="Скинути обрані">×</button>
             </div>
             <div class="bottom-buttons">
@@ -735,7 +752,6 @@
         const shareBtn = document.querySelector('.share-btn');
         const heartBtn = document.querySelector('.heart-btn');
         const clearFavoritesBtn = document.querySelector('.clear-favorites-btn');
-        const loading = document.querySelector('.loading');
         const mainMenu = document.getElementById('mainMenu');
         const mainContent = document.getElementById('mainContent');
         const backButton = document.getElementById('backButton');
@@ -743,7 +759,8 @@
         let favoritePages = {
             gadassa: JSON.parse(localStorage.getItem('gadassa_favorites')) || [],
             medunia: JSON.parse(localStorage.getItem('medunia_favorites')) || [],
-            dobryi_vechir: JSON.parse(localStorage.getItem('dobryi_vechir_favorites')) || []
+            dobryi_vechir: JSON.parse(localStorage.getItem('dobryi_vechir_favorites')) || [],
+            biscotti: JSON.parse(localStorage.getItem('biscotti_favorites')) || []
         };
         
         let renderQuality = Math.min(window.devicePixelRatio || 1, 1.5);
@@ -764,7 +781,8 @@
             const pdfUrls = {
                 gadassa: 'https://lazo-idua.github.io/lazo-idua/gadassa.pdf',
                 medunia: 'https://lazo-idua.github.io/lazo-idua/medunia.pdf',
-                dobryi_vechir: 'https://lazo-idua.github.io/lazo-idua/dobryi_vechir.pdf'
+                dobryi_vechir: 'https://lazo-idua.github.io/lazo-idua/dobryi_vechir.pdf',
+                biscotti: 'https://lazo-idua.github.io/lazo-idua/biscotti.pdf'
             };
             return pdfUrls[pdfName] || '';
         }
@@ -826,6 +844,7 @@
             mainMenu.style.display = 'none';
             mainContent.style.display = 'flex';
             mainContent.classList.add('opening');
+            backButton.style.display = 'flex';
             
             // Очистити canvas перед завантаженням нового PDF
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -876,28 +895,28 @@
         }
 
         function loadPdf() {
-            loading.style.display = 'flex';
-            
             const url = getPdfUrl(currentPdf);
             if (!url) {
-                loading.innerHTML = `
+                mainContent.innerHTML = `
                     <div class="error-message">
                         <p>Помилка: PDF не знайдено</p>
                         <small>Перевірте URL каталогу ${currentPdf.toUpperCase()}</small>
                     </div>
                 `;
+                backButton.style.display = 'flex';
                 updateNavigation();
                 return;
             }
             
             checkPdfAvailability(url).then(isAvailable => {
                 if (!isAvailable) {
-                    loading.innerHTML = `
+                    mainContent.innerHTML = `
                         <div class="error-message">
                             <p>Не вдалося завантажити каталог ${currentPdf.toUpperCase()}</p>
                             <small>PDF недоступний. Перевірте URL або підключення до інтернету.</small>
                         </div>
                     `;
+                    backButton.style.display = 'flex';
                     console.error(`PDF ${currentPdf} недоступний за URL: ${url}`);
                     updateNavigation();
                     return;
@@ -913,18 +932,18 @@
                     useSystemFonts: false
                 }).promise.then(function(pdf) {
                     pdfDoc = pdf;
-                    loading.style.display = 'none';
                     renderPage(pageNum);
                     preloadPages(pageNum + 1, preloadNextPages + 2);
                     updateNavigation();
                 }).catch(function(error) {
                     console.error(`Помилка завантаження PDF ${currentPdf}:`, error);
-                    loading.innerHTML = `
+                    mainContent.innerHTML = `
                         <div class="error-message">
                             <p>Не вдалося завантажити каталог ${currentPdf.toUpperCase()}</p>
                             <small>${error.message || 'Перевірте підключення до інтернету'}</small>
                         </div>
                     `;
+                    backButton.style.display = 'flex';
                     updateNavigation();
                 });
             });
@@ -946,6 +965,7 @@
         function renderPage(num) {
             if (!pdfDoc) return;
             pageRendering = true;
+            backButton.style.display = 'flex';
             
             if (pageCache.has(num)) {
                 renderPageFromCache(num);
@@ -956,6 +976,7 @@
                     preloadPages(num + 1, preloadNextPages);
                 }).catch(function(error) {
                     console.error(`Помилка відображення сторінки ${num}:`, error);
+                    backButton.style.display = 'flex';
                     pageRendering = false;
                 });
             }
@@ -1036,6 +1057,7 @@
                 prevBtn.disabled = true;
                 nextBtn.disabled = true;
                 favoritesBtn.classList.toggle('active', favoritesMode);
+                backButton.style.display = 'flex';
                 return;
             }
             
@@ -1079,6 +1101,7 @@
                 updateHeartButton();
                 updateClearFavoritesButton();
                 favoritesBtn.classList.remove('active');
+                backButton.style.display = 'flex';
             }
         }
         
@@ -1108,6 +1131,7 @@
                     queueRenderPage(pageNum);
                 }
             }
+            backButton.style.display = 'flex';
         }
         
         function toggleFavoritesView() {
@@ -1120,6 +1144,7 @@
                 if (favoritePagesList.length === 0) {
                     favoritesMode = false;
                     alert('У вас немає обраних сторінок');
+                    backButton.style.display = 'flex';
                     return;
                 }
                 
@@ -1134,6 +1159,7 @@
             
             updateNavigation();
             updateClearFavoritesButton();
+            backButton.style.display = 'flex';
         }
         
         function getFavoritePagesList() {
@@ -1162,6 +1188,7 @@
                     alert('Посилання на сторінку скопійовано в буфер обміну!');
                 });
             }
+            backButton.style.display = 'flex';
         }
 
         function queueRenderPage(num) {
@@ -1171,6 +1198,7 @@
             } else {
                 renderPage(num);
             }
+            backButton.style.display = 'flex';
         }
 
         function prevPage() {
@@ -1188,6 +1216,7 @@
                 pageNum--;
                 queueRenderPage(pageNum);
             }
+            backButton.style.display = 'flex';
         }
 
         function nextPage() {
@@ -1205,19 +1234,21 @@
                 pageNum++;
                 queueRenderPage(pageNum);
             }
+            backButton.style.display = 'flex';
         }
 
         window.addEventListener('load', function() {
             generateThumbnail('gadassa', 'thumbnail-gadassa');
             generateThumbnail('medunia', 'thumbnail-medunia');
             generateThumbnail('dobryi_vechir', 'thumbnail-dobryi_vechir');
+            generateThumbnail('biscotti', 'thumbnail-biscotti');
 
             const hash = window.location.hash;
             if (hash && hash.includes('page=') && hash.includes('pdf=')) {
                 const params = new URLSearchParams(hash.substring(1));
                 const page = parseInt(params.get('page'));
                 const pdfName = params.get('pdf');
-                if (!isNaN(page) && page > 0 && (pdfName === 'gadassa' || pdfName === 'medunia' || pdfName === 'dobryi_vechir')) {
+                if (!isNaN(page) && page > 0 && (pdfName === 'gadassa' || pdfName === 'medunia' || pdfName === 'dobryi_vechir' || pdfName === 'biscotti')) {
                     pageNum = page;
                     openPdf(pdfName);
                 }
@@ -1256,6 +1287,7 @@
                 if (pdfDoc && !pageRendering) {
                     renderQuality = Math.min(window.devicePixelRatio || 1, 1.5);
                     renderPage(pageNum);
+                    backButton.style.display = 'flex';
                 }
             }, 100);
         });
@@ -1307,6 +1339,7 @@
             if (pdfDoc && !pageRendering) {
                 setTimeout(function() {
                     renderPage(pageNum);
+                    backButton.style.display = 'flex';
                 }, 350);
             }
         });
