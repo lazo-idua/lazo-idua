@@ -117,6 +117,21 @@
             display: none;
         }
         
+        .main-content.opening {
+            animation: fadeInSlideUp 0.5s ease-out forwards;
+        }
+        
+        @keyframes fadeInSlideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
         .pdf-container {
             position: relative;
             display: flex;
@@ -191,9 +206,16 @@
             top: 20px;
             right: 20px;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            align-items: center;
+            gap: 5px;
             z-index: 100;
+        }
+        
+        .favorite-label {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
         }
         
         .back-btn {
@@ -358,7 +380,7 @@
                 top: 15px;
                 right: 15px;
                 flex-direction: row;
-                gap: 8px;
+                gap: 5px;
             }
             
             .back-btn {
@@ -395,6 +417,10 @@
                 width: 36px;
                 height: 36px;
                 font-size: 18px;
+            }
+            
+            .favorite-label {
+                font-size: 10px;
             }
             
             .footer {
@@ -444,7 +470,7 @@
             .top-buttons {
                 top: 10px;
                 right: 10px;
-                gap: 6px;
+                gap: 3px;
             }
             
             .back-btn {
@@ -483,6 +509,10 @@
                 font-size: 16px;
             }
             
+            .favorite-label {
+                font-size: 9px;
+            }
+            
             .footer {
                 font-size: 9px;
                 padding: 5px;
@@ -511,6 +541,7 @@
             .top-buttons {
                 top: 25px;
                 right: 25px;
+                gap: 10px;
             }
             
             .favorites-btn, .share-btn {
@@ -539,6 +570,10 @@
                 font-size: 24px;
             }
             
+            .favorite-label {
+                font-size: 12px;
+            }
+            
             .footer {
                 padding: 12px;
                 font-size: 12px;
@@ -561,6 +596,7 @@
             .top-buttons {
                 top: 30px;
                 right: 30px;
+                gap: 10px;
             }
             
             .favorites-btn, .share-btn {
@@ -587,6 +623,10 @@
                 height: 60px;
                 font-size: 28px;
             }
+            
+            .favorite-label {
+                font-size: 12px;
+            }
         }
         
         body {
@@ -611,15 +651,15 @@
             </div>
             <div class="pdf-item" onclick="openPdf('medunia')">
                 <div class="pdf-thumbnail" id="thumbnail-medunia">
-                    <div class="thumbnail-placeholder">МЕДУНЯ<br>Каталог</div>
+                    <div class="thumbnail-placeholder">MEDUNIA<br>Каталог</div>
                 </div>
-                <div class="pdf-name">МЕДУНЯ</div>
+                <div class="pdf-name">MEDUNIA</div>
             </div>
             <div class="pdf-item" onclick="openPdf('dobryi_vechir')">
                 <div class="pdf-thumbnail" id="thumbnail-dobryi_vechir">
-                    <div class="thumbnail-placeholder">ДОБРИЙ ВЕЧІР<br>Каталог</div>
+                    <div class="thumbnail-placeholder">DOBRYI VECHIR<br>Каталог</div>
                 </div>
-                <div class="pdf-name">ДОБРИЙ ВЕЧІР</div>
+                <div class="pdf-name">DOBRYI VECHIR</div>
             </div>
         </div>
     </div>
@@ -634,6 +674,7 @@
             
             <div class="top-buttons">
                 <button class="heart-btn" onclick="toggleFavorite()">♡</button>
+                <span class="favorite-label">Додати до обраного</span>
                 <button class="clear-favorites-btn" onclick="clearAllFavorites()" title="Скинути обрані">×</button>
             </div>
             <div class="bottom-buttons">
@@ -783,7 +824,16 @@
             currentPdf = pdfName;
             mainMenu.style.display = 'none';
             mainContent.style.display = 'flex';
+            mainContent.classList.add('opening');
             backButton.style.display = 'flex';
+            
+            // Очистити canvas перед завантаженням нового PDF
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctxNext.clearRect(0, 0, canvasNext.width, canvasNext.height);
+            canvas.width = 0;
+            canvas.height = 0;
+            canvasNext.width = 0;
+            canvasNext.height = 0;
             
             pageCache.clear();
             loadPdf();
@@ -792,6 +842,7 @@
         function goBackToMainMenu() {
             mainMenu.style.display = 'flex';
             mainContent.style.display = 'none';
+            mainContent.classList.remove('opening');
             backButton.style.display = 'none';
             
             pageRendering = false;
@@ -864,7 +915,8 @@
                     pdfDoc = pdf;
                     loading.style.display = 'none';
                     renderPage(pageNum);
-                    preloadPages(pageNum + 1, preloadNextPages);
+                    // Підвантажити кілька сторінок під час анімації
+                    preloadPages(pageNum + 1, preloadNextPages + 2);
                     updateNavigation();
                 }).catch(function(error) {
                     console.error(`Помилка завантаження PDF ${currentPdf}:`, error);
