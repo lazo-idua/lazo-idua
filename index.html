@@ -657,7 +657,7 @@
     </div>
 
     <!-- PDF.js библиотека -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script src="https://unpkg.com/pdfjs-dist@latest/build/pdf.min.js"></script>
     <script>
         // Заборонити лівий клік миші
         document.addEventListener('contextmenu', function(e) {
@@ -686,7 +686,7 @@
         }, { passive: false });
 
         // Ініціалізація PDF.js
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@latest/build/pdf.worker.min.js';
         
         let pdfDoc = null;
         let pageNum = 1;
@@ -720,11 +720,12 @@
         let renderQuality = Math.max(window.devicePixelRatio || 1, 2);
         const isLargeScreen = window.innerWidth >= 1200;
 
-        // Кеш для сторінок - збільшено до 10 сторінок
+        // Кеш для сторінок - збільшено до 20 сторінок
         const pageCache = new Map();
-        const preloadNextPages = 10;
+        const preloadNextPages = 20;
+        const preloadPrevPages = 5; // Додано попереднє завантаження назад
 
-        // Функція для створення мініатюр
+        // Функція для створення мініатюр з покращеною обробкою помилок і вищою роздільною здатністю
         function generateThumbnail(pdfName, thumbnailId) {
             const url = pdfName === 'medunia' 
                 ? 'https://lazo-idua.github.io/lazo-idua/medunia.pdf'
@@ -732,12 +733,12 @@
             
             pdfjsLib.getDocument({
                 url: url,
-                cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/cmaps/',
+                cMapUrl: 'https://unpkg.com/pdfjs-dist@latest/cmaps/',
                 cMapPacked: true,
                 maxImageSize: 1024 * 1024
             }).promise.then(function(pdf) {
                 pdf.getPage(1).then(function(page) {
-                    const viewport = page.getViewport({ scale: 0.5 });
+                    const viewport = page.getViewport({ scale: 1 }); // Збільшено масштаб для кращої видимості
                     const canvas = document.createElement('canvas');
                     const context = canvas.getContext('2d');
                     canvas.width = viewport.width;
@@ -757,7 +758,8 @@
                     });
                 });
             }).catch(function(error) {
-                console.error('Помилка створення мініатюри:', error);
+                console.error('Помилка створення мініатюри для ' + pdfName + ':', error);
+                // Залишити placeholder у разі помилки
             });
         }
 
@@ -818,7 +820,7 @@
             return scale * renderQuality;
         }
 
-        // Завантаження PDF
+        // Завантаження PDF з однаковими параметрами для обох файлів
         function loadPdf() {
             loading.style.display = 'flex';
             
@@ -828,7 +830,7 @@
             
             pdfjsLib.getDocument({
                 url: url,
-                cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/cmaps/',
+                cMapUrl: 'https://unpkg.com/pdfjs-dist@latest/cmaps/',
                 cMapPacked: true,
                 maxImageSize: 4096 * 4096,
                 disableFontFace: false,
@@ -841,8 +843,9 @@
                 loading.style.display = 'none';
                 renderPage(pageNum);
                 
-                // Попереднє завантаження наступних сторінок
-                preloadPages(pageNum + 1, preloadNextPages);
+                // Попереднє завантаження наступних і попередніх сторінок
+                preloadPages(pageNum + 1, preloadNextPages, 1);
+                preloadPages(pageNum - 1, preloadPrevPages, -1);
             }).catch(function(error) {
                 console.error('Помилка завантаження PDF:', error);
                 loading.innerHTML = `
@@ -854,13 +857,14 @@
             });
         }
 
-        // Попереднє завантаження сторінок
-        function preloadPages(startPage, count) {
-            for (let i = startPage; i < startPage + count && i <= pdfDoc.numPages; i++) {
-                if (!pageCache.has(i)) {
-                    pdfDoc.getPage(i).then(function(page) {
-                        pageCache.set(i, page);
-                    });
+        // Попереднє завантаження сторінок (тепер з напрямком)
+        function preloadPages(startPage, count, direction) {
+            for (let i = 0; i < count; i++) {
+                let pageToLoad = startPage + (i * direction);
+                if (pageToLoad >= 1 && pageToLoad <= pdfDoc.numPages && !pageCache.has(pageToLoad)) {
+                    pdfDoc.getPage(pageToLoad).then(function(page) {
+                        pageCache.set(pageToLoad, page);
+                    }).catch(console.error);
                 }
             }
         }
@@ -875,8 +879,9 @@
                 pdfDoc.getPage(num).then(function(page) {
                     pageCache.set(num, page);
                     renderPageFromCache(num);
-                    // Попереднє завантаження наступних сторінок
-                    preloadPages(num + 1, preloadNextPages);
+                    // Попереднє завантаження
+                    preloadPages(num + 1, preloadNextPages, 1);
+                    preloadPages(num - 1, preloadPrevPages, -1);
                 }).catch(function(error) {
                     console.error('Помилка відображення сторінки:', error);
                     pageRendering = false;
@@ -902,8 +907,8 @@
             outputScale = Math.min(outputScale, 3);
             
             // Використовуємо допоміжний canvas для рендерингу
-            const targetCanvas = canvasNext;
-            const targetCtx = ctxNext;
+            const targetCanvas = canvas;
+            const targetCtx = ctx;
             
             targetCanvas.width = Math.floor(viewport.width * outputScale);
             targetCanvas.height = Math.floor(viewport.height * outputScale);
@@ -920,31 +925,17 @@
                 viewport: viewport,
                 transform: transform,
                 enableWebGL: true,
-                textLayer: true,
-                enhanceTextSelection: true
+                renderInteractiveForms: false // Оптимізація для швидкості
             };
+            
+            targetCtx.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
             
             const renderTask = page.render(renderContext);
             
             renderTask.promise.then(function() {
                 pageRendering = false;
                 
-                // Плавна зміна canvas після завершення рендерингу
-                canvas.classList.add('canvas-hidden');
-                setTimeout(() => {
-                    // Переносимо зображення з допоміжного canvas на основний
-                    canvas.width = targetCanvas.width;
-                    canvas.height = targetCanvas.height;
-                    canvas.style.width = targetCanvas.style.width;
-                    canvas.style.height = targetCanvas.style.height;
-                    
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    ctx.drawImage(targetCanvas, 0, 0);
-                    
-                    canvas.classList.remove('canvas-hidden');
-                    canvas.classList.add('high-quality');
-                    targetCanvas.classList.add('canvas-next');
-                }, 50);
+                canvas.classList.add('high-quality');
                 
                 if (pageNumPending !== null) {
                     renderPage(pageNumPending);
@@ -954,10 +945,64 @@
                 updateNavigation();
                 updateHeartButton();
                 updateClearFavoritesButton();
+                
+                // Попередній рендеринг наступної сторінки для швидкого перемикання
+                preRenderNextPage();
             }).catch(function(error) {
                 console.error('Помилка рендерингу сторінки:', error);
                 pageRendering = false;
             });
+        }
+
+        // Нова функція для попереднього рендерингу наступної сторінки
+        function preRenderNextPage() {
+            let nextNum;
+            if (favoritesMode) {
+                const favoritePagesList = getFavoritePagesList();
+                const currentIndex = favoritePagesList.indexOf(pageNum);
+                nextNum = favoritePagesList[currentIndex + 1];
+            } else {
+                nextNum = pageNum + 1;
+            }
+            
+            if (nextNum && nextNum <= pdfDoc.numPages) {
+                if (pageCache.has(nextNum)) {
+                    const page = pageCache.get(nextNum);
+                    const scale = calculateOptimalScale(page);
+                    const viewport = page.getViewport({ scale: scale });
+                    
+                    let outputScale = Math.min(renderQuality, 
+                                             4096 / viewport.width, 
+                                             4096 / viewport.height);
+                    outputScale = Math.min(outputScale, 3);
+                    
+                    canvasNext.width = Math.floor(viewport.width * outputScale);
+                    canvasNext.height = Math.floor(viewport.height * outputScale);
+                    
+                    canvasNext.style.width = Math.floor(viewport.width) + 'px';
+                    canvasNext.style.height = Math.floor(viewport.height) + 'px';
+                    
+                    const transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
+                    
+                    const renderContext = {
+                        canvasContext: ctxNext,
+                        viewport: viewport,
+                        transform: transform,
+                        enableWebGL: true,
+                        renderInteractiveForms: false
+                    };
+                    
+                    ctxNext.clearRect(0, 0, canvasNext.width, canvasNext.height);
+                    page.render(renderContext).promise.catch(console.error);
+                } else {
+                    // Якщо сторінка не в кеші, завантажити її спочатку
+                    pdfDoc.getPage(nextNum).then(function(page) {
+                        pageCache.set(nextNum, page);
+                        // Рекурсивно викликати pre-render після завантаження
+                        preRenderNextPage();
+                    }).catch(console.error);
+                }
+            }
         }
 
         // Оновлення стану кнопок навігації
@@ -1126,12 +1171,44 @@
                 
                 if (currentIndex < favoritePagesList.length - 1) {
                     pageNum = favoritePagesList[currentIndex + 1];
-                    queueRenderPage(pageNum);
+                    // Якщо наступна сторінка вже пререндерена, швидко показати її
+                    if (canvasNext.width > 0) {
+                        // Копіювати з next до main
+                        canvas.width = canvasNext.width;
+                        canvas.height = canvasNext.height;
+                        canvas.style.width = canvasNext.style.width;
+                        canvas.style.height = canvasNext.style.height;
+                        ctx.drawImage(canvasNext, 0, 0);
+                        // Очистити next
+                        canvasNext.width = 0;
+                        // Оновити
+                        updateNavigation();
+                        updateHeartButton();
+                        updateClearFavoritesButton();
+                        // Pre-render нової next
+                        preRenderNextPage();
+                    } else {
+                        queueRenderPage(pageNum);
+                    }
                 }
             } else {
                 if (pageNum >= pdfDoc.numPages) return;
                 pageNum++;
-                queueRenderPage(pageNum);
+                // Аналогічно для нормального режиму
+                if (canvasNext.width > 0) {
+                    canvas.width = canvasNext.width;
+                    canvas.height = canvasNext.height;
+                    canvas.style.width = canvasNext.style.width;
+                    canvas.style.height = canvasNext.style.height;
+                    ctx.drawImage(canvasNext, 0, 0);
+                    canvasNext.width = 0;
+                    updateNavigation();
+                    updateHeartButton();
+                    updateClearFavoritesButton();
+                    preRenderNextPage();
+                } else {
+                    queueRenderPage(pageNum);
+                }
             }
         }
         
