@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>GADASSA</title>
+    <link rel="icon" href="https://lazo-idua.github.io/lazo-idua/Frame1.jpeg" type="image/jpeg">
     <style>
         * {
             margin: 0;
@@ -63,6 +64,8 @@
             object-fit: contain;
             opacity: 1;
             transition: opacity 0.3s ease;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
         }
         
         .canvas-hidden {
@@ -117,10 +120,17 @@
             right: 20px;
         }
         
-        .home-btn {
+        .top-buttons {
             position: absolute;
             top: 20px;
             right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .home-btn, .favorites-btn, .share-btn {
             background: rgba(255, 255, 255, 0.15);
             color: white;
             border: none;
@@ -133,33 +143,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 100;
             padding: 0;
             backdrop-filter: blur(5px);
         }
         
-        .favorites-btn {
-            position: absolute;
-            top: 80px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            font-size: 24px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            padding: 0;
-            backdrop-filter: blur(5px);
-        }
-        
-        .home-btn:hover, .favorites-btn:hover {
+        .home-btn:hover, .favorites-btn:hover, .share-btn:hover {
             background: rgba(255, 255, 255, 0.25);
             transform: scale(1.1);
         }
@@ -169,10 +157,16 @@
             color: #ff5252;
         }
         
-        .heart-btn {
+        .bottom-buttons {
             position: absolute;
             bottom: 15px;
             right: 15px;
+            display: flex;
+            gap: 10px;
+            z-index: 101;
+        }
+        
+        .heart-btn, .clear-favorites-btn {
             background: rgba(0, 0, 0, 0.4);
             color: white;
             border: none;
@@ -185,18 +179,25 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 101;
             padding: 0;
             backdrop-filter: blur(5px);
         }
         
-        .heart-btn:hover {
+        .heart-btn:hover, .clear-favorites-btn:hover {
             background: rgba(0, 0, 0, 0.6);
             transform: scale(1.1);
         }
         
         .heart-btn.favorited {
             color: #ff5252;
+        }
+        
+        .clear-favorites-btn {
+            display: none;
+        }
+        
+        .clear-favorites-btn.visible {
+            display: flex;
         }
         
         .footer {
@@ -245,24 +246,18 @@
                 background: rgba(255, 255, 255, 0.12);
             }
             
-            .home-btn, .favorites-btn {
+            .top-buttons {
+                top: 15px;
+                right: 15px;
+                flex-direction: row; /* Горизонтальне розташування на мобільних */
+                gap: 8px;
+            }
+            
+            .home-btn, .favorites-btn, .share-btn {
                 width: 42px;
                 height: 42px;
                 font-size: 20px;
                 background: rgba(255, 255, 255, 0.12);
-            }
-            
-            /* Змінено: кнопки залишаються у верхньому правому куті на мобільних */
-            .home-btn {
-                top: 20px;
-                right: 20px;
-                bottom: auto;
-            }
-            
-            .favorites-btn {
-                top: 72px; /* 20px + 42px + 10px відступу */
-                right: 20px;
-                bottom: auto;
             }
             
             .prev-btn {
@@ -273,12 +268,16 @@
                 right: 10px;
             }
             
-            .heart-btn {
+            .bottom-buttons {
+                bottom: 10px;
+                right: 10px;
+                gap: 8px;
+            }
+            
+            .heart-btn, .clear-favorites-btn {
                 width: 36px;
                 height: 36px;
                 font-size: 18px;
-                bottom: 10px;
-                right: 10px;
             }
             
             .footer {
@@ -299,24 +298,17 @@
                 background: rgba(255, 255, 255, 0.1);
             }
             
-            .home-btn, .favorites-btn {
+            .top-buttons {
+                top: 10px;
+                right: 10px;
+                gap: 6px;
+            }
+            
+            .home-btn, .favorites-btn, .share-btn {
                 width: 38px;
                 height: 38px;
                 font-size: 18px;
                 background: rgba(255, 255, 255, 0.1);
-            }
-            
-            /* Змінено: кнопки залишаються у верхньому правому куті на мобільних */
-            .home-btn {
-                top: 15px;
-                right: 15px;
-                bottom: auto;
-            }
-            
-            .favorites-btn {
-                top: 63px; /* 15px + 38px + 10px відступу */
-                right: 15px;
-                bottom: auto;
             }
             
             .prev-btn {
@@ -327,12 +319,16 @@
                 right: 8px;
             }
             
-            .heart-btn {
+            .bottom-buttons {
+                bottom: 8px;
+                right: 8px;
+                gap: 6px;
+            }
+            
+            .heart-btn, .clear-favorites-btn {
                 width: 32px;
                 height: 32px;
                 font-size: 16px;
-                bottom: 8px;
-                right: 8px;
             }
             
             .footer {
@@ -354,21 +350,16 @@
                 background: rgba(255, 255, 255, 0.18);
             }
             
-            .home-btn, .favorites-btn {
-                width: 60px;
-                height: 60px;
-                font-size: 28px;
-                background: rgba(255, 255, 255, 0.18);
-            }
-            
-            .home-btn {
+            .top-buttons {
                 top: 25px;
                 right: 25px;
             }
             
-            .favorites-btn {
-                top: 95px;
-                right: 25px;
+            .home-btn, .favorites-btn, .share-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 28px;
+                background: rgba(255, 255, 255, 0.18);
             }
             
             .prev-btn {
@@ -379,12 +370,15 @@
                 right: 30px;
             }
             
-            .heart-btn {
+            .bottom-buttons {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .heart-btn, .clear-favorites-btn {
                 width: 50px;
                 height: 50px;
                 font-size: 24px;
-                bottom: 20px;
-                right: 20px;
             }
             
             .footer {
@@ -400,20 +394,15 @@
                 font-size: 32px;
             }
             
-            .home-btn, .favorites-btn {
-                width: 70px;
-                height: 70px;
-                font-size: 32px;
-            }
-            
-            .home-btn {
+            .top-buttons {
                 top: 30px;
                 right: 30px;
             }
             
-            .favorites-btn {
-                top: 110px;
-                right: 30px;
+            .home-btn, .favorites-btn, .share-btn {
+                width: 70px;
+                height: 70px;
+                font-size: 32px;
             }
             
             .prev-btn {
@@ -424,12 +413,15 @@
                 right: 40px;
             }
             
-            .heart-btn {
+            .bottom-buttons {
+                bottom: 25px;
+                right: 25px;
+            }
+            
+            .heart-btn, .clear-favorites-btn {
                 width: 60px;
                 height: 60px;
                 font-size: 28px;
-                bottom: 25px;
-                right: 25px;
             }
         }
         
@@ -437,6 +429,11 @@
         body {
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
+        }
+        
+        /* Покращена якість відображення тексту */
+        .high-quality {
+            image-rendering: high-quality;
         }
     </style>
 </head>
@@ -448,12 +445,20 @@
             <div class="loading">Завантаження...</div>
             <canvas id="pdf-canvas"></canvas>
             <canvas id="pdf-canvas-next" class="canvas-next"></canvas>
-            <button class="heart-btn" onclick="toggleFavorite()">♡</button>
+            
+            <div class="bottom-buttons">
+                <button class="heart-btn" onclick="toggleFavorite()">♡</button>
+                <button class="clear-favorites-btn" onclick="clearAllFavorites()" title="Скинути обрані">×</button>
+            </div>
         </div>
         
         <button class="nav-btn next-btn" onclick="nextPage()">〉</button>
-        <button class="home-btn" onclick="goHome()" title="На першу сторінку">⌂</button>
-        <button class="favorites-btn" onclick="toggleFavoritesView()" title="Показати обрані">♥</button>
+        
+        <div class="top-buttons">
+            <button class="home-btn" onclick="goHome()" title="На першу сторінку">⌂</button>
+            <button class="favorites-btn" onclick="toggleFavoritesView()" title="Показати обрані">♥</button>
+            <button class="share-btn" onclick="sharePage()" title="Поділитися">↗</button>
+        </div>
     </div>
     
     <div class="footer">
@@ -505,7 +510,9 @@
         const nextBtn = document.querySelector('.next-btn');
         const homeBtn = document.querySelector('.home-btn');
         const favoritesBtn = document.querySelector('.favorites-btn');
+        const shareBtn = document.querySelector('.share-btn');
         const heartBtn = document.querySelector('.heart-btn');
+        const clearFavoritesBtn = document.querySelector('.clear-favorites-btn');
         const loading = document.querySelector('.loading');
         
         // Зберігання обраних сторінок
@@ -550,7 +557,7 @@
                 url: url,
                 cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/cmaps/',
                 cMapPacked: true,
-                maxImageSize: 2048 * 2048, // Збільшили для кращої якості
+                maxImageSize: 4096 * 4096, // Збільшили для кращої якості
                 disableFontFace: false,
                 useSystemFonts: false
             }).promise.then(function(pdf) {
@@ -638,7 +645,11 @@
             const renderContext = {
                 canvasContext: targetCtx,
                 viewport: viewport,
-                transform: transform
+                transform: transform,
+                enableWebGL: true,
+                // Покращення якості відображення тексту
+                textLayer: true,
+                enhanceTextSelection: true
             };
             
             const renderTask = page.render(renderContext);
@@ -659,6 +670,7 @@
                     ctx.drawImage(targetCanvas, 0, 0);
                     
                     canvas.classList.remove('canvas-hidden');
+                    canvas.classList.add('high-quality');
                     targetCanvas.classList.add('canvas-next');
                 }, 50);
                 
@@ -669,6 +681,7 @@
                 
                 updateNavigation();
                 updateHeartButton();
+                updateClearFavoritesButton();
             }).catch(function(error) {
                 console.error('Помилка рендерингу сторінки:', error);
                 pageRendering = false;
@@ -685,6 +698,7 @@
                 nextBtn.disabled = currentIndex >= favoritePagesList.length - 1;
                 homeBtn.disabled = currentIndex === 0;
             } else {
+                // Прибираємо кнопки на першій та останній сторінках
                 prevBtn.disabled = pageNum <= 1;
                 nextBtn.disabled = pageNum >= pdfDoc.numPages;
                 homeBtn.disabled = pageNum === 1;
@@ -696,6 +710,34 @@
         // Оновлення стану кнопки сердечка
         function updateHeartButton() {
             heartBtn.classList.toggle('favorited', favoritePages.includes(pageNum));
+        }
+        
+        // Оновлення стану кнопки скидання обраних
+        function updateClearFavoritesButton() {
+            if (favoritesMode && favoritePages.length > 0) {
+                clearFavoritesBtn.classList.add('visible');
+            } else {
+                clearFavoritesBtn.classList.remove('visible');
+            }
+        }
+        
+        // Скидання всіх обраних сторінок
+        function clearAllFavorites() {
+            if (confirm('Ви впевнені, що хочете видалити всі обрані сторінки?')) {
+                favoritePages = [];
+                localStorage.setItem('gadassa_favorites', JSON.stringify(favoritePages));
+                
+                // Якщо ми в режимі обраних, виходимо з нього
+                if (favoritesMode) {
+                    favoritesMode = false;
+                    pageNum = 1;
+                    queueRenderPage(pageNum);
+                }
+                
+                updateHeartButton();
+                updateClearFavoritesButton();
+                favoritesBtn.classList.remove('active');
+            }
         }
         
         // Перемикання обраного стану для поточної сторінки
@@ -714,6 +756,9 @@
             
             // Зберегти в localStorage
             localStorage.setItem('gadassa_favorites', JSON.stringify(favoritePages));
+            
+            // Оновити кнопку скидання
+            updateClearFavoritesButton();
             
             // Якщо ми в режимі перегляду обраних і вилучили сторінку, перейти до наступної
             if (favoritesMode && index !== -1) {
@@ -758,11 +803,39 @@
             
             updateNavigation();
             favoritesBtn.classList.toggle('active', favoritesMode);
+            updateClearFavoritesButton();
         }
         
         // Отримати відсортований список обраних сторінок
         function getFavoritePagesList() {
             return [...favoritePages].sort((a, b) => a - b);
+        }
+        
+        // Функція для поділуся сторінкою
+        function sharePage() {
+            const pageUrl = window.location.href.split('#')[0] + '#page=' + pageNum;
+            
+            if (navigator.share) {
+                // Використовуємо Web Share API, якщо доступно
+                navigator.share({
+                    title: 'GADASSA - Сторінка ' + pageNum,
+                    url: pageUrl
+                }).catch(console.error);
+            } else {
+                // Копіюємо посилання в буфер обміну
+                navigator.clipboard.writeText(pageUrl).then(function() {
+                    alert('Посилання на сторінку скопійовано в буфер обміну!');
+                }).catch(function() {
+                    // Старий спосіб для браузерів без Clipboard API
+                    const tempInput = document.createElement('input');
+                    tempInput.value = pageUrl;
+                    document.body.appendChild(tempInput);
+                    tempInput.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(tempInput);
+                    alert('Посилання на сторінку скопійовано в буфер обміну!');
+                });
+            }
         }
 
         // Навігація по сторінках
@@ -822,6 +895,15 @@
 
         // Завантаження PDF при старті
         window.addEventListener('load', function() {
+            // Перевіряємо чи є номер сторінки в URL
+            const hash = window.location.hash;
+            if (hash && hash.startsWith('#page=')) {
+                const page = parseInt(hash.substring(6));
+                if (!isNaN(page) && page > 0) {
+                    pageNum = page;
+                }
+            }
+            
             loadPdf();
         });
 
@@ -840,6 +922,12 @@
                 }
             } else if (e.key === 'f' || e.key === 'F') {
                 toggleFavoritesView();
+            } else if (e.key === 's' || e.key === 'S') {
+                sharePage();
+            } else if (e.key === 'c' || e.key === 'C') {
+                if (favoritesMode) {
+                    clearAllFavorites();
+                }
             }
         });
 
