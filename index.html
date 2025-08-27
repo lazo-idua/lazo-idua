@@ -6,6 +6,9 @@
     <title>TD MELNYK</title>
     <link rel="icon" href="https://lazo-idua.github.io/lazo-idua/Logo.jpeg" type="image/jpeg">
     <link rel="apple-touch-icon" href="https://lazo-idua.github.io/lazo-idua/Logo.jpeg">
+    <!-- Додано apple-mobile-web-app-capable для кращої інтеграції на iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
         * {
             margin: 0;
@@ -16,6 +19,9 @@
         html, body {
             height: 100%;
             overflow: hidden;
+            /* Додано для iOS, щоб уникнути bounce-ефекту */
+            position: fixed;
+            width: 100%;
         }
         
         body {
@@ -29,8 +35,12 @@
             -ms-user-select: none;
             user-select: none;
             height: 100vh;
+            /* Виправлено для Safari */
             height: -webkit-fill-available;
             animation: fadeIn 0.5s ease-out forwards;
+            /* Додано для iOS, щоб уникнути bounce-ефекту */
+            overscroll-behavior: none;
+            -webkit-overflow-scrolling: touch;
         }
         
         @keyframes fadeIn {
@@ -63,6 +73,8 @@
             padding: 20px;
             background: #000;
             overflow-y: auto;
+            /* Додано для iOS */
+            -webkit-overflow-scrolling: touch;
         }
         
         .main-menu h1 {
@@ -176,6 +188,7 @@
             object-fit: contain;
             opacity: 1;
             transition: opacity 0.3s ease;
+            /* Виправлено для Safari */
             image-rendering: -webkit-optimize-contrast;
             image-rendering: crisp-edges;
         }
@@ -740,6 +753,9 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
+        // Додано перевірку на iOS
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
             return false;
@@ -751,6 +767,7 @@
             }
         }, { passive: false });
 
+        // Виправлено обробку мультитач для iOS
         document.addEventListener('touchstart', function(e) {
             if (e.touches.length > 1) {
                 e.preventDefault();
@@ -758,7 +775,7 @@
         }, { passive: false });
 
         document.addEventListener('touchmove', function(e) {
-            if (e.touches.length > 1) {
+            if (e.touches.length > 1 && isIOS) {
                 e.preventDefault();
             }
         }, { passive: false });
@@ -793,14 +810,19 @@
             biscotti: JSON.parse(localStorage.getItem('biscotti_favorites')) || []
         };
         
-        let renderQuality = Math.min(window.devicePixelRatio || 1, 1.5);
+        // Змінено якість рендерингу для iOS
+        let renderQuality = isIOS ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
         const isLargeScreen = window.innerWidth >= 1200;
         const pageCache = new Map();
-        const preloadNextPages = 3;
+        const preloadNextPages = isIOS ? 1 : 3; // Зменшено кількість попередньо завантажених сторінок для iOS
 
         async function checkPdfAvailability(url) {
             try {
-                const response = await fetch(url, { method: 'HEAD' });
+                // Додано параметр cache для уникнення кешування на iOS
+                const response = await fetch(url, { 
+                    method: 'HEAD',
+                    cache: 'no-cache'
+                });
                 return response.ok;
             } catch {
                 return false;
@@ -833,7 +855,10 @@
                     cMapPacked: true,
                     maxImageSize: 2048 * 2048,
                     disableFontFace: true,
-                    standardFontDataUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/'
+                    standardFontDataUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/',
+                    // Додано для iOS
+                    isEvalSupported: false,
+                    useSystemFonts: isIOS
                 });
                 
                 loadingTask.promise.then(function(pdf) {
@@ -917,7 +942,11 @@
             const scaleY = availableHeight / viewport.height;
             
             let scale = Math.min(scaleX, scaleY) * 1.2;
-            if (isLargeScreen) {
+            
+            // Змінено масштабування для iOS
+            if (isIOS) {
+                scale = Math.min(scale, 1.8);
+            } else if (isLargeScreen) {
                 scale = Math.min(scale * 1.3, 3.0);
             } else {
                 scale = Math.min(scale, 2.5);
@@ -960,10 +989,14 @@
                     url: url,
                     cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
                     cMapPacked: true,
-                    maxImageSize: 8192 * 8192,
+                    maxImageSize: isIOS ? 4096 * 4096 : 8192 * 8192, // Зменшено для iOS
                     disableFontFace: true,
                     standardFontDataUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/',
-                    useSystemFonts: false
+                    useSystemFonts: isIOS,
+                    // Додано для iOS
+                    isEvalSupported: false,
+                    disableRange: isIOS,
+                    disableStream: isIOS
                 }).promise.then(function(pdf) {
                     pdfDoc = pdf;
                     renderPage(pageNum);
@@ -1025,14 +1058,15 @@
             const scale = calculateOptimalScale(page);
             const viewport = page.getViewport({ scale: scale });
             
-            const maxWidth = 8192;
-            const maxHeight = 8192;
+            // Змінено максимальні розміри для iOS
+            const maxWidth = isIOS ? 4096 : 8192;
+            const maxHeight = isIOS ? 4096 : 8192;
             
             let outputScale = Math.min(renderQuality, 
                                      maxWidth / viewport.width, 
                                      maxHeight / viewport.height);
             
-            outputScale = Math.min(outputScale, 2.5);
+            outputScale = Math.min(outputScale, isIOS ? 1.8 : 2.5);
             
             const targetCanvas = canvasNext;
             const targetCtx = ctxNext;
@@ -1051,7 +1085,7 @@
                 canvasContext: targetCtx,
                 viewport: viewport,
                 transform: transform,
-                enableWebGL: true,
+                enableWebGL: !isIOS, // Вимкнено WebGL для iOS
                 textLayer: false,
                 enhanceTextSelection: false
             };
@@ -1275,7 +1309,7 @@
             if (!pdfDoc) return;
             if (favoritesMode) {
                 const favoritePagesList = getFavoritePagesList();
-                const currentIndex = friendlyPagesList.indexOf(pageNum);
+                const currentIndex = favoritePagesList.indexOf(pageNum);
                 
                 if (currentIndex < favoritePagesList.length - 1) {
                     pageNum = favoritePagesList[currentIndex + 1];
@@ -1338,7 +1372,7 @@
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(function() {
                 if (pdfDoc && !pageRendering) {
-                    renderQuality = Math.min(window.devicePixelRatio || 1, 1.5);
+                    renderQuality = isIOS ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
                     renderPage(pageNum);
                     backButton.style.display = 'flex';
                     logo.style.display = 'block';
