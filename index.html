@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TD MELNYK</title>
-    <link rel="icon" href="https://lazo-idua.github.io/lazo-idua/Logo.jpeg" type="image/jpeg">
-    <link rel="apple-touch-icon" href="https://lazo-idua.github.io/lazo-idua/Logo.jpeg">
+    <link rel="icon" href="https://lazo-idua.github.io/lazo-idua/Logo.png" type="image/png">
+    <link rel="apple-touch-icon" href="https://lazo-idua.github.io/lazo-idua/Logo.png">
     <!-- Додано apple-mobile-web-app-capable для кращої інтеграції на iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -15,7 +15,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+       
         html, body {
             height: 100%;
             overflow: hidden;
@@ -23,7 +23,7 @@
             position: fixed;
             width: 100%;
         }
-        
+       
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             display: flex;
@@ -42,7 +42,7 @@
             overscroll-behavior: none;
             -webkit-overflow-scrolling: touch;
         }
-        
+       
         @keyframes fadeIn {
             0% {
                 opacity: 0;
@@ -51,7 +51,7 @@
                 opacity: 1;
             }
         }
-        
+       
         .logo {
             position: absolute;
             top: 15px;
@@ -63,7 +63,7 @@
             animation: fadeIn 0.5s ease-out 0.2s forwards;
             display: none;
         }
-        
+       
         .main-menu {
             flex: 1;
             display: flex;
@@ -76,14 +76,14 @@
             /* Додано для iOS */
             -webkit-overflow-scrolling: touch;
         }
-        
+       
         .main-menu h1 {
             color: white;
             margin-bottom: 30px;
             font-size: 28px;
             text-align: center;
         }
-        
+       
         .pdf-selection {
             display: flex;
             flex-wrap: wrap;
@@ -91,7 +91,7 @@
             gap: 20px;
             max-width: 1000px;
         }
-        
+       
         .pdf-item {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
@@ -102,12 +102,12 @@
             text-align: center;
             backdrop-filter: blur(5px);
         }
-        
+       
         .pdf-item:hover {
             background: rgba(255, 255, 255, 0.2);
             transform: translateY(-5px);
         }
-        
+       
         .pdf-thumbnail {
             width: 100%;
             height: 250px;
@@ -119,26 +119,26 @@
             justify-content: center;
             overflow: hidden;
         }
-        
+       
         .pdf-thumbnail img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        
+       
         .pdf-thumbnail .thumbnail-placeholder {
             color: rgba(255, 255, 255, 0.5);
             font-size: 14px;
             text-align: center;
             padding: 20px;
         }
-        
+       
         .pdf-name {
             color: white;
             font-size: 16px;
             font-weight: 500;
         }
-        
+       
         .main-content {
             flex: 1;
             display: flex;
@@ -151,11 +151,11 @@
             padding: 0;
             display: none;
         }
-        
+       
         .main-content.opening {
             animation: fadeInSlideUp 0.7s ease-out forwards;
         }
-        
+       
         @keyframes fadeInSlideUp {
             0% {
                 opacity: 0;
@@ -166,7 +166,7 @@
                 transform: translateY(0);
             }
         }
-        
+       
         .pdf-container {
             position: relative;
             display: flex;
@@ -178,7 +178,7 @@
             max-height: 100%;
             padding: 0;
         }
-        
+       
         canvas {
             display: block;
             width: auto;
@@ -192,18 +192,18 @@
             image-rendering: -webkit-optimize-contrast;
             image-rendering: crisp-edges;
         }
-        
+       
         .canvas-hidden {
             opacity: 0;
             pointer-events: none;
         }
-        
+       
         .canvas-next {
             position: absolute;
             opacity: 0;
             z-index: -1;
         }
-        
+       
         .nav-btn {
             position: absolute;
             top: 50%;
@@ -224,19 +224,19 @@
             padding: 0;
             backdrop-filter: blur(5px);
         }
-        
+       
         .nav-btn:hover {
             background: rgba(255, 255, 255, 0.25);
             transform: translateY(-50%) scale(1.1);
         }
-        
+       
         .nav-btn:disabled {
             background: rgba(255, 255, 255, 0.06);
             cursor: not-allowed;
             opacity: 0.4;
             transform: translateY(-50%);
         }
-        
+       
         .top-buttons {
             position: absolute;
             top: 20px;
@@ -246,21 +246,21 @@
             gap: 5px;
             z-index: 100;
         }
-        
+       
         .favorite-container {
             display: flex;
             align-items: center;
             gap: 5px;
             cursor: pointer;
         }
-        
+       
         .favorite-label {
             color: rgba(255, 255, 255, 0.4);
             font-size: 11px;
             letter-spacing: 0.5px;
             white-space: nowrap;
         }
-        
+       
         .back-btn {
             position: absolute;
             bottom: 15px;
@@ -281,12 +281,12 @@
             backdrop-filter: blur(5px);
             z-index: 102;
         }
-        
+       
         .back-btn:hover {
             background: rgba(255, 255, 255, 0.25);
             transform: scale(1.1);
         }
-        
+       
         .favorites-btn, .share-btn {
             background: rgba(255, 255, 255, 0.15);
             color: white;
@@ -303,17 +303,17 @@
             padding: 0;
             backdrop-filter: blur(5px);
         }
-        
+       
         .favorites-btn:hover, .share-btn:hover {
             background: rgba(255, 255, 255, 0.25);
             transform: scale(1.1);
         }
-        
+       
         .favorites-btn.active {
             background: rgba(255, 0, 0, 0.3);
             color: #ff5252;
         }
-        
+       
         .bottom-buttons {
             position: absolute;
             bottom: 15px;
@@ -322,7 +322,7 @@
             gap: 10px;
             z-index: 101;
         }
-        
+       
         .heart-btn, .clear-favorites-btn {
             background: rgba(0, 0, 0, 0.4);
             color: white;
@@ -339,24 +339,24 @@
             padding: 0;
             backdrop-filter: blur(5px);
         }
-        
+       
         .heart-btn:hover, .clear-favorites-btn:hover {
             background: rgba(0, 0, 0, 0.6);
             transform: scale(1.1);
         }
-        
+       
         .heart-btn.favorited {
             color: #ff5252;
         }
-        
+       
         .clear-favorites-btn {
             display: none;
         }
-        
+       
         .clear-favorites-btn.visible {
             display: flex;
         }
-        
+       
         .footer {
             text-align: center;
             padding: 8px;
@@ -367,25 +367,25 @@
             border-top: 1px solid #222;
             min-height: 20px;
         }
-        
+       
         .footer span {
             letter-spacing: 0.5px;
         }
-        
+       
         .error-message {
             text-align: center;
             color: #ff6b6b;
             padding: 30px;
             font-size: 16px;
         }
-        
+       
         .error-message small {
             display: block;
             margin-top: 10px;
             color: #999;
             font-size: 14px;
         }
-        
+       
         @media (max-width: 768px) {
             .logo {
                 max-width: 80px;
@@ -393,39 +393,39 @@
                 top: 10px;
                 left: 10px;
             }
-            
+           
             .main-menu h1 {
                 font-size: 24px;
                 margin-bottom: 20px;
             }
-            
+           
             .pdf-selection {
                 gap: 15px;
             }
-            
+           
             .pdf-item {
                 width: 160px;
                 padding: 12px;
             }
-            
+           
             .pdf-thumbnail {
                 height: 200px;
             }
-            
+           
             .nav-btn {
                 width: 42px;
                 height: 42px;
                 font-size: 20px;
                 background: rgba(255, 255, 255, 0.12);
             }
-            
+           
             .top-buttons {
                 top: 15px;
                 right: 15px;
                 flex-direction: row;
                 gap: 5px;
             }
-            
+           
             .back-btn {
                 bottom: 10px;
                 left: 10px;
@@ -434,44 +434,44 @@
                 font-size: 20px;
                 background: rgba(255, 255, 255, 0.12);
             }
-            
+           
             .favorites-btn, .share-btn {
                 width: 42px;
                 height: 42px;
                 font-size: 20px;
                 background: rgba(255, 255, 255, 0.12);
             }
-            
+           
             .prev-btn {
                 left: 10px;
             }
-            
+           
             .next-btn {
                 right: 10px;
             }
-            
+           
             .bottom-buttons {
                 bottom: 10px;
                 right: 10px;
                 gap: 8px;
             }
-            
+           
             .heart-btn, .clear-favorites-btn {
                 width: 36px;
                 height: 36px;
                 font-size: 18px;
             }
-            
+           
             .favorite-label {
                 font-size: 10px;
             }
-            
+           
             .footer {
                 padding: 6px;
                 font-size: 10px;
             }
         }
-        
+       
         @media (max-width: 480px) {
             .logo {
                 max-width: 60px;
@@ -479,46 +479,46 @@
                 top: 8px;
                 left: 8px;
             }
-            
+           
             .main-menu {
                 padding: 15px;
             }
-            
+           
             .main-menu h1 {
                 font-size: 20px;
                 margin-bottom: 15px;
             }
-            
+           
             .pdf-selection {
                 gap: 10px;
             }
-            
+           
             .pdf-item {
                 width: 140px;
                 padding: 10px;
             }
-            
+           
             .pdf-thumbnail {
                 height: 180px;
             }
-            
+           
             .pdf-name {
                 font-size: 14px;
             }
-            
+           
             .nav-btn {
                 width: 38px;
                 height: 38px;
                 font-size: 18px;
                 background: rgba(255, 255, 255, 0.1);
             }
-            
+           
             .top-buttons {
                 top: 10px;
                 right: 10px;
                 gap: 3px;
             }
-            
+           
             .back-btn {
                 bottom: 8px;
                 left: 8px;
@@ -527,165 +527,165 @@
                 font-size: 18px;
                 background: rgba(255, 255, 255, 0.1);
             }
-            
+           
             .favorites-btn, .share-btn {
                 width: 38px;
                 height: 38px;
                 font-size: 18px;
                 background: rgba(255, 255, 255, 0.1);
             }
-            
+           
             .prev-btn {
                 left: 8px;
             }
-            
+           
             .next-btn {
                 right: 8px;
             }
-            
+           
             .bottom-buttons {
                 bottom: 8px;
                 right: 8px;
                 gap: 6px;
             }
-            
+           
             .heart-btn, .clear-favorites-btn {
                 width: 32px;
                 height: 32px;
                 font-size: 16px;
             }
-            
+           
             .favorite-label {
                 font-size: 9px;
             }
-            
+           
             .footer {
                 font-size: 9px;
                 padding: 5px;
             }
         }
-        
+       
         @media (min-width: 1200px) {
             .logo {
                 max-width: 120px;
                 max-height: 120px;
             }
-            
+           
             .nav-btn {
                 width: 60px;
                 height: 60px;
                 font-size: 28px;
                 background: rgba(255, 255, 255, 0.18);
             }
-            
+           
             .back-btn {
                 width: 60px;
                 height: 60px;
                 font-size: 28px;
                 background: rgba(255, 255, 255, 0.18);
             }
-            
+           
             .top-buttons {
                 top: 25px;
                 right: 25px;
                 gap: 10px;
             }
-            
+           
             .favorites-btn, .share-btn {
                 width: 60px;
                 height: 60px;
                 font-size: 28px;
                 background: rgba(255, 255, 255, 0.18);
             }
-            
+           
             .prev-btn {
                 left: 30px;
             }
-            
+           
             .next-btn {
                 right: 30px;
             }
-            
+           
             .bottom-buttons {
                 bottom: 20px;
                 right: 20px;
             }
-            
+           
             .heart-btn, .clear-favorites-btn {
                 width: 50px;
                 height: 50px;
                 font-size: 24px;
             }
-            
+           
             .favorite-label {
                 font-size: 12px;
             }
-            
+           
             .footer {
                 padding: 12px;
                 font-size: 12px;
             }
         }
-        
+       
         @media (min-width: 1920px) {
             .logo {
                 max-width: 140px;
                 max-height: 140px;
             }
-            
+           
             .nav-btn {
                 width: 70px;
                 height: 70px;
                 font-size: 32px;
             }
-            
+           
             .back-btn {
                 width: 70px;
                 height: 70px;
                 font-size: 32px;
             }
-            
+           
             .top-buttons {
                 top: 30px;
                 right: 30px;
                 gap: 10px;
             }
-            
+           
             .favorites-btn, .share-btn {
                 width: 70px;
                 height: 70px;
                 font-size: 32px;
             }
-            
+           
             .prev-btn {
                 left: 40px;
             }
-            
+           
             .next-btn {
                 right: 40px;
             }
-            
+           
             .bottom-buttons {
                 bottom: 25px;
                 right: 25px;
             }
-            
+           
             .heart-btn, .clear-favorites-btn {
                 width: 60px;
                 height: 60px;
                 font-size: 28px;
             }
-            
+           
             .favorite-label {
                 font-size: 12px;
             }
         }
-        
+       
         body {
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
         }
-        
+       
         .high-quality {
             image-rendering: high-quality;
         }
@@ -719,17 +719,23 @@
                 </div>
                 <div class="pdf-name">BISCOTTI</div>
             </div>
+            <div class="pdf-item" onclick="openPdf('rsv')">
+                <div class="pdf-thumbnail" id="thumbnail-rsv">
+                    <div class="thumbnail-placeholder">R&V<br>Каталог</div>
+                </div>
+                <div class="pdf-name">R&V</div>
+            </div>
         </div>
     </div>
-    
+   
     <div class="main-content" id="mainContent">
         <button class="nav-btn prev-btn" onclick="prevPage()" disabled>〈</button>
-        
+       
         <div class="pdf-container">
-            <img class="logo" src="https://lazo-idua.github.io/lazo-idua/Logo.jpeg" alt="TD MELNYK Logo">
+            <img class="logo" src="https://lazo-idua.github.io/lazo-idua/Logo.png" alt="TD MELNYK Logo">
             <canvas id="pdf-canvas"></canvas>
             <canvas id="pdf-canvas-next" class="canvas-next"></canvas>
-            
+           
             <div class="top-buttons">
                 <div class="favorite-container" onclick="toggleFavorite()">
                     <button class="heart-btn">♡</button>
@@ -743,45 +749,40 @@
             </div>
             <button class="back-btn" id="backButton" onclick="goBackToMainMenu()" title="Назад">←</button>
         </div>
-        
+       
         <button class="nav-btn next-btn" onclick="nextPage()">〉</button>
     </div>
-    
+   
     <div class="footer">
         <span>Created by LAZO.</span>
     </div>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
         // Додано перевірку на iOS
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        
+       
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
             return false;
         });
-
         document.addEventListener('wheel', function(e) {
             if (e.ctrlKey) {
                 e.preventDefault();
             }
         }, { passive: false });
-
         // Виправлено обробку мультитач для iOS
         document.addEventListener('touchstart', function(e) {
             if (e.touches.length > 1) {
                 e.preventDefault();
             }
         }, { passive: false });
-
         document.addEventListener('touchmove', function(e) {
             if (e.touches.length > 1 && isIOS) {
                 e.preventDefault();
             }
         }, { passive: false });
-
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-        
+       
         let pdfDoc = null;
         let pageNum = 1;
         let pageRendering = false;
@@ -802,24 +803,24 @@
         const mainContent = document.getElementById('mainContent');
         const backButton = document.getElementById('backButton');
         const logo = document.querySelector('.logo');
-        
+       
         let favoritePages = {
             gadassa: JSON.parse(localStorage.getItem('gadassa_favorites')) || [],
             medunia: JSON.parse(localStorage.getItem('medunia_favorites')) || [],
             dobryi_vechir: JSON.parse(localStorage.getItem('dobryi_vechir_favorites')) || [],
-            biscotti: JSON.parse(localStorage.getItem('biscotti_favorites')) || []
+            biscotti: JSON.parse(localStorage.getItem('biscotti_favorites')) || [],
+            rsv: JSON.parse(localStorage.getItem('rsv_favorites')) || []
         };
-        
+       
         // Змінено якість рендерингу для iOS
         let renderQuality = isIOS ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
         const isLargeScreen = window.innerWidth >= 1200;
         const pageCache = new Map();
         const preloadNextPages = isIOS ? 1 : 3; // Зменшено кількість попередньо завантажених сторінок для iOS
-
         async function checkPdfAvailability(url) {
             try {
                 // Додано параметр cache для уникнення кешування на iOS
-                const response = await fetch(url, { 
+                const response = await fetch(url, {
                     method: 'HEAD',
                     cache: 'no-cache'
                 });
@@ -828,27 +829,26 @@
                 return false;
             }
         }
-
         function getPdfUrl(pdfName) {
             const pdfUrls = {
                 gadassa: 'https://lazo-idua.github.io/lazo-idua/gadassa.pdf',
                 medunia: 'https://lazo-idua.github.io/lazo-idua/medunia.pdf',
                 dobryi_vechir: 'https://lazo-idua.github.io/lazo-idua/dobryi_vechir.pdf',
-                biscotti: 'https://lazo-idua.github.io/lazo-idua/biscotti.pdf'
+                biscotti: 'https://lazo-idua.github.io/lazo-idua/biscotti.pdf',
+                rsv: 'https://lazo-idua.github.io/lazo-idua/rsv.pdf'
             };
             return pdfUrls[pdfName] || '';
         }
-
         function generateThumbnail(pdfName, thumbnailId) {
             const url = getPdfUrl(pdfName);
             if (!url) return;
-            
+           
             checkPdfAvailability(url).then(isAvailable => {
                 if (!isAvailable) {
                     console.error(`PDF ${pdfName} недоступний за URL: ${url}`);
                     return;
                 }
-                
+               
                 const loadingTask = pdfjsLib.getDocument({
                     url: url,
                     cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
@@ -860,7 +860,7 @@
                     isEvalSupported: false,
                     useSystemFonts: isIOS
                 });
-                
+               
                 loadingTask.promise.then(function(pdf) {
                     pdf.getPage(1).then(function(page) {
                         const viewport = page.getViewport({ scale: 1.0 });
@@ -868,12 +868,12 @@
                         const context = canvas.getContext('2d');
                         canvas.width = viewport.width;
                         canvas.height = viewport.height;
-                        
+                       
                         const renderContext = {
                             canvasContext: context,
                             viewport: viewport
                         };
-                        
+                       
                         page.render(renderContext).promise.then(function() {
                             const thumbnailContainer = document.getElementById(thumbnailId);
                             const img = document.createElement('img');
@@ -893,7 +893,6 @@
                 });
             });
         }
-
         function openPdf(pdfName) {
             currentPdf = pdfName;
             mainMenu.style.display = 'none';
@@ -901,7 +900,7 @@
             mainContent.classList.add('opening');
             backButton.style.display = 'flex';
             logo.style.display = 'block';
-            
+           
             // Очистити canvas перед завантаженням нового PDF
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctxNext.clearRect(0, 0, canvasNext.width, canvasNext.height);
@@ -909,18 +908,17 @@
             canvas.height = 0;
             canvasNext.width = 0;
             canvasNext.height = 0;
-            
+           
             pageCache.clear();
             loadPdf();
         }
-
         function goBackToMainMenu() {
             mainMenu.style.display = 'flex';
             mainContent.style.display = 'none';
             mainContent.classList.remove('opening');
             backButton.style.display = 'none';
             logo.style.display = 'none';
-            
+           
             pageRendering = false;
             pageNumPending = null;
             pageCache.clear();
@@ -931,18 +929,17 @@
             updateHeartButton();
             updateClearFavoritesButton();
         }
-
         function calculateOptimalScale(page) {
             const container = document.querySelector('.pdf-container');
             const availableWidth = container.clientWidth - (isLargeScreen ? 80 : 40);
             const availableHeight = container.clientHeight;
-            
+           
             const viewport = page.getViewport({ scale: 1 });
             const scaleX = availableWidth / viewport.width;
             const scaleY = availableHeight / viewport.height;
-            
+           
             let scale = Math.min(scaleX, scaleY) * 1.2;
-            
+           
             // Змінено масштабування для iOS
             if (isIOS) {
                 scale = Math.min(scale, 1.8);
@@ -951,10 +948,9 @@
             } else {
                 scale = Math.min(scale, 2.5);
             }
-            
+           
             return scale * renderQuality;
         }
-
         function loadPdf() {
             const url = getPdfUrl(currentPdf);
             if (!url) {
@@ -969,7 +965,7 @@
                 updateNavigation();
                 return;
             }
-            
+           
             checkPdfAvailability(url).then(isAvailable => {
                 if (!isAvailable) {
                     mainContent.innerHTML = `
@@ -984,7 +980,7 @@
                     updateNavigation();
                     return;
                 }
-                
+               
                 pdfjsLib.getDocument({
                     url: url,
                     cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
@@ -1017,7 +1013,6 @@
                 });
             });
         }
-
         function preloadPages(startPage, count) {
             if (!pdfDoc) return;
             for (let i = startPage; i < startPage + count && i <= pdfDoc.numPages; i++) {
@@ -1030,13 +1025,12 @@
                 }
             }
         }
-
         function renderPage(num) {
             if (!pdfDoc) return;
             pageRendering = true;
             backButton.style.display = 'flex';
             logo.style.display = 'block';
-            
+           
             if (pageCache.has(num)) {
                 renderPageFromCache(num);
             } else {
@@ -1052,35 +1046,34 @@
                 });
             }
         }
-
         function renderPageFromCache(num) {
             const page = pageCache.get(num);
             const scale = calculateOptimalScale(page);
             const viewport = page.getViewport({ scale: scale });
-            
+           
             // Змінено максимальні розміри для iOS
             const maxWidth = isIOS ? 4096 : 8192;
             const maxHeight = isIOS ? 4096 : 8192;
-            
-            let outputScale = Math.min(renderQuality, 
-                                     maxWidth / viewport.width, 
+           
+            let outputScale = Math.min(renderQuality,
+                                     maxWidth / viewport.width,
                                      maxHeight / viewport.height);
-            
+           
             outputScale = Math.min(outputScale, isIOS ? 1.8 : 2.5);
-            
+           
             const targetCanvas = canvasNext;
             const targetCtx = ctxNext;
-            
+           
             targetCanvas.width = Math.floor(viewport.width * outputScale);
             targetCanvas.height = Math.floor(viewport.height * outputScale);
-            
+           
             targetCanvas.style.width = Math.floor(viewport.width) + 'px';
             targetCanvas.style.height = Math.floor(viewport.height) + 'px';
-            
+           
             const transform = outputScale !== 1
                 ? [outputScale, 0, 0, outputScale, 0, 0]
                 : null;
-            
+           
             const renderContext = {
                 canvasContext: targetCtx,
                 viewport: viewport,
@@ -1089,32 +1082,32 @@
                 textLayer: false,
                 enhanceTextSelection: false
             };
-            
+           
             const renderTask = page.render(renderContext);
-            
+           
             renderTask.promise.then(function() {
                 pageRendering = false;
-                
+               
                 canvas.classList.add('canvas-hidden');
                 setTimeout(() => {
                     canvas.width = targetCanvas.width;
                     canvas.height = targetCanvas.height;
                     canvas.style.width = targetCanvas.style.width;
                     canvas.style.height = targetCanvas.style.height;
-                    
+                   
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     ctx.drawImage(targetCanvas, 0, 0);
-                    
+                   
                     canvas.classList.remove('canvas-hidden');
                     canvas.classList.add('high-quality');
                     targetCanvas.classList.add('canvas-next');
                 }, 50);
-                
+               
                 if (pageNumPending !== null) {
                     renderPage(pageNumPending);
                     pageNumPending = null;
                 }
-                
+               
                 backButton.style.display = 'flex';
                 logo.style.display = 'block';
                 updateNavigation();
@@ -1127,7 +1120,6 @@
                 pageRendering = false;
             });
         }
-
         function updateNavigation() {
             if (!pdfDoc) {
                 prevBtn.disabled = true;
@@ -1137,27 +1129,27 @@
                 logo.style.display = 'block';
                 return;
             }
-            
+           
             if (favoritesMode) {
                 const favoritePagesList = getFavoritePagesList();
                 const currentIndex = favoritePagesList.indexOf(pageNum);
-                
+               
                 prevBtn.disabled = currentIndex <= 0;
                 nextBtn.disabled = currentIndex >= favoritePagesList.length - 1;
             } else {
                 prevBtn.disabled = pageNum <= 1;
                 nextBtn.disabled = pageNum >= pdfDoc.numPages;
             }
-            
+           
             favoritesBtn.classList.toggle('active', favoritesMode);
             backButton.style.display = 'flex';
             logo.style.display = 'block';
         }
-        
+       
         function updateHeartButton() {
             heartBtn.classList.toggle('favorited', favoritePages[currentPdf].includes(pageNum));
         }
-        
+       
         function updateClearFavoritesButton() {
             if (favoritesMode && favoritePages[currentPdf].length > 0) {
                 clearFavoritesBtn.classList.add('visible');
@@ -1165,18 +1157,18 @@
                 clearFavoritesBtn.classList.remove('visible');
             }
         }
-        
+       
         function clearAllFavorites() {
             if (confirm('Ви впевнені, що хочете видалити всі обрані сторінки?')) {
                 favoritePages[currentPdf] = [];
                 localStorage.setItem(`${currentPdf}_favorites`, JSON.stringify(favoritePages[currentPdf]));
-                
+               
                 if (favoritesMode) {
                     favoritesMode = false;
                     pageNum = 1;
                     queueRenderPage(pageNum);
                 }
-                
+               
                 updateHeartButton();
                 updateClearFavoritesButton();
                 favoritesBtn.classList.remove('active');
@@ -1184,11 +1176,11 @@
                 logo.style.display = 'block';
             }
         }
-        
+       
         function toggleFavorite() {
             if (!pdfDoc) return;
             const index = favoritePages[currentPdf].indexOf(pageNum);
-            
+           
             if (index === -1) {
                 favoritePages[currentPdf].push(pageNum);
                 heartBtn.classList.add('favorited');
@@ -1196,11 +1188,11 @@
                 favoritePages[currentPdf].splice(index, 1);
                 heartBtn.classList.remove('favorited');
             }
-            
+           
             localStorage.setItem(`${currentPdf}_favorites`, JSON.stringify(favoritePages[currentPdf]));
-            
+           
             updateClearFavoritesButton();
-            
+           
             if (favoritesMode && index !== -1) {
                 const favoritePagesList = getFavoritePagesList();
                 if (favoritePagesList.length === 0) {
@@ -1214,14 +1206,14 @@
             backButton.style.display = 'flex';
             logo.style.display = 'block';
         }
-        
+       
         function toggleFavoritesView() {
             if (!pdfDoc) return;
             favoritesMode = !favoritesMode;
-            
+           
             if (favoritesMode) {
                 const favoritePagesList = getFavoritePagesList();
-                
+               
                 if (favoritePagesList.length === 0) {
                     favoritesMode = false;
                     alert('У вас немає обраних сторінок');
@@ -1229,7 +1221,7 @@
                     logo.style.display = 'block';
                     return;
                 }
-                
+               
                 if (!favoritePagesList.includes(pageNum)) {
                     pageNum = favoritePagesList[0];
                     queueRenderPage(pageNum);
@@ -1238,21 +1230,21 @@
                 pageNum = 1;
                 queueRenderPage(pageNum);
             }
-            
+           
             updateNavigation();
             updateClearFavoritesButton();
             backButton.style.display = 'flex';
             logo.style.display = 'block';
         }
-        
+       
         function getFavoritePagesList() {
             return [...favoritePages[currentPdf]].sort((a, b) => a - b);
         }
-        
+       
         function sharePage() {
             if (!pdfDoc) return;
             const pageUrl = window.location.href.split('#')[0] + '#page=' + pageNum + '&pdf=' + currentPdf;
-            
+           
             if (navigator.share) {
                 navigator.share({
                     title: 'TD MELNYK - ' + currentPdf.toUpperCase() + ' - Сторінка ' + pageNum,
@@ -1274,7 +1266,6 @@
             backButton.style.display = 'flex';
             logo.style.display = 'block';
         }
-
         function queueRenderPage(num) {
             if (!pdfDoc) return;
             if (pageRendering) {
@@ -1285,13 +1276,12 @@
             backButton.style.display = 'flex';
             logo.style.display = 'block';
         }
-
         function prevPage() {
             if (!pdfDoc) return;
             if (favoritesMode) {
                 const favoritePagesList = getFavoritePagesList();
                 const currentIndex = favoritePagesList.indexOf(pageNum);
-                
+               
                 if (currentIndex > 0) {
                     pageNum = favoritePagesList[currentIndex - 1];
                     queueRenderPage(pageNum);
@@ -1304,13 +1294,12 @@
             backButton.style.display = 'flex';
             logo.style.display = 'block';
         }
-
         function nextPage() {
             if (!pdfDoc) return;
             if (favoritesMode) {
                 const favoritePagesList = getFavoritePagesList();
                 const currentIndex = favoritePagesList.indexOf(pageNum);
-                
+               
                 if (currentIndex < favoritePagesList.length - 1) {
                     pageNum = favoritePagesList[currentIndex + 1];
                     queueRenderPage(pageNum);
@@ -1323,25 +1312,23 @@
             backButton.style.display = 'flex';
             logo.style.display = 'block';
         }
-
         window.addEventListener('load', function() {
             generateThumbnail('gadassa', 'thumbnail-gadassa');
             generateThumbnail('medunia', 'thumbnail-medunia');
             generateThumbnail('dobryi_vechir', 'thumbnail-dobryi_vechir');
             generateThumbnail('biscotti', 'thumbnail-biscotti');
-
+            generateThumbnail('rsv', 'thumbnail-rsv');
             const hash = window.location.hash;
             if (hash && hash.includes('page=') && hash.includes('pdf=')) {
                 const params = new URLSearchParams(hash.substring(1));
                 const page = parseInt(params.get('page'));
                 const pdfName = params.get('pdf');
-                if (!isNaN(page) && page > 0 && (pdfName === 'gadassa' || pdfName === 'medunia' || pdfName === 'dobryi_vechir' || pdfName === 'biscotti')) {
+                if (!isNaN(page) && page > 0 && (pdfName === 'gadassa' || pdfName === 'medunia' || pdfName === 'dobryi_vechir' || pdfName === 'biscotti' || pdfName === 'rsv')) {
                     pageNum = page;
                     openPdf(pdfName);
                 }
             }
         });
-
         document.addEventListener('keydown', function(e) {
             if (e.key === 'ArrowLeft') {
                 prevPage();
@@ -1366,7 +1353,6 @@
                 }
             }
         });
-
         let resizeTimeout;
         window.addEventListener('resize', function() {
             clearTimeout(resizeTimeout);
@@ -1379,24 +1365,21 @@
                 }
             }, 100);
         });
-
         let touchStartX = 0;
         let touchStartTime = 0;
-
         document.addEventListener('touchstart', function(e) {
             if (e.touches.length === 1) {
                 touchStartX = e.touches[0].clientX;
                 touchStartTime = Date.now();
             }
         }, { passive: true });
-
         document.addEventListener('touchend', function(e) {
             if (e.changedTouches.length === 1) {
                 const touchEndX = e.changedTouches[0].clientX;
                 const touchEndTime = Date.now();
                 const deltaX = touchEndX - touchStartX;
                 const deltaTime = touchEndTime - touchStartTime;
-                
+               
                 if (deltaTime < 300 && Math.abs(deltaX) > 50) {
                     if (deltaX > 0) {
                         prevPage();
@@ -1406,7 +1389,6 @@
                 }
             }
         }, { passive: true });
-
         document.addEventListener('keydown', function(e) {
             if (e.key === ' ' && !e.shiftKey) {
                 e.preventDefault();
@@ -1416,11 +1398,10 @@
                 prevPage();
             }
         });
-
         function setAppHeight() {
             document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
         }
-        
+       
         window.addEventListener('resize', setAppHeight);
         window.addEventListener('orientationchange', function() {
             setTimeout(setAppHeight, 300);
