@@ -49,7 +49,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 60px;
+            height: 48px;
             background: #000;
             z-index: 104;
             display: flex;
@@ -58,8 +58,8 @@
         }
        
         .header-logo {
-            max-width: 60px;
-            max-height: 60px;
+            max-width: 40px;
+            max-height: 40px;
             opacity: 0;
             animation: fadeIn 0.5s ease-out 0.2s forwards;
         }
@@ -83,7 +83,7 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
-            padding-top: 60px;
+            padding-top: 48px;
             background: #000;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
@@ -91,28 +91,40 @@
        
         .main-menu h1 {
             color: white;
-            margin-bottom: 30px;
-            font-size: 28px;
+            margin-bottom: 20px;
+            font-size: 24px;
             text-align: center;
         }
        
         .pdf-selection {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            max-width: 1000px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            justify-content: flex-start;
+            gap: 15px;
+            max-width: 100%;
+            padding: 10px;
+            scroll-behavior: smooth;
+        }
+       
+        .pdf-selection::-webkit-scrollbar {
+            display: none;
         }
        
         .pdf-item {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            padding: 15px;
+            padding: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
-            width: 200px;
+            width: calc(25% - 15px);
+            min-width: 140px;
+            max-width: 160px;
             text-align: center;
             backdrop-filter: blur(5px);
+            scroll-snap-align: start;
         }
        
         .pdf-item:hover {
@@ -122,7 +134,7 @@
        
         .pdf-thumbnail {
             width: 100%;
-            height: 250px;
+            height: 180px;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 5px;
             margin-bottom: 10px;
@@ -175,8 +187,55 @@
        
         .pdf-name {
             color: white;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 500;
+        }
+       
+        .dots-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+       
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+       
+        .dot.active {
+            background: white;
+        }
+       
+        .tooltip {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 105;
+            max-width: 90%;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInTooltip 0.5s ease-out forwards;
+            animation-delay: 1s;
+        }
+       
+        .tooltip.pdf-view {
+            top: 20px;
+            bottom: auto;
+        }
+       
+        @keyframes fadeInTooltip {
+            0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+            100% { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
        
         .main-content {
@@ -420,16 +479,16 @@
         }
        
         @media (max-width: 768px) {
-            .header { height: 68px; padding: 10px; }
-            .header-logo { max-width: 80px; max-height: 80px; }
-            .logo { max-width: 80px; max-height: 80px; top: 10px; left: 10px; }
-            .main-menu { padding-top: 68px; }
-            .main-menu h1 { font-size: 24px; margin-bottom: 20px; }
-            .pdf-selection { gap: 15px; }
-            .pdf-item { width: 160px; padding: 12px; }
-            .pdf-thumbnail { height: 200px; }
+            .header { height: 48px; padding: 8px; }
+            .header-logo { max-width: 40px; max-height: 40px; }
+            .main-menu { padding-top: 48px; }
+            .main-menu h1 { font-size: 20px; margin-bottom: 15px; }
+            .pdf-selection { gap: 10px; padding: 8px; }
+            .pdf-item { width: calc(25% - 10px); min-width: 120px; max-width: 140px; }
+            .pdf-thumbnail { height: 160px; }
+            .pdf-name { font-size: 12px; }
             .nav-btn { width: 42px; height: 42px; font-size: 20px; background: rgba(255, 255, 255, 0.12); }
-            .top-buttons { top: 15px; right: 15px; flex-direction: row; gap: 5px; }
+            .top-buttons { top: 15px; right: 15px; gap: 5px; }
             .back-btn { bottom: 10px; left: 10px; width: 42px; height: 42px; font-size: 20px; background: rgba(255, 255, 255, 0.12); }
             .favorites-btn, .share-btn { width: 42px; height: 42px; font-size: 20px; background: rgba(255, 255, 255, 0.12); }
             .prev-btn { left: 10px; }
@@ -438,18 +497,20 @@
             .heart-btn, .clear-favorites-btn { width: 36px; height: 36px; font-size: 18px; }
             .favorite-label { font-size: 10px; }
             .footer { padding: 6px; font-size: 10px; }
+            .dots-container { margin-top: 8px; }
+            .dot { width: 6px; height: 6px; }
+            .tooltip { font-size: 12px; padding: 8px 12px; }
         }
        
         @media (max-width: 480px) {
-            .header { height: 60px; padding: 8px; }
-            .header-logo { max-width: 60px; max-height: 60px; }
-            .logo { max-width: 60px; max-height: 60px; top: 8px; left: 8px; }
-            .main-menu { padding: 15px; padding-top: 60px; }
-            .main-menu h1 { font-size: 20px; margin-bottom: 15px; }
-            .pdf-selection { gap: 10px; }
-            .pdf-item { width: 140px; padding: 10px; }
-            .pdf-thumbnail { height: 180px; }
-            .pdf-name { font-size: 14px; }
+            .header { height: 48px; padding: 6px; }
+            .header-logo { max-width: 36px; max-height: 36px; }
+            .main-menu { padding: 10px; padding-top: 48px; }
+            .main-menu h1 { font-size: 18px; margin-bottom: 10px; }
+            .pdf-selection { gap: 8px; padding: 6px; }
+            .pdf-item { width: calc(25% - 8px); min-width: 100px; max-width: 120px; }
+            .pdf-thumbnail { height: 140px; }
+            .pdf-name { font-size: 11px; }
             .nav-btn { width: 38px; height: 38px; font-size: 18px; background: rgba(255, 255, 255, 0.1); }
             .top-buttons { top: 10px; right: 10px; gap: 3px; }
             .back-btn { bottom: 8px; left: 8px; width: 38px; height: 38px; font-size: 18px; background: rgba(255, 255, 255, 0.1); }
@@ -460,13 +521,19 @@
             .heart-btn, .clear-favorites-btn { width: 32px; height: 32px; font-size: 16px; }
             .favorite-label { font-size: 9px; }
             .footer { font-size: 9px; padding: 5px; }
+            .dots-container { margin-top: 6px; }
+            .dot { width: 5px; height: 5px; }
+            .tooltip { font-size: 11px; padding: 6px 10px; }
         }
        
         @media (min-width: 1200px) {
-            .header { height: 80px; padding: 15px; }
-            .header-logo { max-width: 120px; max-height: 120px; }
-            .logo { max-width: 120px; max-height: 120px; }
-            .main-menu { padding-top: 80px; }
+            .header { height: 64px; padding: 12px; }
+            .header-logo { max-width: 48px; max-height: 48px; }
+            .main-menu { padding-top: 64px; }
+            .pdf-selection { flex-wrap: wrap; justify-content: center; overflow-x: hidden; }
+            .pdf-item { width: 200px; min-width: 200px; max-width: 220px; }
+            .pdf-thumbnail { height: 250px; }
+            .pdf-name { font-size: 16px; }
             .nav-btn { width: 60px; height: 60px; font-size: 28px; background: rgba(255, 255, 255, 0.18); }
             .back-btn { width: 60px; height: 60px; font-size: 28px; background: rgba(255, 255, 255, 0.18); }
             .top-buttons { top: 25px; right: 25px; gap: 10px; }
@@ -477,13 +544,16 @@
             .heart-btn, .clear-favorites-btn { width: 50px; height: 50px; font-size: 24px; }
             .favorite-label { font-size: 12px; }
             .footer { padding: 12px; font-size: 12px; }
+            .dots-container { display: none; }
+            .tooltip { font-size: 14px; padding: 12px 18px; }
         }
        
         @media (min-width: 1920px) {
-            .header { height: 90px; padding: 20px; }
-            .header-logo { max-width: 140px; max-height: 140px; }
-            .logo { max-width: 140px; max-height: 140px; }
-            .main-menu { padding-top: 90px; }
+            .header { height: 64px; padding: 12px; }
+            .header-logo { max-width: 56px; max-height: 56px; }
+            .main-menu { padding-top: 64px; }
+            .pdf-item { width: 220px; min-width: 220px; max-width: 240px; }
+            .pdf-thumbnail { height: 280px; }
             .nav-btn { width: 70px; height: 70px; font-size: 32px; }
             .back-btn { width: 70px; height: 70px; font-size: 32px; }
             .top-buttons { top: 30px; right: 30px; gap: 10px; }
@@ -511,7 +581,7 @@
     </div>
     <div class="main-menu" id="mainMenu">
         <h1>TD MELNYK</h1>
-        <div class="pdf-selection">
+        <div class="pdf-selection" id="pdfSelection">
             <div class="pdf-item" onclick="openPdf('gadassa')">
                 <div class="pdf-thumbnail" id="thumbnail-gadassa">
                     <div class="thumbnail-placeholder">GADASSA<br>Каталог</div>
@@ -548,13 +618,14 @@
                 <div class="pdf-name">R&V</div>
             </div>
         </div>
+        <div class="dots-container" id="dotsContainer"></div>
+        <div class="tooltip" id="mainTooltip">Свайпайте вправо/вліво, щоб переглянути каталоги. Натисніть на картку, щоб відкрити PDF.</div>
     </div>
    
     <div class="main-content" id="mainContent">
         <button class="nav-btn prev-btn" onclick="prevPage()" disabled>〈</button>
        
         <div class="pdf-container">
-            <img class="logo" src="https://lazo-idua.github.io/lazo-idua/Logo.png" alt="TD MELNYK Logo">
             <canvas id="pdf-canvas"></canvas>
             <canvas id="pdf-canvas-next" class="canvas-next"></canvas>
            
@@ -570,6 +641,7 @@
                 <button class="share-btn" onclick="sharePage()" title="Поділитися">↗</button>
             </div>
             <button class="back-btn" id="backButton" onclick="goBackToMainMenu()" title="Назад">←</button>
+            <div class="tooltip pdf-view" id="pdfTooltip">Свайпайте або використовуйте стрілки для навігації. Натисніть ♥ для обраного, ↗ для поширення, ← для повернення.</div>
         </div>
        
         <button class="nav-btn next-btn" onclick="nextPage()">〉</button>
@@ -622,8 +694,11 @@
         const mainMenu = document.getElementById('mainMenu');
         const mainContent = document.getElementById('mainContent');
         const backButton = document.getElementById('backButton');
-        const logo = document.querySelector('.logo');
         const header = document.getElementById('header');
+        const pdfSelection = document.getElementById('pdfSelection');
+        const dotsContainer = document.getElementById('dotsContainer');
+        const mainTooltip = document.getElementById('mainTooltip');
+        const pdfTooltip = document.getElementById('pdfTooltip');
        
         let favoritePages = {
             gadassa: JSON.parse(localStorage.getItem('gadassa_favorites')) || [],
@@ -637,6 +712,44 @@
         const isLargeScreen = window.innerWidth >= 1200;
         const pageCache = new Map();
         const preloadNextPages = isIOS ? 1 : 3;
+       
+        // Initialize dots for mobile pagination
+        function initDots() {
+            const items = pdfSelection.querySelectorAll('.pdf-item');
+            const numItems = items.length;
+            const itemsPerPage = 4;
+            const numPages = Math.ceil(numItems / itemsPerPage);
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < numPages; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                if (i === 0) dot.classList.add('active');
+                dotsContainer.appendChild(dot);
+            }
+        }
+       
+        // Update active dot based on scroll position
+        function updateDots() {
+            const items = pdfSelection.querySelectorAll('.pdf-item');
+            const itemsPerPage = 4;
+            const numPages = Math.ceil(items.length / itemsPerPage);
+            const scrollLeft = pdfSelection.scrollLeft;
+            const itemWidth = items[0].offsetWidth + 8; // Including gap
+            const currentPage = Math.floor(scrollLeft / (itemWidth * itemsPerPage));
+            const dots = dotsContainer.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentPage);
+            });
+        }
+       
+        // Hide tooltips after 5 seconds
+        function hideTooltips() {
+            setTimeout(() => {
+                mainTooltip.style.opacity = '0';
+                pdfTooltip.style.opacity = '0';
+            }, 5000);
+        }
+       
         async function checkPdfAvailability(url) {
             try {
                 const response = await fetch(url, {
@@ -648,6 +761,7 @@
                 return false;
             }
         }
+       
         function getPdfUrl(pdfName) {
             const pdfUrls = {
                 gadassa: 'https://lazo-idua.github.io/lazo-idua/gadassa.pdf',
@@ -658,6 +772,7 @@
             };
             return pdfUrls[pdfName] || '';
         }
+       
         function generateThumbnail(pdfName, thumbnailId) {
             const url = getPdfUrl(pdfName);
             if (!url) return;
@@ -722,6 +837,7 @@
                 });
             });
         }
+       
         function openPdf(pdfName) {
             currentPdf = pdfName;
             mainMenu.style.display = 'none';
@@ -729,8 +845,7 @@
             header.style.display = 'none';
             mainContent.classList.add('opening');
             backButton.style.display = 'flex';
-            logo.style.display = 'block';
-           
+            pdfTooltip.style.display = 'block';
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctxNext.clearRect(0, 0, canvasNext.width, canvasNext.height);
             canvas.width = 0;
@@ -740,15 +855,17 @@
            
             pageCache.clear();
             loadPdf();
+            hideTooltips();
         }
+       
         function goBackToMainMenu() {
             mainMenu.style.display = 'flex';
             mainContent.style.display = 'none';
             header.style.display = 'flex';
             mainContent.classList.remove('opening');
             backButton.style.display = 'none';
-            logo.style.display = 'none';
-           
+            pdfTooltip.style.display = 'none';
+            mainTooltip.style.display = 'block';
             pageRendering = false;
             pageNumPending = null;
             pageCache.clear();
@@ -758,7 +875,9 @@
             updateNavigation();
             updateHeartButton();
             updateClearFavoritesButton();
+            hideTooltips();
         }
+       
         function calculateOptimalScale(page) {
             const container = document.querySelector('.pdf-container');
             const availableWidth = container.clientWidth - (isLargeScreen ? 80 : 40);
@@ -780,6 +899,7 @@
            
             return scale * renderQuality;
         }
+       
         function loadPdf() {
             const url = getPdfUrl(currentPdf);
             if (!url) {
@@ -790,8 +910,9 @@
                     </div>
                 `;
                 backButton.style.display = 'flex';
-                logo.style.display = 'block';
+                pdfTooltip.style.display = 'block';
                 updateNavigation();
+                hideTooltips();
                 return;
             }
            
@@ -804,9 +925,10 @@
                         </div>
                     `;
                     backButton.style.display = 'flex';
-                    logo.style.display = 'block';
+                    pdfTooltip.style.display = 'block';
                     console.error(`PDF ${currentPdf} недоступний за URL: ${url}`);
                     updateNavigation();
+                    hideTooltips();
                     return;
                 }
                
@@ -826,7 +948,8 @@
                     renderPage(pageNum);
                     preloadPages(pageNum + 1, preloadNextPages + 2);
                     updateNavigation();
-                    logo.style.display = 'block';
+                    pdfTooltip.style.display = 'block';
+                    hideTooltips();
                 }).catch(function(error) {
                     console.error(`Помилка завантаження PDF ${currentPdf}:`, error);
                     mainContent.innerHTML = `
@@ -836,11 +959,13 @@
                         </div>
                     `;
                     backButton.style.display = 'flex';
-                    logo.style.display = 'block';
+                    pdfTooltip.style.display = 'block';
                     updateNavigation();
+                    hideTooltips();
                 });
             });
         }
+       
         function preloadPages(startPage, count) {
             if (!pdfDoc) return;
             for (let i = startPage; i < startPage + count && i <= pdfDoc.numPages; i++) {
@@ -853,11 +978,12 @@
                 }
             }
         }
+       
         function renderPage(num) {
             if (!pdfDoc) return;
             pageRendering = true;
             backButton.style.display = 'flex';
-            logo.style.display = 'block';
+            pdfTooltip.style.display = 'block';
            
             if (pageCache.has(num)) {
                 renderPageFromCache(num);
@@ -869,11 +995,12 @@
                 }).catch(function(error) {
                     console.error(`Помилка відображення сторінки ${num}:`, error);
                     backButton.style.display = 'flex';
-                    logo.style.display = 'block';
+                    pdfTooltip.style.display = 'block';
                     pageRendering = false;
                 });
             }
         }
+       
         function renderPageFromCache(num) {
             const page = pageCache.get(num);
             const scale = calculateOptimalScale(page);
@@ -932,24 +1059,27 @@
                 }
                
                 backButton.style.display = 'flex';
-                logo.style.display = 'block';
+                pdfTooltip.style.display = 'block';
                 updateNavigation();
                 updateHeartButton();
                 updateClearFavoritesButton();
+                hideTooltips();
             }).catch(function(error) {
                 console.error(`Помилка рендерингу сторінки ${num}:`, error);
                 backButton.style.display = 'flex';
-                logo.style.display = 'block';
+                pdfTooltip.style.display = 'block';
                 pageRendering = false;
+                hideTooltips();
             });
         }
+       
         function updateNavigation() {
             if (!pdfDoc) {
                 prevBtn.disabled = true;
                 nextBtn.disabled = true;
                 favoritesBtn.classList.toggle('active', favoritesMode);
                 backButton.style.display = 'flex';
-                logo.style.display = 'block';
+                pdfTooltip.style.display = 'block';
                 return;
             }
            
@@ -966,7 +1096,7 @@
            
             favoritesBtn.classList.toggle('active', favoritesMode);
             backButton.style.display = 'flex';
-            logo.style.display = 'block';
+            pdfTooltip.style.display = 'block';
         }
        
         function updateHeartButton() {
@@ -996,7 +1126,8 @@
                 updateClearFavoritesButton();
                 favoritesBtn.classList.remove('active');
                 backButton.style.display = 'flex';
-                logo.style.display = 'block';
+                pdfTooltip.style.display = 'block';
+                hideTooltips();
             }
         }
        
@@ -1027,7 +1158,8 @@
                 }
             }
             backButton.style.display = 'flex';
-            logo.style.display = 'block';
+            pdfTooltip.style.display = 'block';
+            hideTooltips();
         }
        
         function toggleFavoritesView() {
@@ -1041,7 +1173,8 @@
                     favoritesMode = false;
                     alert('У вас немає обраних сторінок');
                     backButton.style.display = 'flex';
-                    logo.style.display = 'block';
+                    pdfTooltip.style.display = 'block';
+                    hideTooltips();
                     return;
                 }
                
@@ -1057,7 +1190,8 @@
             updateNavigation();
             updateClearFavoritesButton();
             backButton.style.display = 'flex';
-            logo.style.display = 'block';
+            pdfTooltip.style.display = 'block';
+            hideTooltips();
         }
        
         function getFavoritePagesList() {
@@ -1087,8 +1221,10 @@
                 });
             }
             backButton.style.display = 'flex';
-            logo.style.display = 'block';
+            pdfTooltip.style.display = 'block';
+            hideTooltips();
         }
+       
         function queueRenderPage(num) {
             if (!pdfDoc) return;
             if (pageRendering) {
@@ -1097,8 +1233,10 @@
                 renderPage(num);
             }
             backButton.style.display = 'flex';
-            logo.style.display = 'block';
+            pdfTooltip.style.display = 'block';
+            hideTooltips();
         }
+       
         function prevPage() {
             if (!pdfDoc) return;
             if (favoritesMode) {
@@ -1115,8 +1253,10 @@
                 queueRenderPage(pageNum);
             }
             backButton.style.display = 'flex';
-            logo.style.display = 'block';
+            pdfTooltip.style.display = 'block';
+            hideTooltips();
         }
+       
         function nextPage() {
             if (!pdfDoc) return;
             if (favoritesMode) {
@@ -1133,8 +1273,10 @@
                 queueRenderPage(pageNum);
             }
             backButton.style.display = 'flex';
-            logo.style.display = 'block';
+            pdfTooltip.style.display = 'block';
+            hideTooltips();
         }
+       
         function setupThumbnailObserver() {
             const thumbnails = [
                 { pdfName: 'gadassa', id: 'thumbnail-gadassa' },
@@ -1162,8 +1304,11 @@
                 if (element) observer.observe(element);
             });
         }
+       
         window.addEventListener('load', function() {
             setupThumbnailObserver();
+            initDots();
+            pdfSelection.addEventListener('scroll', updateDots);
             const hash = window.location.hash;
             if (hash && hash.includes('page=') && hash.includes('pdf=')) {
                 const params = new URLSearchParams(hash.substring(1));
@@ -1174,7 +1319,9 @@
                     openPdf(pdfName);
                 }
             }
+            hideTooltips();
         });
+       
         document.addEventListener('keydown', function(e) {
             if (e.key === 'ArrowLeft') {
                 prevPage();
@@ -1199,6 +1346,7 @@
                 }
             }
         });
+       
         let resizeTimeout;
         window.addEventListener('resize', function() {
             clearTimeout(resizeTimeout);
@@ -1207,10 +1355,14 @@
                     renderQuality = isIOS ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
                     renderPage(pageNum);
                     backButton.style.display = 'flex';
-                    logo.style.display = 'block';
+                    pdfTooltip.style.display = 'block';
+                    hideTooltips();
                 }
+                initDots();
+                updateDots();
             }, 100);
         });
+       
         let touchStartX = 0;
         let touchStartTime = 0;
         document.addEventListener('touchstart', function(e) {
@@ -1219,6 +1371,7 @@
                 touchStartTime = Date.now();
             }
         }, { passive: true });
+       
         document.addEventListener('touchend', function(e) {
             if (e.changedTouches.length === 1) {
                 const touchEndX = e.changedTouches[0].clientX;
@@ -1235,6 +1388,7 @@
                 }
             }
         }, { passive: true });
+       
         document.addEventListener('keydown', function(e) {
             if (e.key === ' ' && !e.shiftKey) {
                 e.preventDefault();
@@ -1244,6 +1398,7 @@
                 prevPage();
             }
         });
+       
         function setAppHeight() {
             document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
         }
@@ -1255,9 +1410,12 @@
                 setTimeout(function() {
                     renderPage(pageNum);
                     backButton.style.display = 'flex';
-                    logo.style.display = 'block';
+                    pdfTooltip.style.display = 'block';
+                    hideTooltips();
                 }, 350);
             }
+            initDots();
+            updateDots();
         });
         setAppHeight();
     </script>
