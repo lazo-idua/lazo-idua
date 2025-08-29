@@ -6,7 +6,6 @@
     <title>TD MELNYK</title>
     <link rel="icon" href="https://lazo-idua.github.io/lazo-idua/Logo.png" type="image/png">
     <link rel="apple-touch-icon" href="https://lazo-idua.github.io/lazo-idua/Logo.png">
-    <!-- Додано apple-mobile-web-app-capable для кращої інтеграції на iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
@@ -19,7 +18,6 @@
         html, body {
             height: 100%;
             overflow: hidden;
-            /* Додано для iOS, щоб уникнути bounce-ефекту */
             position: fixed;
             width: 100%;
         }
@@ -35,21 +33,35 @@
             -ms-user-select: none;
             user-select: none;
             height: 100vh;
-            /* Виправлено для Safari */
             height: -webkit-fill-available;
             animation: fadeIn 0.5s ease-out forwards;
-            /* Додано для iOS, щоб уникнути bounce-ефекту */
             overscroll-behavior: none;
             -webkit-overflow-scrolling: touch;
         }
        
         @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+       
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: #000;
+            z-index: 104;
+            display: flex;
+            align-items: center;
+            padding: 8px;
+        }
+       
+        .header-logo {
+            max-width: 60px;
+            max-height: 60px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 0.2s forwards;
         }
        
         .logo {
@@ -71,9 +83,9 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            padding-top: 60px;
             background: #000;
             overflow-y: auto;
-            /* Додано для iOS */
             -webkit-overflow-scrolling: touch;
         }
        
@@ -118,6 +130,7 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            position: relative;
         }
        
         .pdf-thumbnail img {
@@ -131,6 +144,33 @@
             font-size: 14px;
             text-align: center;
             padding: 20px;
+        }
+       
+        .pdf-thumbnail .loading-spinner {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+       
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+       
+        .pdf-thumbnail.loading .thumbnail-placeholder {
+            display: none;
+        }
+       
+        .pdf-thumbnail.loading .loading-spinner {
+            display: block;
         }
        
         .pdf-name {
@@ -157,14 +197,8 @@
         }
        
         @keyframes fadeInSlideUp {
-            0% {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            0% { opacity: 0; transform: translateY(50px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
        
         .pdf-container {
@@ -188,7 +222,6 @@
             object-fit: contain;
             opacity: 1;
             transition: opacity 0.3s ease;
-            /* Виправлено для Safari */
             image-rendering: -webkit-optimize-contrast;
             image-rendering: crisp-edges;
         }
@@ -387,298 +420,79 @@
         }
        
         @media (max-width: 768px) {
-            .logo {
-                max-width: 80px;
-                max-height: 80px;
-                top: 10px;
-                left: 10px;
-            }
-           
-            .main-menu h1 {
-                font-size: 24px;
-                margin-bottom: 20px;
-            }
-           
-            .pdf-selection {
-                gap: 15px;
-            }
-           
-            .pdf-item {
-                width: 160px;
-                padding: 12px;
-            }
-           
-            .pdf-thumbnail {
-                height: 200px;
-            }
-           
-            .nav-btn {
-                width: 42px;
-                height: 42px;
-                font-size: 20px;
-                background: rgba(255, 255, 255, 0.12);
-            }
-           
-            .top-buttons {
-                top: 15px;
-                right: 15px;
-                flex-direction: row;
-                gap: 5px;
-            }
-           
-            .back-btn {
-                bottom: 10px;
-                left: 10px;
-                width: 42px;
-                height: 42px;
-                font-size: 20px;
-                background: rgba(255, 255, 255, 0.12);
-            }
-           
-            .favorites-btn, .share-btn {
-                width: 42px;
-                height: 42px;
-                font-size: 20px;
-                background: rgba(255, 255, 255, 0.12);
-            }
-           
-            .prev-btn {
-                left: 10px;
-            }
-           
-            .next-btn {
-                right: 10px;
-            }
-           
-            .bottom-buttons {
-                bottom: 10px;
-                right: 10px;
-                gap: 8px;
-            }
-           
-            .heart-btn, .clear-favorites-btn {
-                width: 36px;
-                height: 36px;
-                font-size: 18px;
-            }
-           
-            .favorite-label {
-                font-size: 10px;
-            }
-           
-            .footer {
-                padding: 6px;
-                font-size: 10px;
-            }
+            .header { height: 68px; padding: 10px; }
+            .header-logo { max-width: 80px; max-height: 80px; }
+            .logo { max-width: 80px; max-height: 80px; top: 10px; left: 10px; }
+            .main-menu { padding-top: 68px; }
+            .main-menu h1 { font-size: 24px; margin-bottom: 20px; }
+            .pdf-selection { gap: 15px; }
+            .pdf-item { width: 160px; padding: 12px; }
+            .pdf-thumbnail { height: 200px; }
+            .nav-btn { width: 42px; height: 42px; font-size: 20px; background: rgba(255, 255, 255, 0.12); }
+            .top-buttons { top: 15px; right: 15px; flex-direction: row; gap: 5px; }
+            .back-btn { bottom: 10px; left: 10px; width: 42px; height: 42px; font-size: 20px; background: rgba(255, 255, 255, 0.12); }
+            .favorites-btn, .share-btn { width: 42px; height: 42px; font-size: 20px; background: rgba(255, 255, 255, 0.12); }
+            .prev-btn { left: 10px; }
+            .next-btn { right: 10px; }
+            .bottom-buttons { bottom: 10px; right: 10px; gap: 8px; }
+            .heart-btn, .clear-favorites-btn { width: 36px; height: 36px; font-size: 18px; }
+            .favorite-label { font-size: 10px; }
+            .footer { padding: 6px; font-size: 10px; }
         }
        
         @media (max-width: 480px) {
-            .logo {
-                max-width: 60px;
-                max-height: 60px;
-                top: 8px;
-                left: 8px;
-            }
-           
-            .main-menu {
-                padding: 15px;
-            }
-           
-            .main-menu h1 {
-                font-size: 20px;
-                margin-bottom: 15px;
-            }
-           
-            .pdf-selection {
-                gap: 10px;
-            }
-           
-            .pdf-item {
-                width: 140px;
-                padding: 10px;
-            }
-           
-            .pdf-thumbnail {
-                height: 180px;
-            }
-           
-            .pdf-name {
-                font-size: 14px;
-            }
-           
-            .nav-btn {
-                width: 38px;
-                height: 38px;
-                font-size: 18px;
-                background: rgba(255, 255, 255, 0.1);
-            }
-           
-            .top-buttons {
-                top: 10px;
-                right: 10px;
-                gap: 3px;
-            }
-           
-            .back-btn {
-                bottom: 8px;
-                left: 8px;
-                width: 38px;
-                height: 38px;
-                font-size: 18px;
-                background: rgba(255, 255, 255, 0.1);
-            }
-           
-            .favorites-btn, .share-btn {
-                width: 38px;
-                height: 38px;
-                font-size: 18px;
-                background: rgba(255, 255, 255, 0.1);
-            }
-           
-            .prev-btn {
-                left: 8px;
-            }
-           
-            .next-btn {
-                right: 8px;
-            }
-           
-            .bottom-buttons {
-                bottom: 8px;
-                right: 8px;
-                gap: 6px;
-            }
-           
-            .heart-btn, .clear-favorites-btn {
-                width: 32px;
-                height: 32px;
-                font-size: 16px;
-            }
-           
-            .favorite-label {
-                font-size: 9px;
-            }
-           
-            .footer {
-                font-size: 9px;
-                padding: 5px;
-            }
+            .header { height: 60px; padding: 8px; }
+            .header-logo { max-width: 60px; max-height: 60px; }
+            .logo { max-width: 60px; max-height: 60px; top: 8px; left: 8px; }
+            .main-menu { padding: 15px; padding-top: 60px; }
+            .main-menu h1 { font-size: 20px; margin-bottom: 15px; }
+            .pdf-selection { gap: 10px; }
+            .pdf-item { width: 140px; padding: 10px; }
+            .pdf-thumbnail { height: 180px; }
+            .pdf-name { font-size: 14px; }
+            .nav-btn { width: 38px; height: 38px; font-size: 18px; background: rgba(255, 255, 255, 0.1); }
+            .top-buttons { top: 10px; right: 10px; gap: 3px; }
+            .back-btn { bottom: 8px; left: 8px; width: 38px; height: 38px; font-size: 18px; background: rgba(255, 255, 255, 0.1); }
+            .favorites-btn, .share-btn { width: 38px; height: 38px; font-size: 18px; background: rgba(255, 255, 255, 0.1); }
+            .prev-btn { left: 8px; }
+            .next-btn { right: 8px; }
+            .bottom-buttons { bottom: 8px; right: 8px; gap: 6px; }
+            .heart-btn, .clear-favorites-btn { width: 32px; height: 32px; font-size: 16px; }
+            .favorite-label { font-size: 9px; }
+            .footer { font-size: 9px; padding: 5px; }
         }
        
         @media (min-width: 1200px) {
-            .logo {
-                max-width: 120px;
-                max-height: 120px;
-            }
-           
-            .nav-btn {
-                width: 60px;
-                height: 60px;
-                font-size: 28px;
-                background: rgba(255, 255, 255, 0.18);
-            }
-           
-            .back-btn {
-                width: 60px;
-                height: 60px;
-                font-size: 28px;
-                background: rgba(255, 255, 255, 0.18);
-            }
-           
-            .top-buttons {
-                top: 25px;
-                right: 25px;
-                gap: 10px;
-            }
-           
-            .favorites-btn, .share-btn {
-                width: 60px;
-                height: 60px;
-                font-size: 28px;
-                background: rgba(255, 255, 255, 0.18);
-            }
-           
-            .prev-btn {
-                left: 30px;
-            }
-           
-            .next-btn {
-                right: 30px;
-            }
-           
-            .bottom-buttons {
-                bottom: 20px;
-                right: 20px;
-            }
-           
-            .heart-btn, .clear-favorites-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 24px;
-            }
-           
-            .favorite-label {
-                font-size: 12px;
-            }
-           
-            .footer {
-                padding: 12px;
-                font-size: 12px;
-            }
+            .header { height: 80px; padding: 15px; }
+            .header-logo { max-width: 120px; max-height: 120px; }
+            .logo { max-width: 120px; max-height: 120px; }
+            .main-menu { padding-top: 80px; }
+            .nav-btn { width: 60px; height: 60px; font-size: 28px; background: rgba(255, 255, 255, 0.18); }
+            .back-btn { width: 60px; height: 60px; font-size: 28px; background: rgba(255, 255, 255, 0.18); }
+            .top-buttons { top: 25px; right: 25px; gap: 10px; }
+            .favorites-btn, .share-btn { width: 60px; height: 60px; font-size: 28px; background: rgba(255, 255, 255, 0.18); }
+            .prev-btn { left: 30px; }
+            .next-btn { right: 30px; }
+            .bottom-buttons { bottom: 20px; right: 20px; }
+            .heart-btn, .clear-favorites-btn { width: 50px; height: 50px; font-size: 24px; }
+            .favorite-label { font-size: 12px; }
+            .footer { padding: 12px; font-size: 12px; }
         }
        
         @media (min-width: 1920px) {
-            .logo {
-                max-width: 140px;
-                max-height: 140px;
-            }
-           
-            .nav-btn {
-                width: 70px;
-                height: 70px;
-                font-size: 32px;
-            }
-           
-            .back-btn {
-                width: 70px;
-                height: 70px;
-                font-size: 32px;
-            }
-           
-            .top-buttons {
-                top: 30px;
-                right: 30px;
-                gap: 10px;
-            }
-           
-            .favorites-btn, .share-btn {
-                width: 70px;
-                height: 70px;
-                font-size: 32px;
-            }
-           
-            .prev-btn {
-                left: 40px;
-            }
-           
-            .next-btn {
-                right: 40px;
-            }
-           
-            .bottom-buttons {
-                bottom: 25px;
-                right: 25px;
-            }
-           
-            .heart-btn, .clear-favorites-btn {
-                width: 60px;
-                height: 60px;
-                font-size: 28px;
-            }
-           
-            .favorite-label {
-                font-size: 12px;
-            }
+            .header { height: 90px; padding: 20px; }
+            .header-logo { max-width: 140px; max-height: 140px; }
+            .logo { max-width: 140px; max-height: 140px; }
+            .main-menu { padding-top: 90px; }
+            .nav-btn { width: 70px; height: 70px; font-size: 32px; }
+            .back-btn { width: 70px; height: 70px; font-size: 32px; }
+            .top-buttons { top: 30px; right: 30px; gap: 10px; }
+            .favorites-btn, .share-btn { width: 70px; height: 70px; font-size: 32px; }
+            .prev-btn { left: 40px; }
+            .next-btn { right: 40px; }
+            .bottom-buttons { bottom: 25px; right: 25px; }
+            .heart-btn, .clear-favorites-btn { width: 60px; height: 60px; font-size: 28px; }
+            .favorite-label { font-size: 12px; }
         }
        
         body {
@@ -692,36 +506,44 @@
     </style>
 </head>
 <body>
+    <div class="header" id="header">
+        <img class="header-logo" src="https://lazo-idua.github.io/lazo-idua/Logo.png" alt="TD MELNYK Logo">
+    </div>
     <div class="main-menu" id="mainMenu">
         <h1>TD MELNYK</h1>
         <div class="pdf-selection">
             <div class="pdf-item" onclick="openPdf('gadassa')">
                 <div class="pdf-thumbnail" id="thumbnail-gadassa">
                     <div class="thumbnail-placeholder">GADASSA<br>Каталог</div>
+                    <div class="loading-spinner"></div>
                 </div>
                 <div class="pdf-name">GADASSA</div>
             </div>
             <div class="pdf-item" onclick="openPdf('medunia')">
                 <div class="pdf-thumbnail" id="thumbnail-medunia">
                     <div class="thumbnail-placeholder">MEDUNIA<br>Каталог</div>
+                    <div class="loading-spinner"></div>
                 </div>
                 <div class="pdf-name">MEDUNIA</div>
             </div>
             <div class="pdf-item" onclick="openPdf('dobryi_vechir')">
                 <div class="pdf-thumbnail" id="thumbnail-dobryi_vechir">
                     <div class="thumbnail-placeholder">DOBRYI VECHIR<br>Каталог</div>
+                    <div class="loading-spinner"></div>
                 </div>
                 <div class="pdf-name">DOBRYI VECHIR</div>
             </div>
             <div class="pdf-item" onclick="openPdf('biscotti')">
                 <div class="pdf-thumbnail" id="thumbnail-biscotti">
                     <div class="thumbnail-placeholder">BISCOTTI<br>Каталог</div>
+                    <div class="loading-spinner"></div>
                 </div>
                 <div class="pdf-name">BISCOTTI</div>
             </div>
             <div class="pdf-item" onclick="openPdf('rsv')">
                 <div class="pdf-thumbnail" id="thumbnail-rsv">
                     <div class="thumbnail-placeholder">R&V<br>Каталог</div>
+                    <div class="loading-spinner"></div>
                 </div>
                 <div class="pdf-name">R&V</div>
             </div>
@@ -758,7 +580,6 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
-        // Додано перевірку на iOS
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
        
         document.addEventListener('contextmenu', function(e) {
@@ -770,7 +591,6 @@
                 e.preventDefault();
             }
         }, { passive: false });
-        // Виправлено обробку мультитач для iOS
         document.addEventListener('touchstart', function(e) {
             if (e.touches.length > 1) {
                 e.preventDefault();
@@ -803,6 +623,7 @@
         const mainContent = document.getElementById('mainContent');
         const backButton = document.getElementById('backButton');
         const logo = document.querySelector('.logo');
+        const header = document.getElementById('header');
        
         let favoritePages = {
             gadassa: JSON.parse(localStorage.getItem('gadassa_favorites')) || [],
@@ -812,14 +633,12 @@
             rsv: JSON.parse(localStorage.getItem('rsv_favorites')) || []
         };
        
-        // Змінено якість рендерингу для iOS
         let renderQuality = isIOS ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
         const isLargeScreen = window.innerWidth >= 1200;
         const pageCache = new Map();
-        const preloadNextPages = isIOS ? 1 : 3; // Зменшено кількість попередньо завантажених сторінок для iOS
+        const preloadNextPages = isIOS ? 1 : 3;
         async function checkPdfAvailability(url) {
             try {
-                // Додано параметр cache для уникнення кешування на iOS
                 const response = await fetch(url, {
                     method: 'HEAD',
                     cache: 'no-cache'
@@ -843,9 +662,14 @@
             const url = getPdfUrl(pdfName);
             if (!url) return;
            
+            const thumbnailContainer = document.getElementById(thumbnailId);
+            thumbnailContainer.classList.add('loading');
+           
             checkPdfAvailability(url).then(isAvailable => {
                 if (!isAvailable) {
                     console.error(`PDF ${pdfName} недоступний за URL: ${url}`);
+                    thumbnailContainer.classList.remove('loading');
+                    thumbnailContainer.innerHTML = `<div class="thumbnail-placeholder">Помилка завантаження<br>${pdfName.toUpperCase()}</div>`;
                     return;
                 }
                
@@ -856,7 +680,6 @@
                     maxImageSize: 2048 * 2048,
                     disableFontFace: true,
                     standardFontDataUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/',
-                    // Додано для iOS
                     isEvalSupported: false,
                     useSystemFonts: isIOS
                 });
@@ -875,21 +698,27 @@
                         };
                        
                         page.render(renderContext).promise.then(function() {
-                            const thumbnailContainer = document.getElementById(thumbnailId);
                             const img = document.createElement('img');
                             img.src = canvas.toDataURL('image/jpeg', 0.9);
                             img.onload = function() {
                                 thumbnailContainer.innerHTML = '';
                                 thumbnailContainer.appendChild(img);
+                                thumbnailContainer.classList.remove('loading');
                             };
                         }).catch(function(error) {
                             console.error(`Помилка рендерингу мініатюри для ${pdfName}:`, error);
+                            thumbnailContainer.classList.remove('loading');
+                            thumbnailContainer.innerHTML = `<div class="thumbnail-placeholder">Помилка завантаження<br>${pdfName.toUpperCase()}</div>`;
                         });
                     }).catch(function(error) {
                         console.error(`Помилка завантаження сторінки для мініатюри ${pdfName}:`, error);
+                        thumbnailContainer.classList.remove('loading');
+                        thumbnailContainer.innerHTML = `<div class="thumbnail-placeholder">Помилка завантаження<br>${pdfName.toUpperCase()}</div>`;
                     });
                 }).catch(function(error) {
                     console.error(`Помилка завантаження PDF для мініатюри ${pdfName}:`, error);
+                    thumbnailContainer.classList.remove('loading');
+                    thumbnailContainer.innerHTML = `<div class="thumbnail-placeholder">Помилка завантаження<br>${pdfName.toUpperCase()}</div>`;
                 });
             });
         }
@@ -897,11 +726,11 @@
             currentPdf = pdfName;
             mainMenu.style.display = 'none';
             mainContent.style.display = 'flex';
+            header.style.display = 'none';
             mainContent.classList.add('opening');
             backButton.style.display = 'flex';
             logo.style.display = 'block';
            
-            // Очистити canvas перед завантаженням нового PDF
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctxNext.clearRect(0, 0, canvasNext.width, canvasNext.height);
             canvas.width = 0;
@@ -915,6 +744,7 @@
         function goBackToMainMenu() {
             mainMenu.style.display = 'flex';
             mainContent.style.display = 'none';
+            header.style.display = 'flex';
             mainContent.classList.remove('opening');
             backButton.style.display = 'none';
             logo.style.display = 'none';
@@ -940,7 +770,6 @@
            
             let scale = Math.min(scaleX, scaleY) * 1.2;
            
-            // Змінено масштабування для iOS
             if (isIOS) {
                 scale = Math.min(scale, 1.8);
             } else if (isLargeScreen) {
@@ -985,11 +814,10 @@
                     url: url,
                     cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
                     cMapPacked: true,
-                    maxImageSize: isIOS ? 4096 * 4096 : 8192 * 8192, // Зменшено для iOS
+                    maxImageSize: isIOS ? 4096 * 4096 : 8192 * 8192,
                     disableFontFace: true,
                     standardFontDataUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/',
                     useSystemFonts: isIOS,
-                    // Додано для iOS
                     isEvalSupported: false,
                     disableRange: isIOS,
                     disableStream: isIOS
@@ -1051,13 +879,10 @@
             const scale = calculateOptimalScale(page);
             const viewport = page.getViewport({ scale: scale });
            
-            // Змінено максимальні розміри для iOS
             const maxWidth = isIOS ? 4096 : 8192;
             const maxHeight = isIOS ? 4096 : 8192;
            
-            let outputScale = Math.min(renderQuality,
-                                     maxWidth / viewport.width,
-                                     maxHeight / viewport.height);
+            let outputScale = Math.min(renderQuality, maxWidth / viewport.width, maxHeight / viewport.height);
            
             outputScale = Math.min(outputScale, isIOS ? 1.8 : 2.5);
            
@@ -1070,15 +895,13 @@
             targetCanvas.style.width = Math.floor(viewport.width) + 'px';
             targetCanvas.style.height = Math.floor(viewport.height) + 'px';
            
-            const transform = outputScale !== 1
-                ? [outputScale, 0, 0, outputScale, 0, 0]
-                : null;
+            const transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
            
             const renderContext = {
                 canvasContext: targetCtx,
                 viewport: viewport,
                 transform: transform,
-                enableWebGL: !isIOS, // Вимкнено WebGL для iOS
+                enableWebGL: !isIOS,
                 textLayer: false,
                 enhanceTextSelection: false
             };
@@ -1312,12 +1135,35 @@
             backButton.style.display = 'flex';
             logo.style.display = 'block';
         }
+        function setupThumbnailObserver() {
+            const thumbnails = [
+                { pdfName: 'gadassa', id: 'thumbnail-gadassa' },
+                { pdfName: 'medunia', id: 'thumbnail-medunia' },
+                { pdfName: 'dobryi_vechir', id: 'thumbnail-dobryi_vechir' },
+                { pdfName: 'biscotti', id: 'thumbnail-biscotti' },
+                { pdfName: 'rsv', id: 'thumbnail-rsv' }
+            ];
+           
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const thumbnailId = entry.target.id;
+                        const pdfName = thumbnails.find(t => t.id === thumbnailId)?.pdfName;
+                        if (pdfName && !entry.target.classList.contains('loaded')) {
+                            generateThumbnail(pdfName, thumbnailId);
+                            entry.target.classList.add('loaded');
+                        }
+                    }
+                });
+            }, { root: null, rootMargin: '0px', threshold: 0.1 });
+           
+            thumbnails.forEach(thumbnail => {
+                const element = document.getElementById(thumbnail.id);
+                if (element) observer.observe(element);
+            });
+        }
         window.addEventListener('load', function() {
-            generateThumbnail('gadassa', 'thumbnail-gadassa');
-            generateThumbnail('medunia', 'thumbnail-medunia');
-            generateThumbnail('dobryi_vechir', 'thumbnail-dobryi_vechir');
-            generateThumbnail('biscotti', 'thumbnail-biscotti');
-            generateThumbnail('rsv', 'thumbnail-rsv');
+            setupThumbnailObserver();
             const hash = window.location.hash;
             if (hash && hash.includes('page=') && hash.includes('pdf=')) {
                 const params = new URLSearchParams(hash.substring(1));
