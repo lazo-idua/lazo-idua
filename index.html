@@ -33,14 +33,40 @@
             -ms-user-select: none;
             user-select: none;
             height: 100vh;
-            animation: fadeIn 0.5s ease-out forwards;
             overscroll-behavior: none;
             -webkit-overflow-scrolling: touch;
         }
 
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeOut 0.5s ease-out 1.5s forwards;
+        }
+
+        .loader img {
+            max-width: 50px;
+            max-height: 50px;
+            opacity: 0;
+            animation: growAndFade 1.5s ease-out forwards;
+        }
+
+        @keyframes growAndFade {
+            0% { transform: scale(0.1); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; display: none; }
         }
 
         .header {
@@ -91,6 +117,7 @@
             justify-content: center;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
             gap: 5px;
+            margin-right: 10px; /* Додано мінімальний відступ */
         }
 
         .favorites-header-btn:hover {
@@ -288,6 +315,7 @@
             min-height: 0;
             padding: 0;
             display: none;
+            padding-bottom: 70px; /* Відступ від футера */
         }
 
         .main-content.opening {
@@ -307,7 +335,7 @@
             width: 100%;
             height: 100%;
             max-width: 100%;
-            max-height: 100%;
+            max-height: calc(100% - 70px); /* Відступ від футера */
             padding: 0;
         }
 
@@ -489,6 +517,7 @@
             display: flex;
             gap: 10px;
             z-index: 101;
+            padding-bottom: 70px; /* Відступ від футера */
         }
 
         .heart-btn, .clear-favorites-btn {
@@ -534,6 +563,7 @@
             border-top: 1px solid #222;
             min-height: 20px;
             z-index: 103;
+            height: 70px; /* Фіксована висота футера */
         }
 
         .footer span {
@@ -581,42 +611,83 @@
             font-size: 20px;
         }
 
-        .close-modal {
+        .trash-btn {
             background: none;
             border: none;
             color: white;
             font-size: 24px;
             cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .trash-btn:hover {
+            color: #ff5252;
         }
 
         .favorites-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            justify-content: flex-start;
+            gap: 5px;
+            max-width: 100%;
+            padding: 5px;
+            scroll-behavior: smooth;
+            flex: 1;
+            padding-bottom: 70px; /* Відступ від футера */
+        }
+
+        .favorites-list::-webkit-scrollbar {
+            display: none;
         }
 
         .favorite-item {
-            position: relative;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            padding: 10px;
+            padding: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
             text-align: center;
+            backdrop-filter: blur(5px);
+            max-height: calc((100vh - 48px - 20px - 20px) / 2);
+            min-width: 150px;
+        }
+
+        .favorite-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
         }
 
         .favorite-thumbnail {
             width: 100%;
-            height: 200px;
+            aspect-ratio: 1 / 1.414;
+            height: auto;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 5px;
             margin-bottom: 5px;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .favorite-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .favorite-info {
             color: white;
-            font-size: 14px;
+            font-size: 12px;
+            font-weight: 500;
         }
 
         .remove-favorite {
@@ -634,21 +705,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .clear-all-favorites {
-            margin-top: 20px;
-            background: rgba(255, 0, 0, 0.6);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .clear-all-favorites:hover {
-            background: rgba(255, 0, 0, 0.8);
         }
 
         @media (max-width: 768px) {
@@ -671,9 +727,7 @@
             .dots-container { margin-top: 5px; }
             .dot { width: 6px; height: 6px; }
             .tooltip { font-size: 12px; padding: 8px 12px; }
-            .favorites-list { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
-            .favorite-thumbnail { height: 160px; }
-            .favorite-info { font-size: 12px; }
+            .favorite-item { min-width: 120px; }
         }
 
         @media (max-width: 480px) {
@@ -696,9 +750,7 @@
             .dots-container { margin-top: 5px; }
             .dot { width: 5px; height: 5px; }
             .tooltip { font-size: 11px; padding: 6px 10px; }
-            .favorites-list { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); }
-            .favorite-thumbnail { height: 140px; }
-            .favorite-info { font-size: 11px; }
+            .favorite-item { min-width: 100px; }
         }
 
         @media (min-width: 1200px) {
@@ -720,9 +772,7 @@
             .footer { padding: 12px; font-size: 12px; }
             .dots-container { display: none; }
             .tooltip { font-size: 14px; padding: 12px 18px; }
-            .favorites-list { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
-            .favorite-thumbnail { height: 250px; }
-            .favorite-info { font-size: 16px; }
+            .favorite-item { min-width: 200px; }
             .menu-nav-btn { display: flex; }
             .prev-menu-btn { left: 30px; }
             .next-menu-btn { right: 30px; }
@@ -742,8 +792,7 @@
             .next-btn { right: 40px; }
             .bottom-buttons { bottom: 25px; right: 25px; }
             .favorite-label { font-size: 12px; }
-            .favorites-list { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-            .favorite-thumbnail { height: 280px; }
+            .favorite-item { min-width: 220px; }
             .prev-menu-btn { left: 40px; }
             .next-menu-btn { right: 40px; }
         }
@@ -759,6 +808,9 @@
     </style>
 </head>
 <body>
+    <div class="loader">
+        <img src="https://lazo-idua.github.io/lazo-idua/Logo.png" alt="Loading Logo">
+    </div>
     <div class="header" id="header">
         <div class="header-left">
             <img class="header-logo" src="https://lazo-idua.github.io/lazo-idua/Logo.png" alt="TD MELNYK Logo">
@@ -836,10 +888,10 @@
     <div class="favorites-modal" id="favoritesModal">
         <div class="favorites-header">
             <span class="favorites-title">Обрані малюнки</span>
-            <button class="close-modal" onclick="closeFavoritesModal()">×</button>
+            <button class="trash-btn" onclick="clearGlobalFavorites()" title="Очистити всі">🗑️</button>
         </div>
         <div class="favorites-list" id="favoritesList"></div>
-        <button class="clear-all-favorites" onclick="clearGlobalFavorites()">Очистити всі</button>
+        <button class="back-btn" onclick="closeFavoritesModal()" title="Назад">←</button>
     </div>
 
     <div class="footer">
@@ -906,8 +958,8 @@
 
         // Group cards into 2x2 groups for mobile
         function groupCards() {
-            if (isLargeScreen) return; // Skip grouping on large screens
-            const items = Array.from(pdfSelection.querySelectorAll('.pdf-item'));
+            if (isLargeScreen) return;
+            const items = Array.from(pdfSelection.queryAll('.pdf-item'));
             const numItems = items.length;
             const itemsPerGroup = 4;
             const numGroups = Math.ceil(numItems / itemsPerGroup);
@@ -936,7 +988,7 @@
                 dotsContainer.style.display = 'none';
                 return;
             }
-            const groups = pdfSelection.querySelectorAll('.pdf-group');
+            const groups = pdfSelection.queryAll('.pdf-group');
             const numGroups = groups.length || 1;
             dotsContainer.innerHTML = '';
             for (let i = 0; i < numGroups; i++) {
@@ -953,7 +1005,7 @@
             if (isLargeScreen) return;
             const groups = pdfSelection.queryAll('.pdf-group');
             const scrollLeft = pdfSelection.scrollLeft;
-            const groupWidth = groups[0]?.offsetWidth + 5 || 1; // Including gap
+            const groupWidth = groups[0]?.offsetWidth + 5 || 1;
             const currentPage = Math.floor(scrollLeft / groupWidth);
             const dots = dotsContainer.queryAll('.dot');
             dots.forEach((dot, index) => {
@@ -1008,6 +1060,7 @@
                 favoritePages[pdfName].forEach(page => {
                     const item = document.createElement('div');
                     item.classList.add('favorite-item');
+                    item.onclick = () => openFavoritePdf(pdfName, page);
                     const thumbnail = document.createElement('div');
                     thumbnail.classList.add('favorite-thumbnail');
                     thumbnail.innerHTML = `<div class="thumbnail-placeholder">${pdfName.toUpperCase()} - Сторінка ${page}</div>`;
@@ -1017,13 +1070,36 @@
                     const removeBtn = document.createElement('button');
                     removeBtn.classList.add('remove-favorite');
                     removeBtn.textContent = '×';
-                    removeBtn.onclick = () => removeGlobalFavorite(pdfName, page);
+                    removeBtn.onclick = (e) => { e.stopPropagation(); removeGlobalFavorite(pdfName, page); };
                     item.appendChild(thumbnail);
                     item.appendChild(info);
                     item.appendChild(removeBtn);
                     favoritesList.appendChild(item);
                 });
             }
+        }
+
+        // Open favorite PDF page
+        function openFavoritePdf(pdfName, page) {
+            currentPdf = pdfName;
+            pageNum = page;
+            mainMenu.style.display = 'none';
+            mainContent.style.display = 'flex';
+            header.style.display = 'none';
+            mainContent.classList.add('opening');
+            if (backButton) backButton.style.display = 'flex';
+            pdfTooltip.style.display = 'block';
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctxNext.clearRect(0, 0, canvasNext.width, canvasNext.height);
+            canvas.width = 0;
+            canvas.height = 0;
+            canvasNext.width = 0;
+            canvasNext.height = 0;
+
+            pageCache.clear();
+            loadPdf();
+            closeFavoritesModal();
+            hideTooltips();
         }
 
         // Remove single favorite from global
@@ -1045,10 +1121,7 @@
 
         async function checkPdfAvailability(url) {
             try {
-                const response = await fetch(url, {
-                    method: 'HEAD',
-                    cache: 'no-cache'
-                });
+                const response = await fetch(url, { method: 'HEAD', cache: 'no-cache' });
                 return response.ok;
             } catch {
                 return false;
@@ -1593,26 +1666,31 @@
         }
 
         window.addEventListener('load', function() {
-            setupThumbnailObserver();
-            groupCards();
-            initDots();
-            pdfSelection.addEventListener('scroll', () => {
-                updateDots();
+            setTimeout(() => {
+                document.querySelector('.loader').style.display = 'none';
+                mainMenu.style.display = 'flex';
+                header.style.display = 'flex';
+                mainTooltip.style.display = 'block';
+                setupThumbnailObserver();
+                groupCards();
+                initDots();
+                pdfSelection.addEventListener('scroll', () => {
+                    updateDots();
+                    updateMenuButtons();
+                });
                 updateMenuButtons();
-            });
-            updateMenuButtons();
-            const hash = window.location.hash;
-            if (hash && hash.includes('page=') && hash.includes('pdf=')) {
-                const params = new URLSearchParams(hash.substring(1));
-                const page = parseInt(params.get('page'));
-                const pdfName = params.get('pdf');
-                if (!isNaN(page) && page > 0 && (pdfName === 'gadassa' || pdfName === 'medunia' || pdfName === 'dobryi_vechir' || pdfName === 'biscotti' || pdfName === 'rsv')) {
-                    pageNum = page;
-                    openPdf(pdfName);
+                const hash = window.location.hash;
+                if (hash && hash.includes('page=') && hash.includes('pdf=')) {
+                    const params = new URLSearchParams(hash.substring(1));
+                    const page = parseInt(params.get('page'));
+                    const pdfName = params.get('pdf');
+                    if (!isNaN(page) && page > 0 && (pdfName === 'gadassa' || pdfName === 'medunia' || pdfName === 'dobryi_vechir' || pdfName === 'biscotti' || pdfName === 'rsv')) {
+                        pageNum = page;
+                        openPdf(pdfName);
+                    }
                 }
-            }
-            mainTooltip.style.display = 'block';
-            hideTooltips();
+                hideTooltips();
+            }, 2000); // Затримка для анімації
         });
 
         document.addEventListener('keydown', function(e) {
