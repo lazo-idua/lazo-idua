@@ -76,7 +76,7 @@
             font-weight: 500;
         }
 
-        .favorites-global-btn {
+        .favorites-header-btn {
             background: rgba(0, 0, 0, 0.6);
             color: white;
             border: none;
@@ -90,11 +90,19 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            gap: 5px;
         }
 
-        .favorites-global-btn:hover {
+        .favorites-header-btn:hover {
             background: rgba(0, 0, 0, 0.8);
             transform: scale(1.1);
+        }
+
+        .favorites-header-label {
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
         }
 
         .main-menu {
@@ -408,10 +416,7 @@
         }
 
         .favorite-container {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
+            display: none;
         }
 
         .favorite-label {
@@ -487,7 +492,11 @@
         }
 
         .heart-btn, .clear-favorites-btn {
-            background: rgba(0, 0, 0, 0.6);
+            display: none;
+        }
+
+        .clear-favorites-btn {
+            background: rgba(255, 0, 0, 0.6);
             color: white;
             border: none;
             width: 40px;
@@ -504,17 +513,9 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
         }
 
-        .heart-btn:hover, .clear-favorites-btn:hover {
-            background: rgba(0, 0, 0, 0.8);
+        .clear-favorites-btn:hover {
+            background: rgba(255, 0, 0, 0.8);
             transform: scale(1.1);
-        }
-
-        .heart-btn.favorited {
-            color: #ff5252;
-        }
-
-        .clear-favorites-btn {
-            display: none;
         }
 
         .clear-favorites-btn.visible {
@@ -665,7 +666,6 @@
             .prev-btn { left: 10px; }
             .next-btn { right: 10px; }
             .bottom-buttons { bottom: 30px; right: 10px; gap: 8px; }
-            .heart-btn, .clear-favorites-btn { width: 36px; height: 36px; font-size: 18px; background: rgba(0, 0, 0, 0.6); }
             .favorite-label { font-size: 10px; }
             .footer { padding: 6px; font-size: 10px; }
             .dots-container { margin-top: 5px; }
@@ -691,7 +691,6 @@
             .prev-btn { left: 8px; }
             .next-btn { right: 8px; }
             .bottom-buttons { bottom: 30px; right: 8px; gap: 6px; }
-            .heart-btn, .clear-favorites-btn { width: 32px; height: 32px; font-size: 16px; background: rgba(0, 0, 0, 0.6); }
             .favorite-label { font-size: 9px; }
             .footer { font-size: 9px; padding: 5px; }
             .dots-container { margin-top: 5px; }
@@ -717,7 +716,6 @@
             .prev-btn { left: 30px; }
             .next-btn { right: 30px; }
             .bottom-buttons { bottom: 20px; right: 25px; }
-            .heart-btn, .clear-favorites-btn { width: 50px; height: 50px; font-size: 24px; background: rgba(0, 0, 0, 0.6); }
             .favorite-label { font-size: 12px; }
             .footer { padding: 12px; font-size: 12px; }
             .dots-container { display: none; }
@@ -743,7 +741,6 @@
             .prev-btn { left: 40px; }
             .next-btn { right: 40px; }
             .bottom-buttons { bottom: 25px; right: 25px; }
-            .heart-btn, .clear-favorites-btn { width: 60px; height: 60px; font-size: 28px; }
             .favorite-label { font-size: 12px; }
             .favorites-list { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
             .favorite-thumbnail { height: 280px; }
@@ -767,7 +764,10 @@
             <img class="header-logo" src="https://lazo-idua.github.io/lazo-idua/Logo.png" alt="TD MELNYK Logo">
             <span class="header-title">MELNYK</span>
         </div>
-        <button class="favorites-global-btn" onclick="openFavoritesModal()" title="Обрані малюнки">♥</button>
+        <button class="favorites-header-btn" onclick="openFavoritesModal()" title="Обрані малюнки">
+            <span>♥</span>
+            <span class="favorites-header-label">Обране</span>
+        </button>
     </div>
     <div class="main-menu" id="mainMenu">
         <button class="menu-nav-btn prev-menu-btn" onclick="prevMenu()" disabled>〈</button>
@@ -821,14 +821,9 @@
             <canvas id="pdf-canvas-next" class="canvas-next"></canvas>
 
             <div class="top-buttons">
-                <div class="favorite-container" onclick="toggleFavorite()">
-                    <button class="heart-btn">♡</button>
-                    <span class="favorite-label">Додати до обраного</span>
-                </div>
-                <button class="clear-favorites-btn" onclick="clearAllFavorites()" title="Скинути обрані">×</button>
             </div>
             <div class="bottom-buttons">
-                <button class="favorites-btn" onclick="toggleFavoritesView()" title="Показати обрані">♥</button>
+                <button class="favorites-btn" onclick="toggleFavorite()" title="Додати до обраного">♥</button>
                 <button class="share-btn" onclick="sharePage()" title="Поділитися">↗</button>
             </div>
             <button class="back-btn" onclick="goBackToMainMenu()" title="Назад">←</button>
@@ -889,8 +884,6 @@
         const nextBtn = document.querySelector('.next-btn');
         const favoritesBtn = document.querySelector('.favorites-btn');
         const shareBtn = document.querySelector('.share-btn');
-        const heartBtn = document.querySelector('.heart-btn');
-        const clearFavoritesBtn = document.querySelector('.clear-favorites-btn');
         const mainMenu = document.getElementById('mainMenu');
         const mainContent = document.getElementById('mainContent');
         const backButton = document.querySelector('.back-btn');
@@ -958,11 +951,11 @@
         // Update active dot based on scroll position
         function updateDots() {
             if (isLargeScreen) return;
-            const groups = pdfSelection.querySelectorAll('.pdf-group');
+            const groups = pdfSelection.queryAll('.pdf-group');
             const scrollLeft = pdfSelection.scrollLeft;
             const groupWidth = groups[0]?.offsetWidth + 5 || 1; // Including gap
             const currentPage = Math.floor(scrollLeft / groupWidth);
-            const dots = dotsContainer.querySelectorAll('.dot');
+            const dots = dotsContainer.queryAll('.dot');
             dots.forEach((dot, index) => {
                 dot.classList.toggle('active', index === currentPage);
             });
@@ -1174,8 +1167,7 @@
             pageNum = 1;
             favoritesMode = false;
             updateNavigation();
-            updateHeartButton();
-            updateClearFavoritesButton();
+            updateFavoriteButton();
             hideTooltips();
         }
 
@@ -1288,7 +1280,7 @@
             pdfTooltip.style.display = 'block';
             pdfTooltip.style.opacity = '1';
 
-            if (pageCache.has(num) ) {
+            if (pageCache.has(num)) {
                 renderPageFromCache(num);
             } else {
                 pdfDoc.getPage(num).then(function(page) {
@@ -1366,8 +1358,7 @@
                 pdfTooltip.style.display = 'block';
                 pdfTooltip.style.opacity = '1';
                 updateNavigation();
-                updateHeartButton();
-                updateClearFavoritesButton();
+                updateFavoriteButton();
                 hideTooltips();
             }).catch(function(error) {
                 console.error(`Помилка рендерингу сторінки ${num}:`, error);
@@ -1406,16 +1397,8 @@
             hideTooltips();
         }
 
-        function updateHeartButton() {
-            heartBtn.classList.toggle('favorited', favoritePages[currentPdf]?.includes(pageNum) || false);
-        }
-
-        function updateClearFavoritesButton() {
-            if (favoritesMode && favoritePages[currentPdf]?.length > 0) {
-                clearFavoritesBtn.classList.add('visible');
-            } else {
-                clearFavoritesBtn.classList.remove('visible');
-            }
+        function updateFavoriteButton() {
+            favoritesBtn.classList.toggle('active', favoritePages[currentPdf]?.includes(pageNum) || false);
         }
 
         function clearAllFavorites() {
@@ -1429,8 +1412,7 @@
                     queueRenderPage(pageNum);
                 }
 
-                updateHeartButton();
-                updateClearFavoritesButton();
+                updateFavoriteButton();
                 favoritesBtn.classList.remove('active');
                 if (backButton) backButton.style.display = 'flex';
                 pdfTooltip.style.display = 'block';
@@ -1445,15 +1427,13 @@
 
             if (index === -1) {
                 favoritePages[currentPdf].push(pageNum);
-                heartBtn.classList.add('favorited');
+                favoritesBtn.classList.add('active');
             } else {
                 favoritePages[currentPdf].splice(index, 1);
-                heartBtn.classList.remove('favorited');
+                favoritesBtn.classList.remove('active');
             }
 
             localStorage.setItem('favoritePages', JSON.stringify(favoritePages));
-
-            updateClearFavoritesButton();
 
             if (favoritesMode && index !== -1) {
                 const favoritePagesList = getFavoritePagesList();
@@ -1496,7 +1476,6 @@
             }
 
             updateNavigation();
-            updateClearFavoritesButton();
             if (backButton) backButton.style.display = 'flex';
             pdfTooltip.style.display = 'block';
             hideTooltips();
@@ -1650,10 +1629,6 @@
                 toggleFavoritesView();
             } else if (e.key === 's' || e.key === 'S') {
                 sharePage();
-            } else if (e.key === 'c' || e.key === 'C') {
-                if (favoritesMode) {
-                    clearAllFavorites();
-                }
             } else if (e.key === 'Escape') {
                 if (mainContent.style.display === 'flex') {
                     goBackToMainMenu();
