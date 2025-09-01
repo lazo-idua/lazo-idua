@@ -139,11 +139,11 @@
             align-items: center;
             justify-content: center;
             padding: 10px;
-            padding-top: 40px;
+            padding-top: 50px; /* Виправлено: збільшено відступ від верхнього краю */
             background: #000;
             overflow-y: hidden;
             position: relative;
-            height: calc(100vh - 40px - 30px);
+            height: calc(100vh - 40px - 30px); /* Виправлено: враховано висоту header і footer */
         }
 
         .pdf-selection {
@@ -273,6 +273,7 @@
             min-height: 0;
             padding: 0;
             display: none;
+            height: calc(100vh - 40px - 30px); /* Виправлено: враховано висоту header і footer */
         }
 
         .main-content.opening {
