@@ -291,15 +291,16 @@
         }
 
         .main-content {
-            flex: 1;
+            position: absolute;
+            top: 40px; /* Висота хедера */
+            bottom: 30px; /* Висота футера */
+            left: 0;
+            right: 0;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            position: relative;
             background: #000;
             overflow: hidden;
-            min-height: 0;
             padding: 0;
             display: none;
         }
@@ -322,7 +323,7 @@
             width: 100%;
             height: 100%;
             max-width: 100%;
-            max-height: calc(100vh - 40px);
+            max-height: 100%;
             padding: 0;
             overflow: hidden;
         }
@@ -1716,7 +1717,7 @@
             const thumbnails = [
                 { pdfName: 'gadassa', id: 'thumbnail-gadassa' },
                 { pdfName: 'medunia', id: 'thumbnail-medunia' },
-                { pdfName: 'dobryi_vechir', id: 'thumbnail-dobryi_vechir' },
+                { pdfName: 'dobryi_vechir', id: 'thumbnail-dobryi-vechir' },
                 { pdfName: 'biscotti', id: 'thumbnail-biscotti' },
                 { pdfName: 'rsv', id: 'thumbnail-rsv' }
             ];
