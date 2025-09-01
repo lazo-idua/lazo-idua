@@ -141,21 +141,24 @@
             padding: 10px;
             padding-top: 40px;
             background: #000;
-            overflow-y: hidden;
+            overflow: hidden;
             position: relative;
             height: calc(100vh - 40px - 30px);
         }
 
         .pdf-selection {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-content: center;
-            gap: 15px; /* Забезпечує однакові відступи між картками */
-            max-width: 100%;
-            padding: 10px;
+            flex-wrap: nowrap;
+            overflow-x: hidden;
             scroll-behavior: smooth;
             width: 100%;
+            height: 100%;
+            justify-content: flex-start;
+            align-content: flex-start;
+            padding: 10px;
+            gap: 15px;
+            transition: transform 0.4s ease-out;
+            touch-action: pan-x;
         }
 
         .pdf-selection::-webkit-scrollbar {
@@ -173,9 +176,10 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            flex-basis: calc(50% - 15px); /* Адаптивний розмір для 2-х колонок */
+            flex-basis: calc(50% - 15px);
             max-width: calc(50% - 15px);
-            aspect-ratio: 148 / 210; /* Співвідношення сторін A5 */
+            aspect-ratio: 148 / 210;
+            flex-shrink: 0;
         }
 
         .pdf-item:hover {
@@ -248,6 +252,7 @@
             justify-content: center;
             gap: 8px;
             margin: 10px 0 5px 0;
+            z-index: 1;
         }
 
         .dot {
@@ -292,12 +297,12 @@
         .main-content {
             flex: 1;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
             background: #000;
             overflow: hidden;
-            min-height: 0;
             padding: 0;
             display: none;
         }
@@ -319,8 +324,9 @@
             width: 100%;
             height: 100%;
             max-width: 100%;
-            max-height: calc(100% - 40px);
+            max-height: calc(100vh - 40px); /* Adjust height to accommodate footer/header */
             padding: 0;
+            touch-action: none;
         }
 
         canvas {
@@ -382,6 +388,14 @@
             transform: translateY(-50%);
         }
 
+        .prev-btn {
+            left: 20px;
+        }
+
+        .next-btn {
+            right: 20px;
+        }
+
         .menu-nav-btn {
             display: none;
             position: absolute;
@@ -438,24 +452,31 @@
             white-space: nowrap;
         }
         
-        /* Вирівнюємо кнопки внизу */
         .bottom-right-container {
             position: absolute;
             bottom: 20px;
             right: 15px;
-            display: flex;
+            display: none; /* Hide by default */
             align-items: center;
             gap: 10px;
             z-index: 101;
+        }
+
+        .bottom-right-container.visible {
+            display: flex;
         }
 
         .bottom-left-container {
             position: absolute;
             bottom: 20px;
             left: 15px;
-            display: flex;
+            display: none; /* Hide by default */
             align-items: center;
             z-index: 101;
+        }
+
+        .bottom-left-container.visible {
+            display: flex;
         }
 
         .back-btn {
@@ -864,6 +885,38 @@
             }
         }
 
+        @media (max-width: 768px) {
+            .pdf-item {
+                flex-basis: calc(50% - 15px);
+                max-width: calc(50% - 15px);
+            }
+
+            .main-menu {
+                justify-content: flex-start;
+                padding-top: 40px;
+            }
+            
+            .pdf-selection {
+                display: grid;
+                grid-auto-flow: column;
+                grid-auto-columns: 100%;
+                overflow-x: auto;
+                justify-content: start;
+                padding: 0 10px;
+                gap: 15px;
+                scroll-snap-type: x mandatory;
+            }
+
+            .pdf-selection > .pdf-item-page {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+                width: 100%;
+                scroll-snap-align: center;
+            }
+        }
+
         body {
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
@@ -927,6 +980,8 @@
             </div>
         </div>
         <div class="tooltip" id="mainTooltip">Свайпайте вправо/вліво, щоб переглянути каталоги. Натисніть на картку, щоб відкрити PDF.</div>
+        <button class="menu-nav-btn prev-menu-btn" onclick="prevMenuPage()">〈</button>
+        <button class="menu-nav-btn next-menu-btn" onclick="nextMenuPage()">〉</button>
     </div>
 
     <div class="main-content" id="mainContent">
@@ -938,10 +993,10 @@
 
             <div class="top-buttons">
             </div>
-            <div class="bottom-left-container">
+            <div class="bottom-left-container" id="bottomLeftContainer">
                 <button class="back-btn" onclick="goBackToMainMenu()" title="Назад">←</button>
             </div>
-            <div class="bottom-right-container">
+            <div class="bottom-right-container" id="bottomRightContainer">
                 <button class="favorites-btn" onclick="toggleFavorite()" title="Додати до обраного">♥</button>
                 <button class="share-btn" onclick="sharePage()" title="Поділитися">↗</button>
             </div>
@@ -1037,8 +1092,8 @@
         const favoritesCtxNext = favoritesCanvasNext.getContext('2d', { willReadFrequently: true });
         const favoritesPrevBtn = document.querySelector('.favorites-prev-btn');
         const favoritesNextBtn = document.querySelector('.favorites-next-btn');
-        const bottomrightcontainer = document.querySelector('.bottom-right-container');
-        const bottomleftcontainer = document.querySelector('.bottom-left-container');
+        const bottomrightcontainer = document.getElementById('bottomRightContainer');
+        const bottomleftcontainer = document.getElementById('bottomLeftContainer');
 
         let favoritePages = JSON.parse(localStorage.getItem('favoritePages')) || {};
         let currentFavoriteIndex = 0;
@@ -1050,6 +1105,12 @@
         const favoritesPageCache = new Map();
         const preloadNextPages = isIOS ? 1 : 3;
 
+        // Menu pagination variables
+        let menuPage = 0;
+        let menuPagesCount = 0;
+        const pdfItemsPerPage = 4;
+        const pdfItems = Array.from(document.querySelectorAll('.pdf-item'));
+        
         // Hide tooltips after 15 seconds
         function hideTooltips() {
             setTimeout(() => {
@@ -1214,7 +1275,7 @@
             if (currentFavoriteIndex >= favoriteItems.length - 1) return;
             currentFavoriteIndex++;
             const favorite = favoriteItems[currentFavoriteIndex];
-            loadFavoritePdf(nextFavorite.pdfName, nextFavorite.page);
+            loadFavoritePdf(favorite.pdfName, favorite.page);
         }
 
         // Remove current favorite from view
@@ -1359,6 +1420,11 @@
             mainContent.style.display = 'flex';
             header.style.display = 'none';
             mainContent.classList.add('opening');
+            
+            // Show buttons
+            bottomleftcontainer.classList.add('visible');
+            bottomrightcontainer.classList.add('visible');
+
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctxNext.clearRect(0, 0, canvasNext.width, canvasNext.height);
             canvas.width = 0;
@@ -1375,6 +1441,11 @@
             mainContent.style.display = 'none';
             header.style.display = 'flex';
             mainContent.classList.remove('opening');
+            
+            // Hide buttons
+            bottomleftcontainer.classList.remove('visible');
+            bottomrightcontainer.classList.remove('visible');
+
             pageRendering = false;
             pageNumPending = null;
             pageCache.clear();
@@ -1384,6 +1455,7 @@
             updateNavigation();
             updateFavoriteButton();
             hideTooltips();
+            updateMenuNavigation();
         }
 
         function calculateOptimalScale(page) {
@@ -1768,6 +1840,108 @@
                 if (element) observer.observe(element);
             });
         }
+        
+        // Menu Pagination Logic
+        function setupMenuPagination() {
+            // Unpack all items first
+            pdfItems.forEach(item => pdfSelection.appendChild(item));
+
+            const totalItems = pdfItems.length;
+            const itemsPerPage = isMobile() ? 4 : totalItems;
+            
+            if (isMobile()) {
+                menuPagesCount = Math.ceil(totalItems / itemsPerPage);
+                pdfSelection.innerHTML = '';
+                
+                for (let i = 0; i < menuPagesCount; i++) {
+                    const pageContainer = document.createElement('div');
+                    pageContainer.classList.add('pdf-item-page');
+                    
+                    const startIndex = i * itemsPerPage;
+                    const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+                    
+                    for (let j = startIndex; j < endIndex; j++) {
+                        pageContainer.appendChild(pdfItems[j]);
+                    }
+                    pdfSelection.appendChild(pageContainer);
+                }
+            } else {
+                menuPagesCount = 1;
+            }
+
+            updateMenuNavigation();
+        }
+
+        function updateMenuNavigation() {
+            if (isMobile() && menuPagesCount > 1) {
+                prevMenuBtn.style.display = 'flex';
+                nextMenuBtn.style.display = 'flex';
+                prevMenuBtn.disabled = menuPage === 0;
+                nextMenuBtn.disabled = menuPage === menuPagesCount - 1;
+            } else {
+                prevMenuBtn.style.display = 'none';
+                nextMenuBtn.style.display = 'none';
+            }
+        }
+
+        function nextMenuPage() {
+            if (menuPage < menuPagesCount - 1) {
+                menuPage++;
+                updateMenuDisplay();
+            }
+        }
+
+        function prevMenuPage() {
+            if (menuPage > 0) {
+                menuPage--;
+                updateMenuDisplay();
+            }
+        }
+
+        function updateMenuDisplay() {
+            const containerWidth = pdfSelection.clientWidth;
+            pdfSelection.style.transform = `translateX(-${menuPage * containerWidth}px)`;
+            updateMenuNavigation();
+        }
+
+        function isMobile() {
+            return window.innerWidth <= 768;
+        }
+        
+        // Touch events for menu swipe
+        let menuTouchStartX = 0;
+        let menuTouchMoveX = 0;
+        let menuSwiping = false;
+
+        function handleMenuTouchStart(e) {
+            menuTouchStartX = e.touches[0].clientX;
+            menuSwiping = true;
+            pdfSelection.style.transition = 'none';
+        }
+
+        function handleMenuTouchMove(e) {
+            if (!menuSwiping) return;
+            menuTouchMoveX = e.touches[0].clientX;
+            const diff = menuTouchMoveX - menuTouchStartX;
+            const containerWidth = pdfSelection.clientWidth;
+            pdfSelection.style.transform = `translateX(calc(-${menuPage * 100}% + ${diff}px))`;
+        }
+
+        function handleMenuTouchEnd(e) {
+            if (!menuSwiping) return;
+            menuSwiping = false;
+            pdfSelection.style.transition = 'transform 0.4s ease-out';
+            const touchEndX = e.changedTouches[0].clientX;
+            const swipeDistance = touchEndX - menuTouchStartX;
+
+            if (swipeDistance > 50 && menuPage > 0) {
+                prevMenuPage();
+            } else if (swipeDistance < -50 && menuPage < menuPagesCount - 1) {
+                nextMenuPage();
+            } else {
+                updateMenuDisplay(); // Snap back
+            }
+        }
 
         window.addEventListener('load', function() {
             setTimeout(() => {
@@ -1776,6 +1950,7 @@
                 header.style.display = 'flex';
                 mainTooltip.style.display = 'block';
                 setupThumbnailObserver();
+                setupMenuPagination();
                 const hash = window.location.hash;
                 if (hash && hash.includes('page=') && hash.includes('pdf=')) {
                     const params = new URLSearchParams(hash.substring(1));
@@ -1792,9 +1967,17 @@
 
         document.addEventListener('keydown', function(e) {
             if (e.key === 'ArrowLeft') {
-                prevPage();
+                if (mainMenu.style.display === 'flex') {
+                    prevMenuPage();
+                } else {
+                    prevPage();
+                }
             } else if (e.key === 'ArrowRight') {
-                nextPage();
+                if (mainMenu.style.display === 'flex') {
+                    nextMenuPage();
+                } else {
+                    nextPage();
+                }
             } else if (e.key === 'End') {
                 if (!favoritesMode && pdfDoc) {
                     pageNum = pdfDoc.numPages;
@@ -1822,20 +2005,23 @@
                     renderPage(pageNum);
                     hideTooltips();
                 }
+                setupMenuPagination();
+                updateMenuDisplay();
             }, 100);
         });
-
+        
+        // Touch events for PDF viewer swipe
         let touchStartX = 0;
         let touchStartTime = 0;
         document.addEventListener('touchstart', function(e) {
-            if (e.touches.length === 1) {
+            if (e.touches.length === 1 && mainContent.style.display === 'flex') {
                 touchStartX = e.touches[0].clientX;
                 touchStartTime = Date.now();
             }
         }, { passive: true });
 
         document.addEventListener('touchend', function(e) {
-            if (e.changedTouches.length === 1) {
+            if (e.changedTouches.length === 1 && mainContent.style.display === 'flex') {
                 const touchEndX = e.changedTouches[0].clientX;
                 const touchEndTime = Date.now();
                 const deltaX = touchEndX - touchStartX;
@@ -1876,6 +2062,11 @@
             }
         });
         setAppHeight();
+
+        // Add event listeners for menu swiping on mobile
+        pdfSelection.addEventListener('touchstart', handleMenuTouchStart, { passive: true });
+        pdfSelection.addEventListener('touchmove', handleMenuTouchMove, { passive: true });
+        pdfSelection.addEventListener('touchend', handleMenuTouchEnd);
     </script>
 </body>
 </html>
