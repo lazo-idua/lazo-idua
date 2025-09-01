@@ -148,34 +148,18 @@
 
         .pdf-selection {
             display: flex;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            -webkit-overflow-scrolling: touch;
-            justify-content: flex-start;
-            gap: 5px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-content: center;
+            gap: 15px; /* Забезпечує однакові відступи між картками */
             max-width: 100%;
-            padding: 5px;
+            padding: 10px;
             scroll-behavior: smooth;
             width: 100%;
         }
 
         .pdf-selection::-webkit-scrollbar {
             display: none;
-        }
-
-        .pdf-group {
-            display: grid;
-            grid-template-rows: 1fr 1fr;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            min-width: 100vw;
-            scroll-snap-align: start;
-            padding: 10px;
-            height: 100%;
-            justify-content: center;
-            align-content: center;
-            box-sizing: border-box;
         }
 
         .pdf-item {
@@ -186,12 +170,12 @@
             transition: all 0.3s ease;
             text-align: center;
             backdrop-filter: blur(5px);
-            /* Зменшено висоту та ширину для мобільних пристроїв */
-            width: 148px;
-            height: 210px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            flex-basis: calc(50% - 15px); /* Адаптивний розмір для 2-х колонок */
+            max-width: calc(50% - 15px);
+            aspect-ratio: 148 / 210; /* Співвідношення сторін A5 */
         }
 
         .pdf-item:hover {
@@ -293,10 +277,6 @@
             text-align: center;
             opacity: 0;
             animation: fadeInTooltip 0.5s ease-out forwards, fadeOutTooltip 0.5s ease-out 14.5s forwards;
-        }
-
-        .tooltip.pdf-view {
-            display: none;
         }
 
         @keyframes fadeInTooltip {
@@ -777,16 +757,15 @@
 
         .favorites-list-view {
             display: flex;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            -webkit-overflow-scrolling: touch;
-            justify-content: flex-start;
-            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-content: flex-start;
+            gap: 15px;
             max-width: 100%;
             padding: 10px;
-            scroll-behavior: smooth;
             flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .favorites-list-view::-webkit-scrollbar {
@@ -801,11 +780,12 @@
             transition: all 0.3s ease;
             text-align: center;
             backdrop-filter: blur(5px);
-            height: 210px;
-            min-width: 148px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            flex-basis: calc(50% - 15px);
+            max-width: calc(50% - 15px);
+            aspect-ratio: 148 / 210;
         }
 
         .favorite-item:hover {
@@ -859,90 +839,29 @@
             content: '×';
         }
 
-        @media (max-width: 768px) {
-            .header { height: 40px; padding: 0 10px; }
-            .header-logo { width: 28px; height: 28px; }
-            .header-title { font-size: 14px; }
-            .main-menu { padding-top: 40px; padding: 5px; height: calc(100vh - 40px - 30px); }
-            .pdf-selection { gap: 5px; padding: 5px; }
-            .pdf-group { gap: 8px; padding: 8px; }
-            .pdf-item { padding: 8px; height: 210px; width: 148px; }
-            .nav-btn { width: 42px; height: 42px; font-size: 20px; }
-            .top-buttons { top: 15px; right: 15px; gap: 5px; }
-            .back-btn { width: 45px; height: 45px; font-size: 20px; }
-            .favorites-btn, .share-btn { width: 42px; height: 42px; font-size: 20px; }
-            .prev-btn { left: 8px; }
-            .next-btn { right: 8px; }
-            .bottom-right-container, .bottom-left-container { bottom: 15px; }
-            .bottom-right-container { right: 10px; gap: 8px; }
-            .bottom-left-container { left: 10px; }
-            .favorite-label { font-size: 10px; }
-            .footer { padding: 5px; font-size: 10px; height: 30px; }
-            .dots-container { margin: 8px 0 3px 0; }
-            .dot { width: 6px; height: 6px; }
-            .tooltip { font-size: 12px; padding: 8px 12px; }
-            .favorite-item { min-width: 148px; height: 210px; }
-            .favorites-nav-btn { width: 42px; height: 42px; font-size: 20px; }
-            .remove-favorite-btn { width: 42px; height: 42px; font-size: 20px; }
-            .favorites-back-btn { width: 45px; height: 45px; font-size: 20px; }
-        }
-
-        @media (max-width: 480px) {
-            .header { height: 36px; padding: 0 8px; }
-            .header-logo { width: 24px; height: 24px; }
-            .header-title { font-size: 13px; }
-            .main-menu { padding: 4px; padding-top: 36px; height: calc(100vh - 36px - 30px); }
-            .pdf-selection { gap: 4px; padding: 4px; }
-            .pdf-group { gap: 6px; padding: 6px; }
-            .pdf-item { padding: 6px; height: 180px; width: 127px; }
-            .nav-btn { width: 38px; height: 38px; font-size: 18px; }
-            .top-buttons { top: 10px; right: 10px; gap: 3px; }
-            .back-btn { width: 40px; height: 40px; font-size: 18px; }
-            .favorites-btn, .share-btn { width: 38px; height: 38px; font-size: 18px; }
-            .prev-btn { left: 6px; }
-            .next-btn { right: 6px; }
-            .bottom-right-container, .bottom-left-container { bottom: 12px; }
-            .bottom-right-container { right: 8px; gap: 6px; }
-            .bottom-left-container { left: 8px; }
-            .favorite-label { font-size: 9px; }
-            .footer { font-size: 9px; padding: 4px; height: 30px; }
-            .dots-container { margin: 6px 0 2px 0; }
-            .dot { width: 5px; height: 5px; }
-            .tooltip { font-size: 11px; padding: 6px 10px; }
-            .favorite-item { min-width: 127px; height: 180px; }
-            .favorites-nav-btn { width: 38px; height: 38px; font-size: 18px; }
-            .remove-favorite-btn { width: 38px; height: 38px; font-size: 18px; }
-            .favorites-back-btn { width: 40px; height: 40px; font-size: 18px; }
+        @media (min-width: 768px) {
+            .pdf-item, .favorite-item {
+                flex-basis: calc(33.333% - 15px);
+                max-width: calc(33.333% - 15px);
+            }
         }
 
         @media (min-width: 1200px) {
-            .header { height: 50px; padding: 0 15px; }
-            .header-logo { width: 40px; height: 40px; }
-            .header-title { font-size: 18px; }
-            .main-menu { padding-top: 50px; height: calc(100vh - 50px - 30px); padding: 10px; }
-            .pdf-selection { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scroll-snap-type: x mandatory; gap: 15px; }
-            .pdf-group { display: none; }
-            .pdf-item { width: 210px; min-width: 210px; max-width: 210px; height: 297px; padding: 12px; }
-            .nav-btn { width: 60px; height: 60px; font-size: 28px; }
-            .back-btn { width: 60px; height: 60px; font-size: 28px; }
-            .top-buttons { top: 25px; right: 25px; gap: 10px; }
-            .favorites-btn, .share-btn { width: 60px; height: 60px; font-size: 28px; }
-            .prev-btn { left: 30px; }
-            .next-btn { right: 30px; }
-            .bottom-right-container, .bottom-left-container { bottom: 20px; }
-            .bottom-right-container { right: 25px; }
-            .bottom-left-container { left: 25px; }
-            .favorite-label { font-size: 12px; }
-            .footer { padding: 10px; font-size: 12px; height: 30px; }
-            .dots-container { display: none; }
-            .tooltip { font-size: 14px; padding: 12px 18px; }
-            .favorite-item { min-width: 210px; height: 297px; }
-            .menu-nav-btn { display: flex; }
-            .prev-menu-btn { left: 30px; }
-            .next-menu-btn { right: 30px; }
-            .favorites-nav-btn { width: 60px; height: 60px; font-size: 28px; }
-            .remove-favorite-btn { width: 60px; height: 60px; font-size: 28px; }
-            .favorites-back-btn { width: 60px; height: 60px; font-size: 28px; }
+            .pdf-item, .favorite-item {
+                flex-basis: calc(20% - 15px);
+                max-width: calc(20% - 15px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .pdf-item, .favorite-item {
+                flex-basis: calc(50% - 10px);
+                max-width: calc(50% - 10px);
+                gap: 10px;
+            }
+            .pdf-selection, .favorites-list-view {
+                gap: 10px;
+            }
         }
 
         body {
@@ -970,7 +889,6 @@
         </button>
     </div>
     <div class="main-menu" id="mainMenu">
-        <button class="menu-nav-btn prev-menu-btn" onclick="prevMenu()" disabled>〈</button>
         <div class="pdf-selection" id="pdfSelection">
             <div class="pdf-item" onclick="openPdf('gadassa')">
                 <div class="pdf-thumbnail" id="thumbnail-gadassa">
@@ -1008,8 +926,6 @@
                 <div class="pdf-name">R&V</div>
             </div>
         </div>
-        <button class="menu-nav-btn next-menu-btn" onclick="nextMenu()">〉</button>
-        <div class="dots-container" id="dotsContainer"></div>
         <div class="tooltip" id="mainTooltip">Свайпайте вправо/вліво, щоб переглянути каталоги. Натисніть на картку, щоб відкрити PDF.</div>
     </div>
 
@@ -1066,8 +982,6 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
-        // JavaScript код залишається незмінним, як у попередній версії
-        // Він повністю сумісний з новими стилями
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
         document.addEventListener('contextmenu', function(e) {
@@ -1112,7 +1026,6 @@
         const pdfSelection = document.getElementById('pdfSelection');
         const dotsContainer = document.getElementById('dotsContainer');
         const mainTooltip = document.getElementById('mainTooltip');
-        const pdfTooltip = document.getElementById('pdfTooltip');
         const favoritesModal = document.getElementById('favoritesModal');
         const favoritesListView = document.getElementById('favoritesListView');
         const favoritesContentView = document.getElementById('favoritesContentView');
@@ -1137,88 +1050,12 @@
         const favoritesPageCache = new Map();
         const preloadNextPages = isIOS ? 1 : 3;
 
-        // Group cards into 2x2 groups for mobile
-        function groupCards() {
-            if (isLargeScreen) return;
-            const items = Array.from(pdfSelection.querySelectorAll('.pdf-item'));
-            const numItems = items.length;
-            const itemsPerGroup = 4;
-            const numGroups = Math.ceil(numItems / itemsPerGroup);
-            pdfSelection.innerHTML = '';
-            for (let i = 0; i < numGroups; i++) {
-                const group = document.createElement('div');
-                group.classList.add('pdf-group');
-                for (let j = 0; j < itemsPerGroup; j++) {
-                    const index = i * itemsPerGroup + j;
-                    if (index < numItems) {
-                        group.appendChild(items[index]);
-                    }
-                }
-                if (group.childElementCount < itemsPerGroup) {
-                    group.style.gridTemplateColumns = '1fr';
-                    group.style.justifyItems = 'center';
-                    group.style.alignItems = 'center';
-                }
-                pdfSelection.appendChild(group);
-            }
-        }
-
-        // Initialize dots for mobile pagination
-        function initDots() {
-            if (isLargeScreen) {
-                dotsContainer.style.display = 'none';
-                return;
-            }
-            const groups = pdfSelection.querySelectorAll('.pdf-group');
-            const numGroups = groups.length || 1;
-            dotsContainer.innerHTML = '';
-            for (let i = 0; i < numGroups; i++) {
-                const dot = document.createElement('div');
-                dot.classList.add('dot');
-                if (i === 0) dot.classList.add('active');
-                dotsContainer.appendChild(dot);
-            }
-            dotsContainer.style.display = 'flex';
-        }
-
-        // Update active dot based on scroll position
-        function updateDots() {
-            if (isLargeScreen) return;
-            const groups = pdfSelection.querySelectorAll('.pdf-group');
-            const scrollLeft = pdfSelection.scrollLeft;
-            const groupWidth = groups[0]?.offsetWidth + 5 || 1;
-            const currentPage = Math.floor(scrollLeft / groupWidth);
-            const dots = dotsContainer.querySelectorAll('.dot');
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentPage);
-            });
-        }
-
         // Hide tooltips after 15 seconds
         function hideTooltips() {
             setTimeout(() => {
                 mainTooltip.style.opacity = '0';
                 mainTooltip.style.display = 'none';
             }, 15000);
-        }
-
-        function prevMenu() {
-            const itemWidth = document.querySelector('.pdf-item')?.offsetWidth + 5 || 0;
-            pdfSelection.scrollBy({ left: -itemWidth, behavior: 'smooth' });
-            updateMenuButtons();
-        }
-
-        function nextMenu() {
-            const itemWidth = document.querySelector('.pdf-item')?.offsetWidth + 5 || 0;
-            pdfSelection.scrollBy({ left: itemWidth, behavior: 'smooth' });
-            updateMenuButtons();
-        }
-
-        function updateMenuButtons() {
-            if (prevMenuBtn && nextMenuBtn) {
-                prevMenuBtn.disabled = pdfSelection.scrollLeft <= 0;
-                nextMenuBtn.disabled = pdfSelection.scrollLeft + pdfSelection.clientWidth >= pdfSelection.scrollWidth;
-            }
         }
 
         // Open global favorites modal
@@ -1252,7 +1089,7 @@
                     item.onclick = () => openFavoritePdf(pdfName, page);
                     const thumbnail = document.createElement('div');
                     thumbnail.classList.add('favorite-thumbnail');
-                    thumbnail.innerHTML = `<div class="thumbnail-placeholder">${pdfName.toUpperCase()} - Сторінка ${page}</div>`;
+                    thumbnail.innerHTML = `<div class="thumbnail-placeholder">${pdfName.toUpperCase()}<br>Сторінка ${page}</div>`;
                     const info = document.createElement('div');
                     info.classList.add('favorite-info');
                     info.textContent = `${pdfName.toUpperCase()} - Сторінка ${page}`;
@@ -1377,7 +1214,7 @@
             if (currentFavoriteIndex >= favoriteItems.length - 1) return;
             currentFavoriteIndex++;
             const favorite = favoriteItems[currentFavoriteIndex];
-            loadFavoritePdf(favorite.pdfName, favorite.page);
+            loadFavoritePdf(nextFavorite.pdfName, nextFavorite.page);
         }
 
         // Remove current favorite from view
@@ -1939,13 +1776,6 @@
                 header.style.display = 'flex';
                 mainTooltip.style.display = 'block';
                 setupThumbnailObserver();
-                groupCards();
-                initDots();
-                pdfSelection.addEventListener('scroll', () => {
-                    updateDots();
-                    updateMenuButtons();
-                });
-                updateMenuButtons();
                 const hash = window.location.hash;
                 if (hash && hash.includes('page=') && hash.includes('pdf=')) {
                     const params = new URLSearchParams(hash.substring(1));
@@ -1971,7 +1801,7 @@
                     queueRenderPage(pageNum);
                 }
             } else if (e.key === 'f' || e.key === 'F') {
-                toggleFavoritesView();
+                toggleFavorite();
             } else if (e.key === 's' || e.key === 'S') {
                 sharePage();
             } else if (e.key === 'Escape') {
@@ -1992,10 +1822,6 @@
                     renderPage(pageNum);
                     hideTooltips();
                 }
-                groupCards();
-                initDots();
-                updateDots();
-                updateMenuButtons();
             }, 100);
         });
 
@@ -2048,10 +1874,6 @@
                     hideTooltips();
                 }, 350);
             }
-            groupCards();
-            initDots();
-            updateDots();
-            updateMenuButtons();
         });
         setAppHeight();
     </script>
