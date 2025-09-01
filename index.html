@@ -186,7 +186,9 @@
             transition: all 0.3s ease;
             text-align: center;
             backdrop-filter: blur(5px);
-            height: calc((100vh - 40px - 30px - 40px) / 2);
+            /* Зменшено висоту та ширину для мобільних пристроїв */
+            width: 148px;
+            height: 210px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -294,9 +296,7 @@
         }
 
         .tooltip.pdf-view {
-            top: 20px;
-            bottom: auto;
-            z-index: 99;
+            display: none;
         }
 
         @keyframes fadeInTooltip {
@@ -320,7 +320,6 @@
             min-height: 0;
             padding: 0;
             display: none;
-            padding-bottom: 40px;
         }
 
         .main-content.opening {
@@ -458,11 +457,28 @@
             letter-spacing: 0.5px;
             white-space: nowrap;
         }
+        
+        /* Вирівнюємо кнопки внизу */
+        .bottom-right-container {
+            position: absolute;
+            bottom: 20px;
+            right: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 101;
+        }
 
-        .back-btn {
+        .bottom-left-container {
             position: absolute;
             bottom: 20px;
             left: 15px;
+            display: flex;
+            align-items: center;
+            z-index: 101;
+        }
+
+        .back-btn {
             background: rgba(255, 255, 255, 0.9);
             color: #000;
             border: 2px solid #000;
@@ -478,7 +494,6 @@
             justify-content: center;
             padding: 0;
             backdrop-filter: blur(5px);
-            z-index: 102;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
         }
 
@@ -522,7 +537,6 @@
             display: flex;
             gap: 10px;
             z-index: 101;
-            padding-bottom: 40px;
         }
 
         .heart-btn, .clear-favorites-btn {
@@ -645,7 +659,6 @@
             overflow: hidden;
             min-height: 0;
             padding: 0;
-            padding-bottom: 40px;
         }
 
         .favorites-pdf-container {
@@ -709,7 +722,6 @@
             display: flex;
             gap: 10px;
             z-index: 101;
-            padding-bottom: 40px;
         }
 
         .remove-favorite-btn {
@@ -775,7 +787,6 @@
             padding: 10px;
             scroll-behavior: smooth;
             flex: 1;
-            padding-bottom: 40px;
         }
 
         .favorites-list-view::-webkit-scrollbar {
@@ -790,8 +801,8 @@
             transition: all 0.3s ease;
             text-align: center;
             backdrop-filter: blur(5px);
-            height: calc((100vh - 40px - 30px - 40px) / 2);
-            min-width: 120px;
+            height: 210px;
+            min-width: 148px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -855,20 +866,22 @@
             .main-menu { padding-top: 40px; padding: 5px; height: calc(100vh - 40px - 30px); }
             .pdf-selection { gap: 5px; padding: 5px; }
             .pdf-group { gap: 8px; padding: 8px; }
-            .pdf-item { padding: 8px; height: calc((100vh - 40px - 30px - 32px) / 2); }
+            .pdf-item { padding: 8px; height: 210px; width: 148px; }
             .nav-btn { width: 42px; height: 42px; font-size: 20px; }
             .top-buttons { top: 15px; right: 15px; gap: 5px; }
-            .back-btn { bottom: 15px; left: 10px; width: 45px; height: 45px; font-size: 20px; }
+            .back-btn { width: 45px; height: 45px; font-size: 20px; }
             .favorites-btn, .share-btn { width: 42px; height: 42px; font-size: 20px; }
             .prev-btn { left: 8px; }
             .next-btn { right: 8px; }
-            .bottom-buttons { bottom: 15px; right: 10px; gap: 8px; }
+            .bottom-right-container, .bottom-left-container { bottom: 15px; }
+            .bottom-right-container { right: 10px; gap: 8px; }
+            .bottom-left-container { left: 10px; }
             .favorite-label { font-size: 10px; }
             .footer { padding: 5px; font-size: 10px; height: 30px; }
             .dots-container { margin: 8px 0 3px 0; }
             .dot { width: 6px; height: 6px; }
             .tooltip { font-size: 12px; padding: 8px 12px; }
-            .favorite-item { min-width: 100px; height: calc((100vh - 40px - 30px - 32px) / 2); }
+            .favorite-item { min-width: 148px; height: 210px; }
             .favorites-nav-btn { width: 42px; height: 42px; font-size: 20px; }
             .remove-favorite-btn { width: 42px; height: 42px; font-size: 20px; }
             .favorites-back-btn { width: 45px; height: 45px; font-size: 20px; }
@@ -881,20 +894,22 @@
             .main-menu { padding: 4px; padding-top: 36px; height: calc(100vh - 36px - 30px); }
             .pdf-selection { gap: 4px; padding: 4px; }
             .pdf-group { gap: 6px; padding: 6px; }
-            .pdf-item { padding: 6px; height: calc((100vh - 36px - 30px - 24px) / 2); }
+            .pdf-item { padding: 6px; height: 180px; width: 127px; }
             .nav-btn { width: 38px; height: 38px; font-size: 18px; }
             .top-buttons { top: 10px; right: 10px; gap: 3px; }
-            .back-btn { bottom: 12px; left: 8px; width: 40px; height: 40px; font-size: 18px; }
+            .back-btn { width: 40px; height: 40px; font-size: 18px; }
             .favorites-btn, .share-btn { width: 38px; height: 38px; font-size: 18px; }
             .prev-btn { left: 6px; }
             .next-btn { right: 6px; }
-            .bottom-buttons { bottom: 12px; right: 8px; gap: 6px; }
+            .bottom-right-container, .bottom-left-container { bottom: 12px; }
+            .bottom-right-container { right: 8px; gap: 6px; }
+            .bottom-left-container { left: 8px; }
             .favorite-label { font-size: 9px; }
             .footer { font-size: 9px; padding: 4px; height: 30px; }
             .dots-container { margin: 6px 0 2px 0; }
             .dot { width: 5px; height: 5px; }
             .tooltip { font-size: 11px; padding: 6px 10px; }
-            .favorite-item { min-width: 90px; height: calc((100vh - 36px - 30px - 24px) / 2); }
+            .favorite-item { min-width: 127px; height: 180px; }
             .favorites-nav-btn { width: 38px; height: 38px; font-size: 18px; }
             .remove-favorite-btn { width: 38px; height: 38px; font-size: 18px; }
             .favorites-back-btn { width: 40px; height: 40px; font-size: 18px; }
@@ -907,19 +922,21 @@
             .main-menu { padding-top: 50px; height: calc(100vh - 50px - 30px); padding: 10px; }
             .pdf-selection { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scroll-snap-type: x mandatory; gap: 15px; }
             .pdf-group { display: none; }
-            .pdf-item { width: 180px; min-width: 180px; max-width: 200px; padding: 12px; height: calc(100vh - 50px - 30px - 40px); }
+            .pdf-item { width: 210px; min-width: 210px; max-width: 210px; height: 297px; padding: 12px; }
             .nav-btn { width: 60px; height: 60px; font-size: 28px; }
-            .back-btn { bottom: 20px; width: 60px; height: 60px; font-size: 28px; }
+            .back-btn { width: 60px; height: 60px; font-size: 28px; }
             .top-buttons { top: 25px; right: 25px; gap: 10px; }
             .favorites-btn, .share-btn { width: 60px; height: 60px; font-size: 28px; }
             .prev-btn { left: 30px; }
             .next-btn { right: 30px; }
-            .bottom-buttons { bottom: 20px; right: 25px; }
+            .bottom-right-container, .bottom-left-container { bottom: 20px; }
+            .bottom-right-container { right: 25px; }
+            .bottom-left-container { left: 25px; }
             .favorite-label { font-size: 12px; }
             .footer { padding: 10px; font-size: 12px; height: 30px; }
             .dots-container { display: none; }
             .tooltip { font-size: 14px; padding: 12px 18px; }
-            .favorite-item { min-width: 180px; height: calc(100vh - 50px - 30px - 40px); }
+            .favorite-item { min-width: 210px; height: 297px; }
             .menu-nav-btn { display: flex; }
             .prev-menu-btn { left: 30px; }
             .next-menu-btn { right: 30px; }
@@ -1005,12 +1022,14 @@
 
             <div class="top-buttons">
             </div>
-            <div class="bottom-buttons">
+            <div class="bottom-left-container">
+                <button class="back-btn" onclick="goBackToMainMenu()" title="Назад">←</button>
+            </div>
+            <div class="bottom-right-container">
                 <button class="favorites-btn" onclick="toggleFavorite()" title="Додати до обраного">♥</button>
                 <button class="share-btn" onclick="sharePage()" title="Поділитися">↗</button>
             </div>
-            <button class="back-btn" onclick="goBackToMainMenu()" title="Назад">←</button>
-            <div class="tooltip pdf-view" id="pdfTooltip">Свайпайте або використовуйте стрілки для навігації. Натисніть ♥ для обраного, ↗ для поширення, ← для повернення.</div>
+            
         </div>
 
         <button class="nav-btn next-btn" onclick="nextPage()">〉</button>
@@ -1039,8 +1058,7 @@
         </div>
         
         <div class="favorites-list-view" id="favoritesListView">
-            <!-- Favorites list will be rendered here -->
-        </div>
+            </div>
     </div>
 
     <div class="footer">
@@ -1106,6 +1124,8 @@
         const favoritesCtxNext = favoritesCanvasNext.getContext('2d', { willReadFrequently: true });
         const favoritesPrevBtn = document.querySelector('.favorites-prev-btn');
         const favoritesNextBtn = document.querySelector('.favorites-next-btn');
+        const bottomrightcontainer = document.querySelector('.bottom-right-container');
+        const bottomleftcontainer = document.querySelector('.bottom-left-container');
 
         let favoritePages = JSON.parse(localStorage.getItem('favoritePages')) || {};
         let currentFavoriteIndex = 0;
@@ -1179,8 +1199,6 @@
             setTimeout(() => {
                 mainTooltip.style.opacity = '0';
                 mainTooltip.style.display = 'none';
-                pdfTooltip.style.opacity = '0';
-                pdfTooltip.style.display = 'none';
             }, 15000);
         }
 
@@ -1504,15 +1522,12 @@
             mainContent.style.display = 'flex';
             header.style.display = 'none';
             mainContent.classList.add('opening');
-            if (backButton) backButton.style.display = 'flex';
-            pdfTooltip.style.display = 'block';
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctxNext.clearRect(0, 0, canvasNext.width, canvasNext.height);
             canvas.width = 0;
             canvas.height = 0;
             canvasNext.width = 0;
             canvasNext.height = 0;
-
             pageCache.clear();
             loadPdf();
             hideTooltips();
@@ -1523,9 +1538,6 @@
             mainContent.style.display = 'none';
             header.style.display = 'flex';
             mainContent.classList.remove('opening');
-            if (backButton) backButton.style.display = 'none';
-            pdfTooltip.style.display = 'none';
-            mainTooltip.style.display = 'block';
             pageRendering = false;
             pageNumPending = null;
             pageCache.clear();
@@ -1568,8 +1580,6 @@
                         <small>Перевірте URL каталогу ${currentPdf.toUpperCase()}</small>
                     </div>
                 `;
-                if (backButton) backButton.style.display = 'flex';
-                pdfTooltip.style.display = 'block';
                 updateNavigation();
                 hideTooltips();
                 return;
@@ -1583,8 +1593,6 @@
                             <small>PDF недоступний. Перевірте URL або підключення до інтернету.</small>
                         </div>
                     `;
-                    if (backButton) backButton.style.display = 'flex';
-                    pdfTooltip.style.display = 'block';
                     console.error(`PDF ${currentPdf} недоступний за URL: ${url}`);
                     updateNavigation();
                     hideTooltips();
@@ -1607,8 +1615,6 @@
                     renderPage(pageNum);
                     preloadPages(pageNum + 1, preloadNextPages + 2);
                     updateNavigation();
-                    pdfTooltip.style.display = 'block';
-                    pdfTooltip.style.opacity = '1';
                     hideTooltips();
                 }).catch(function(error) {
                     console.error(`Помилка завантаження PDF ${currentPdf}:`, error);
@@ -1618,8 +1624,6 @@
                             <small>${error.message || 'Перевірте підключення до інтернету'}</small>
                         </div>
                     `;
-                    if (backButton) backButton.style.display = 'flex';
-                    pdfTooltip.style.display = 'block';
                     updateNavigation();
                     hideTooltips();
                 });
@@ -1642,9 +1646,6 @@
         function renderPage(num) {
             if (!pdfDoc) return;
             pageRendering = true;
-            if (backButton) backButton.style.display = 'flex';
-            pdfTooltip.style.display = 'block';
-            pdfTooltip.style.opacity = '1';
 
             if (pageCache.has(num)) {
                 renderPageFromCache(num);
@@ -1655,8 +1656,6 @@
                     preloadPages(num + 1, preloadNextPages);
                 }).catch(function(error) {
                     console.error(`Помилка відображення сторінки ${num}:`, error);
-                    if (backButton) backButton.style.display = 'flex';
-                    pdfTooltip.style.display = 'block';
                     pageRendering = false;
                     hideTooltips();
                 });
@@ -1720,16 +1719,11 @@
                     pageNumPending = null;
                 }
 
-                if (backButton) backButton.style.display = 'flex';
-                pdfTooltip.style.display = 'block';
-                pdfTooltip.style.opacity = '1';
                 updateNavigation();
                 updateFavoriteButton();
                 hideTooltips();
             }).catch(function(error) {
                 console.error(`Помилка рендерингу сторінки ${num}:`, error);
-                if (backButton) backButton.style.display = 'flex';
-                pdfTooltip.style.display = 'block';
                 pageRendering = false;
                 hideTooltips();
             });
@@ -1740,8 +1734,6 @@
                 prevBtn.disabled = true;
                 nextBtn.disabled = true;
                 favoritesBtn.classList.toggle('active', favoritesMode);
-                if (backButton) backButton.style.display = 'flex';
-                pdfTooltip.style.display = 'block';
                 hideTooltips();
                 return;
             }
@@ -1758,8 +1750,6 @@
             }
 
             favoritesBtn.classList.toggle('active', favoritesMode);
-            if (backButton) backButton.style.display = 'flex';
-            pdfTooltip.style.display = 'block';
             hideTooltips();
         }
 
@@ -1780,8 +1770,6 @@
 
                 updateFavoriteButton();
                 favoritesBtn.classList.remove('active');
-                if (backButton) backButton.style.display = 'flex';
-                pdfTooltip.style.display = 'block';
                 hideTooltips();
             }
         }
@@ -1811,8 +1799,6 @@
                     queueRenderPage(pageNum);
                 }
             }
-            if (backButton) backButton.style.display = 'flex';
-            pdfTooltip.style.display = 'block';
             hideTooltips();
         }
 
@@ -1826,8 +1812,6 @@
                 if (favoritePagesList.length === 0) {
                     favoritesMode = false;
                     alert('У вас немає обраних сторінок');
-                    if (backButton) backButton.style.display = 'flex';
-                    pdfTooltip.style.display = 'block';
                     hideTooltips();
                     return;
                 }
@@ -1842,8 +1826,6 @@
             }
 
             updateNavigation();
-            if (backButton) backButton.style.display = 'flex';
-            pdfTooltip.style.display = 'block';
             hideTooltips();
         }
 
@@ -1873,8 +1855,6 @@
                     alert('Посилання на сторінку скопійовано в буфер обміну!');
                 });
             }
-            if (backButton) backButton.style.display = 'flex';
-            pdfTooltip.style.display = 'block';
             hideTooltips();
         }
 
@@ -1885,8 +1865,6 @@
             } else {
                 renderPage(num);
             }
-            if (backButton) backButton.style.display = 'flex';
-            pdfTooltip.style.display = 'block';
             hideTooltips();
         }
 
@@ -1905,8 +1883,6 @@
                 pageNum--;
                 queueRenderPage(pageNum);
             }
-            if (backButton) backButton.style.display = 'flex';
-            pdfTooltip.style.display = 'block';
             hideTooltips();
         }
 
@@ -1925,8 +1901,6 @@
                 pageNum++;
                 queueRenderPage(pageNum);
             }
-            if (backButton) backButton.style.display = 'flex';
-            pdfTooltip.style.display = 'block';
             hideTooltips();
         }
 
@@ -2016,8 +1990,6 @@
                 if (pdfDoc && !pageRendering) {
                     renderQuality = isIOS ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
                     renderPage(pageNum);
-                    if (backButton) backButton.style.display = 'flex';
-                    pdfTooltip.style.display = 'block';
                     hideTooltips();
                 }
                 groupCards();
@@ -2073,8 +2045,6 @@
             if (pdfDoc && !pageRendering) {
                 setTimeout(function() {
                     renderPage(pageNum);
-                    if (backButton) backButton.style.display = 'flex';
-                    pdfTooltip.style.display = 'block';
                     hideTooltips();
                 }, 350);
             }
