@@ -140,6 +140,7 @@
             justify-content: center;
             padding: 10px;
             padding-top: 40px;
+            padding-bottom: 40px; /* Added bottom padding */
             background: #000;
             overflow-y: hidden;
             position: relative;
@@ -837,7 +838,7 @@
             .header { height: 40px; padding: 0 10px; }
             .header-logo { width: 28px; height: 28px; }
             .header-title { font-size: 14px; }
-            .main-menu { padding: 5px; padding-top: 40px; height: calc(100vh - 40px - 30px); }
+            .main-menu { padding: 5px; padding-top: 40px; padding-bottom: 40px; height: calc(100vh - 40px - 30px); }
             .pdf-selection { gap: 5px; padding: 5px; }
             .pdf-group { gap: 8px; padding: 8px; }
             .pdf-item { padding: 8px; height: calc((100vh - 40px - 30px - 32px) / 2); }
@@ -863,7 +864,7 @@
             .header { height: 36px; padding: 0 8px; }
             .header-logo { width: 24px; height: 24px; }
             .header-title { font-size: 13px; }
-            .main-menu { padding: 4px; padding-top: 36px; height: calc(100vh - 36px - 30px); }
+            .main-menu { padding: 4px; padding-top: 36px; padding-bottom: 36px; height: calc(100vh - 36px - 30px); }
             .pdf-selection { gap: 4px; padding: 4px; }
             .pdf-group { gap: 6px; padding: 6px; }
             .pdf-item { padding: 6px; height: calc((100vh - 36px - 30px - 24px) / 2); }
@@ -885,14 +886,58 @@
             .favorites-back-btn { width: 40px; height: 40px; font-size: 18px; }
         }
 
+        @media (min-width: 769px) {
+            .main-menu {
+                padding: 10px;
+                padding-top: 50px;
+                padding-bottom: 50px;
+            }
+            .pdf-selection {
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                gap: 15px;
+            }
+            .pdf-group {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                min-width: unset;
+                scroll-snap-align: none;
+                gap: 15px;
+                height: 100%;
+                justify-content: flex-start;
+                align-content: flex-start;
+                overflow-x: hidden;
+                width: auto;
+            }
+            .pdf-item {
+                width: 180px;
+                min-width: 180px;
+                max-width: 200px;
+                padding: 12px;
+                height: calc(100vh - 50px - 30px - 40px);
+            }
+            .menu-nav-btn {
+                display: flex;
+            }
+            .dots-container {
+                display: none;
+            }
+            .prev-menu-btn {
+                left: 30px;
+            }
+            .next-menu-btn {
+                right: 30px;
+            }
+        }
+
         @media (min-width: 1200px) {
             .header { height: 50px; padding: 0 15px; }
             .header-logo { width: 40px; height: 40px; }
             .header-title { font-size: 18px; }
             .main-menu { padding-top: 50px; height: calc(100vh - 50px - 30px); padding: 10px; }
-            .pdf-selection { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scroll-snap-type: x mandatory; gap: 15px; }
-            .pdf-group { display: none; }
-            .pdf-item { width: 180px; min-width: 180px; max-width: 200px; padding: 12px; height: calc(100vh - 50px - 30px - 40px); }
             .nav-btn { width: 60px; height: 60px; font-size: 28px; }
             .back-btn { bottom: 20px; width: 60px; height: 60px; font-size: 28px; }
             .top-buttons { top: 25px; right: 25px; gap: 10px; }
@@ -905,9 +950,6 @@
             .dots-container { display: none; }
             .tooltip { font-size: 14px; padding: 12px 18px; }
             .favorite-item { min-width: 180px; height: calc(100vh - 50px - 30px - 40px); }
-            .menu-nav-btn { display: flex; }
-            .prev-menu-btn { left: 30px; }
-            .next-menu-btn { right: 30px; }
             .favorites-nav-btn { width: 60px; height: 60px; font-size: 28px; }
             .remove-favorite-btn { width: 60px; height: 60px; font-size: 28px; }
             .favorites-back-btn { width: 60px; height: 60px; font-size: 28px; }
@@ -1064,19 +1106,13 @@
         let favoritesTouchEndX = 0;
         let currentFavoriteIndex = 0;
         let favoriteItems = [];
-        let pdfDocs = {
-            'gadassa': { url: 'https://lazo-idua.github.io/lazo-idua/PDF/GADASSA.pdf', thumbnail: 'https://lazo-idua.github.io/lazo-idua/PDF/1_GADASSA/GADASSA-1.jpg', name: 'GADASSA' },
-            'medunia': { url: 'https://lazo-idua.github.io/lazo-idua/PDF/MEDUNIA.pdf', thumbnail: 'https://lazo-idua.github.io/lazo-idua/PDF/2_MEDUNIA/MEDUNIA-1.jpg', name: 'MEDUNIA' },
-            'dobryi_vechir': { url: 'https://lazo-idua.github.io/lazo-idua/PDF/DOBRYI_VECHIR.pdf', thumbnail: 'https://lazo-idua.github.io/lazo-idua/PDF/3_DOBRYI_VECHIR/DOBRYI_VECHIR-1.jpg', name: 'DOBRYI VECHIR' },
-            'biscotti': { url: 'https://lazo-idua.github.io/lazo-idua/PDF/BISCOTTI.pdf', thumbnail: 'https://lazo-idua.github.io/lazo-idua/PDF/4_BISCOTTI/BISCOTTI-1.jpg', name: 'BISCOTTI' },
-            'rsv': { url: 'https://lazo-idua.github.io/lazo-idua/PDF/rsv.pdf', thumbnail: 'https://lazo-idua.github.io/lazo-idua/PDF/rsv/R&V-1.jpg', name: 'R&V' },
-        };
+
         const allPdfData = [
             { id: 'gadassa', name: 'GADASSA', url: 'https://lazo-idua.github.io/lazo-idua/PDF/1_GADASSA.pdf', thumbnail: 'https://lazo-idua.github.io/lazo-idua/PDF/1_GADASSA/GADASSA-1.jpg' },
             { id: 'medunia', name: 'MEDUNIA', url: 'https://lazo-idua.github.io/lazo-idua/PDF/2_MEDUNIA.pdf', thumbnail: 'https://lazo-idua.github.io/lazo-idua/PDF/2_MEDUNIA/MEDUNIA-1.jpg' },
             { id: 'dobryi_vechir', name: 'DOBRYI VECHIR', url: 'https://lazo-idua.github.io/lazo-idua/PDF/3_DOBRYI_VECHIR.pdf', thumbnail: 'https://lazo-idua.github.io/lazo-idua/PDF/3_DOBRYI_VECHIR/DOBRYI_VECHIR-1.jpg' },
             { id: 'biscotti', name: 'BISCOTTI', url: 'https://lazo-idua.github.io/lazo-idua/PDF/4_BISCOTTI.pdf', thumbnail: 'https://lazo-idua.github.io/lazo-idua/PDF/4_BISCOTTI/BISCOTTI-1.jpg' },
-            { id: 'rsv', name: 'R&V', url: 'https://lazo-idua.github.io/lazo-idua/PDF/rsv.pdf', thumbnail: 'https://lazo-idua.github.io/lazo-idua/PDF/rsv/R&V-1.jpg' },
+            { id: 'rsv', name: 'R&V', url: 'https://lazo-idua.github.io/lazo-idua/PDF/5_R_V.pdf', thumbnail: 'https://lazo-idua.github.io/lazo-idua/PDF/5_R_V/R&V-1.jpg' },
         ];
         
         // Functions from previous versions
@@ -1118,9 +1154,10 @@
                 });
             });
             if (isFavorite) {
-                document.querySelector('.favorites-title').textContent = `${favoriteItems[currentFavoriteIndex].name} - ${num}/${favoriteItems[currentFavoriteIndex].pdfDoc.numPages}`;
+                document.querySelector('.favorites-title').textContent = `${favoriteItems[currentFavoriteIndex].name} - ${num}/${currentPdfDoc.numPages}`;
             } else {
-                document.querySelector('.header-title').textContent = `${pdfDocs[currentPdf].name} - ${num}/${pdfDoc.numPages}`;
+                const pdfData = allPdfData.find(p => p.id === currentPdf);
+                document.querySelector('.header-title').textContent = `${pdfData.name} - ${num}/${pdfDoc.numPages}`;
             }
         }
 
@@ -1150,20 +1187,31 @@
 
         function prevFavoritePage() {
             if (currentFavoriteIndex < 0) return;
-            favoriteItems[currentFavoriteIndex].pageNum--;
-            queueRenderPage(favoriteItems[currentFavoriteIndex].pageNum, true);
+            const currentItem = favoriteItems[currentFavoriteIndex];
+            if (currentItem.pageNum > 1) {
+                currentItem.pageNum--;
+                queueRenderPage(currentItem.pageNum, true);
+            }
         }
 
         function nextFavoritePage() {
             if (currentFavoriteIndex < 0) return;
-            favoriteItems[currentFavoriteIndex].pageNum++;
-            queueRenderPage(favoriteItems[currentFavoriteIndex].pageNum, true);
+            const currentItem = favoriteItems[currentFavoriteIndex];
+            if (currentItem.pageNum < currentItem.pdfDoc.numPages) {
+                currentItem.pageNum++;
+                queueRenderPage(currentItem.pageNum, true);
+            }
         }
-
+        
         function openPdf(pdfId) {
             currentPdf = pdfId;
             pageNum = 1;
-            const url = pdfDocs[pdfId].url;
+            const pdfData = allPdfData.find(p => p.id === pdfId);
+            if (!pdfData) {
+                console.error('PDF data not found for id:', pdfId);
+                return;
+            }
+            const url = pdfData.url;
             pdfjsLib.getDocument(url).promise.then(function(pdf) {
                 pdfDoc = pdf;
                 mainMenu.style.display = 'none';
@@ -1174,7 +1222,22 @@
                 updateFavoritesBtn();
                 setTimeout(() => mainContent.classList.remove('opening'), 700);
             }).catch(function(error) {
-                mainMenu.innerHTML = `<div class="error-message">Помилка завантаження файлу. <br><small>Деталі: ${error.message}</small></div>`;
+                mainMenu.style.display = 'flex';
+                mainContent.style.display = 'none';
+                header.style.display = 'flex';
+                const errorMessage = document.createElement('div');
+                errorMessage.className = 'error-message';
+                errorMessage.innerHTML = `
+                    <p>Помилка завантаження файлу.</p>
+                    <p><small>Можливо, шлях до PDF-файлу невірний. Будь ласка, перевірте URL-адресу:</small></p>
+                    <p><small>${url}</small></p>
+                    <p><small>Деталі: ${error.message}</small></p>
+                `;
+                document.body.appendChild(errorMessage);
+                setTimeout(() => {
+                    errorMessage.remove();
+                }, 10000);
+                console.error('PDF loading error:', error);
             });
         }
 
@@ -1214,7 +1277,7 @@
                 }).then(() => {
                     showTooltip('Успішно поділилися!');
                 }).catch((error) => {
-                    showTooltip('Помилка: ' + error);
+                    showTooltip('Помилка: ' + error.message);
                 });
             } else {
                 showTooltip('API спільного доступу не підтримується на вашому пристрої.');
@@ -1344,6 +1407,10 @@
             pdfjsLib.getDocument(favoriteItems[currentFavoriteIndex].url).promise.then(pdf => {
                 favoriteItems[currentFavoriteIndex].pdfDoc = pdf;
                 queueRenderPage(favoriteItems[currentFavoriteIndex].pageNum, true);
+            }).catch(function(error) {
+                console.error('PDF loading error:', error);
+                closeFavoritesView();
+                alert('Не вдалося завантажити обраний файл. Можливо, його було видалено.');
             });
         }
 
@@ -1361,6 +1428,7 @@
 
         // Home page card grouping and navigation
         function createPdfCards() {
+            pdfSelection.innerHTML = '';
             allPdfData.forEach(pdf => {
                 const item = document.createElement('div');
                 item.className = 'pdf-item';
@@ -1392,9 +1460,9 @@
         let cardGroups = [];
 
         function groupCards() {
-            const items = Array.from(pdfSelection.querySelectorAll('.pdf-item'));
             const isMobile = window.innerWidth <= 768;
-            const cardsPerGroup = isMobile ? 4 : 8; // Adjust based on your preference for desktop
+            const items = Array.from(document.querySelectorAll('.pdf-item'));
+            const cardsPerGroup = isMobile ? 4 : items.length; // On desktop, all cards in one group
             
             // Clear existing groups and items
             pdfSelection.innerHTML = '';
@@ -1402,15 +1470,24 @@
             
             let group;
             items.forEach((item, index) => {
-                if (index % cardsPerGroup === 0) {
-                    group = document.createElement('div');
-                    group.className = 'pdf-group';
-                    cardGroups.push(group);
+                if (isMobile) {
+                    if (index % cardsPerGroup === 0) {
+                        group = document.createElement('div');
+                        group.className = 'pdf-group';
+                        cardGroups.push(group);
+                    }
+                    group.appendChild(item);
+                } else {
+                    if (index === 0) {
+                        group = document.createElement('div');
+                        group.className = 'pdf-group';
+                        cardGroups.push(group);
+                    }
+                    group.appendChild(item);
                 }
-                group.appendChild(item);
             });
             cardGroups.forEach(group => pdfSelection.appendChild(group));
-            totalPages = cardGroups.length;
+            totalPages = isMobile ? cardGroups.length : 1;
             
             updateMenuButtons();
             updateDots();
@@ -1422,37 +1499,60 @@
         }
         
         function updateMenuButtons() {
-            prevMenuBtn.disabled = currentPage === 0;
-            nextMenuBtn.disabled = currentPage === totalPages - 1;
-        }
-        
-        function updateDots() {
-            dotsContainer.innerHTML = '';
-            for (let i = 0; i < totalPages; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'dot';
-                if (i === currentPage) {
-                    dot.classList.add('active');
-                }
-                dot.onclick = () => {
-                    currentPage = i;
-                    groupCards();
-                };
-                dotsContainer.appendChild(dot);
+            const isMobile = window.innerWidth <= 768;
+            if (isMobile) {
+                prevMenuBtn.disabled = currentPage === 0;
+                nextMenuBtn.disabled = currentPage === totalPages - 1;
+            } else {
+                prevMenuBtn.style.display = 'none';
+                nextMenuBtn.style.display = 'none';
             }
         }
         
+        function updateDots() {
+            const isMobile = window.innerWidth <= 768;
+            if (isMobile) {
+                dotsContainer.style.display = 'flex';
+                dotsContainer.innerHTML = '';
+                for (let i = 0; i < totalPages; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'dot';
+                    if (i === currentPage) {
+                        dot.classList.add('active');
+                    }
+                    dot.onclick = () => {
+                        currentPage = i;
+                        scrollToPage(currentPage);
+                    };
+                    dotsContainer.appendChild(dot);
+                }
+            } else {
+                dotsContainer.style.display = 'none';
+            }
+        }
+        
+        function scrollToPage(pageIndex) {
+            if (pageIndex >= 0 && pageIndex < totalPages) {
+                const scrollPosition = pageIndex * pdfSelection.offsetWidth;
+                pdfSelection.scrollTo({
+                    left: scrollPosition,
+                    behavior: 'smooth'
+                });
+                currentPage = pageIndex;
+                updateMenuButtons();
+                updateDots();
+            }
+        }
+
         function prevMenu() {
             if (currentPage > 0) {
-                currentPage--;
-                groupCards();
+                scrollToPage(currentPage - 1);
             }
         }
         
         function nextMenu() {
             if (currentPage < totalPages - 1) {
-                currentPage++;
-                groupCards();
+                scrollToPage(currentPage + 1);
             }
         }
 
@@ -1485,6 +1585,11 @@
                 } else {
                     nextMenu();
                 }
+            } else {
+                // If it's a slow drag, snap to the nearest page
+                const scrollLeft = pdfSelection.scrollLeft;
+                const newPageIndex = Math.round(scrollLeft / pdfSelection.offsetWidth);
+                scrollToPage(newPageIndex);
             }
         });
 
