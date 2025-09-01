@@ -139,8 +139,8 @@
             align-items: center;
             justify-content: center;
             padding: 10px;
-            padding-top: 40px;
-            padding-bottom: 40px; /* Added bottom padding */
+            padding-top: 50px;
+            padding-bottom: 50px;
             background: #000;
             overflow-y: hidden;
             position: relative;
@@ -894,10 +894,11 @@
             }
             .pdf-selection {
                 flex-wrap: nowrap;
-                justify-content: flex-start;
-                overflow-x: auto;
-                scroll-snap-type: x mandatory;
+                justify-content: center;
                 gap: 15px;
+                overflow-x: hidden;
+                scroll-snap-type: none;
+                max-width: calc(100vw - 120px);
             }
             .pdf-group {
                 display: flex;
@@ -913,11 +914,12 @@
                 width: auto;
             }
             .pdf-item {
-                width: 180px;
-                min-width: 180px;
-                max-width: 200px;
+                width: auto;
+                min-width: unset;
+                max-width: unset;
                 padding: 12px;
                 height: calc(100vh - 50px - 30px - 40px);
+                aspect-ratio: 210 / 297;
             }
             .menu-nav-btn {
                 display: flex;
@@ -949,7 +951,7 @@
             .footer { padding: 10px; font-size: 12px; height: 30px; }
             .dots-container { display: none; }
             .tooltip { font-size: 14px; padding: 12px 18px; }
-            .favorite-item { min-width: 180px; height: calc(100vh - 50px - 30px - 40px); }
+            .favorite-item { min-width: unset; width: 220px; height: calc(100vh - 50px - 30px - 40px); }
             .favorites-nav-btn { width: 60px; height: 60px; font-size: 28px; }
             .remove-favorite-btn { width: 60px; height: 60px; font-size: 28px; }
             .favorites-back-btn { width: 60px; height: 60px; font-size: 28px; }
@@ -1108,11 +1110,11 @@
         let favoriteItems = [];
 
         const allPdfData = [
-            { id: 'gadassa', name: 'GADASSA', url: 'https://lazo-idua.github.io/lazo-idua/PDF/1_GADASSA.pdf', thumbnail: 'https://lazo-idua.github.io/lazo-idua/PDF/1_GADASSA/GADASSA-1.jpg' },
-            { id: 'medunia', name: 'MEDUNIA', url: 'https://lazo-idua.github.io/lazo-idua/PDF/2_MEDUNIA.pdf', thumbnail: 'https://lazo-idua.github.io/lazo-idua/PDF/2_MEDUNIA/MEDUNIA-1.jpg' },
-            { id: 'dobryi_vechir', name: 'DOBRYI VECHIR', url: 'https://lazo-idua.github.io/lazo-idua/PDF/3_DOBRYI_VECHIR.pdf', thumbnail: 'https://lazo-idua.github.io/lazo-idua/PDF/3_DOBRYI_VECHIR/DOBRYI_VECHIR-1.jpg' },
-            { id: 'biscotti', name: 'BISCOTTI', url: 'https://lazo-idua.github.io/lazo-idua/PDF/4_BISCOTTI.pdf', thumbnail: 'https://lazo-idua.github.io/lazo-idua/PDF/4_BISCOTTI/BISCOTTI-1.jpg' },
-            { id: 'rsv', name: 'R&V', url: 'https://lazo-idua.github.io/lazo-idua/PDF/5_R_V.pdf', thumbnail: 'https://lazo-idua.github.io/lazo-idua/PDF/5_R_V/R&V-1.jpg' },
+            { id: '1_GADASSA', name: 'GADASSA', url: 'https://lazo-idua.github.io/lazo-idua/PDF/1_GADASSA.pdf', thumbnailBase: 'https://lazo-idua.github.io/lazo-idua/PDF/1_GADASSA/GADASSA-' },
+            { id: '2_MEDUNIA', name: 'MEDUNIA', url: 'https://lazo-idua.github.io/lazo-idua/PDF/2_MEDUNIA.pdf', thumbnailBase: 'https://lazo-idua.github.io/lazo-idua/PDF/2_MEDUNIA/MEDUNIA-' },
+            { id: '3_DOBRYI_VECHIR', name: 'DOBRYI VECHIR', url: 'https://lazo-idua.github.io/lazo-idua/PDF/3_DOBRYI_VECHIR.pdf', thumbnailBase: 'https://lazo-idua.github.io/lazo-idua/PDF/3_DOBRYI_VECHIR/DOBRYI_VECHIR-' },
+            { id: '4_BISCOTTI', name: 'BISCOTTI', url: 'https://lazo-idua.github.io/lazo-idua/PDF/4_BISCOTTI.pdf', thumbnailBase: 'https://lazo-idua.github.io/lazo-idua/PDF/4_BISCOTTI/BISCOTTI-' },
+            { id: '5_R_V', name: 'R&V', url: 'https://lazo-idua.github.io/lazo-idua/PDF/5_R_V.pdf', thumbnailBase: 'https://lazo-idua.github.io/lazo-idua/PDF/5_R_V/R&V-' },
         ];
         
         // Functions from previous versions
@@ -1325,6 +1327,7 @@
                             pageNum: pageNum,
                             name: pdfData.name,
                             url: pdfData.url,
+                            thumbnailBase: pdfData.thumbnailBase,
                             pdfDoc: null
                         };
                         promises.push(pdfjsLib.getDocument(pdfData.url).promise.then(pdf => {
@@ -1358,7 +1361,7 @@
                     thumbnailDiv.className = 'favorite-thumbnail';
 
                     const thumbnailImg = document.createElement('img');
-                    thumbnailImg.src = `https://lazo-idua.github.io/lazo-idua/PDF/${item.pdfId.toUpperCase()}/${item.name.replace(/\s/g, '-')}-${item.pageNum}.jpg`;
+                    thumbnailImg.src = `${item.thumbnailBase}${item.pageNum}.jpg`;
                     thumbnailImg.alt = `${item.name} Page ${item.pageNum}`;
                     thumbnailDiv.appendChild(thumbnailImg);
                     
@@ -1447,11 +1450,11 @@
                     const thumbnailDiv = document.getElementById(`thumbnail-${pdf.id}`);
                     thumbnailDiv.querySelector('.thumbnail-placeholder').style.display = 'none';
                     thumbnailDiv.querySelector('.loading-spinner').style.display = 'none';
-                    thumbnailDiv.style.backgroundImage = `url(${pdf.thumbnail})`;
+                    thumbnailDiv.style.backgroundImage = `url(${pdf.thumbnailBase}1.jpg)`;
                     thumbnailDiv.style.backgroundSize = 'cover';
                     thumbnailDiv.style.backgroundPosition = 'center';
                 };
-                img.src = pdf.thumbnail;
+                img.src = `${pdf.thumbnailBase}1.jpg`;
             });
         }
 
