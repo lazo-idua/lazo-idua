@@ -79,15 +79,19 @@
             z-index: 104;
             display: flex;
             align-items: center;
-            padding: 8px;
+            justify-content: space-between;
+            padding: 8px 16px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .header-logo {
             max-width: 40px;
             max-height: 40px;
-            position: absolute;
-            top: 8px;
-            left: 8px;
             opacity: 0;
             animation: fadeIn 0.5s ease-out 0.2s forwards;
         }
@@ -96,7 +100,6 @@
             color: white;
             font-size: 18px;
             font-weight: 500;
-            margin-left: 56px; /* Зсув для уникнення перекриття логотипом */
         }
 
         .favorites-header-btn {
@@ -115,9 +118,6 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
             gap: 5px;
             margin-right: 10px;
-            position: absolute;
-            top: 8px;
-            right: 8px;
         }
 
         .favorites-header-btn:hover {
@@ -167,10 +167,10 @@
             display: grid;
             grid-template-rows: 1fr 1fr;
             grid-template-columns: repeat(2, 1fr);
-            gap: 5px;
+            gap: 10px;
             min-width: 100vw;
             scroll-snap-align: start;
-            padding: 0 5px;
+            padding: 10px;
             height: 100%;
             justify-content: center;
             align-content: center;
@@ -179,14 +179,12 @@
         .pdf-item {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            padding: 5px;
+            padding: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
             backdrop-filter: blur(5px);
-            max-height: calc((100vh - 48px - 20px - 20px) / 2);
-            width: calc(25% - 3.75px); /* 4 картки на екрані з відступами */
-            margin: 2.5px; /* Відступи з усіх боків */
+            max-height: calc((100vh - 48px - 20px - 40px) / 2);
         }
 
         .pdf-item:hover {
@@ -259,10 +257,7 @@
             justify-content: center;
             gap: 8px;
             margin-top: 5px;
-            position: absolute;
-            bottom: 30px; /* Над футером */
-            width: 100%;
-            z-index: 103;
+            margin-bottom: 5px;
         }
 
         .dot {
@@ -321,7 +316,7 @@
             min-height: 0;
             padding: 0;
             display: none;
-            padding-bottom: 70px;
+            padding-bottom: 40px;
         }
 
         .main-content.opening {
@@ -341,7 +336,7 @@
             width: 100%;
             height: 100%;
             max-width: 100%;
-            max-height: calc(100% - 70px);
+            max-height: calc(100% - 40px);
             padding: 0;
         }
 
@@ -462,15 +457,15 @@
 
         .back-btn {
             position: absolute;
-            bottom: 30px;
+            bottom: 20px;
             left: 15px;
             background: rgba(255, 255, 255, 0.9);
             color: #000;
             border: 2px solid #000;
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            font-size: 28px;
+            font-size: 24px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -518,16 +513,43 @@
 
         .bottom-buttons {
             position: absolute;
-            bottom: 30px;
+            bottom: 20px;
             right: 15px;
             display: flex;
             gap: 10px;
             z-index: 101;
-            padding-bottom: 20px;
+            padding-bottom: 40px;
         }
 
         .heart-btn, .clear-favorites-btn {
             display: none;
+        }
+
+        .clear-favorites-btn {
+            background: rgba(255, 0, 0, 0.6);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .clear-favorites-btn:hover {
+            background: rgba(255, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+
+        .clear-favorites-btn.visible {
+            display: flex;
         }
 
         .footer {
@@ -535,14 +557,14 @@
             bottom: 0;
             width: 100%;
             text-align: center;
-            padding: 4px 0;
+            padding: 6px;
             background: #000;
             color: rgba(255, 255, 255, 0.4);
             font-size: 11px;
             border-top: 1px solid #222;
             min-height: 20px;
             z-index: 103;
-            height: auto;
+            height: 30px;
         }
 
         .footer span {
@@ -590,7 +612,7 @@
             font-size: 20px;
         }
 
-        .close-btn {
+        .trash-btn {
             background: none;
             border: none;
             color: white;
@@ -603,41 +625,168 @@
             justify-content: center;
         }
 
-        .close-btn:hover {
+        .trash-btn:hover {
             color: #ff5252;
         }
 
-        .favorites-list {
+        .favorites-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: #000;
+            overflow: hidden;
+            min-height: 0;
+            padding: 0;
+            padding-bottom: 40px;
+        }
+
+        .favorites-pdf-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: calc(100% - 40px);
+            padding: 0;
+        }
+
+        .favorites-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 101;
+            padding: 0;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .favorites-nav-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .favorites-nav-btn:disabled {
+            background: rgba(255, 255, 255, 0.06);
+            cursor: not-allowed;
+            opacity: 0.4;
+            transform: translateY(-50%);
+        }
+
+        .favorites-prev-btn {
+            left: 10px;
+        }
+
+        .favorites-next-btn {
+            right: 10px;
+        }
+
+        .favorites-bottom-buttons {
+            position: absolute;
+            bottom: 20px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+            z-index: 101;
+            padding-bottom: 40px;
+        }
+
+        .remove-favorite-btn {
+            background: rgba(255, 0, 0, 0.6);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .remove-favorite-btn:hover {
+            background: rgba(255, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+
+        .favorites-back-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #000;
+            border: 2px solid #000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            backdrop-filter: blur(5px);
+            z-index: 102;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+        }
+
+        .favorites-back-btn:hover {
+            background: #fff;
+            transform: scale(1.1);
+        }
+
+        .favorites-list-view {
             display: flex;
             flex-wrap: nowrap;
             overflow-x: auto;
             scroll-snap-type: x mandatory;
             -webkit-overflow-scrolling: touch;
             justify-content: flex-start;
-            gap: 5px;
+            gap: 10px;
             max-width: 100%;
-            padding: 5px;
+            padding: 10px;
             scroll-behavior: smooth;
             flex: 1;
-            padding-bottom: 70px;
-            display: none;
+            padding-bottom: 40px;
         }
 
-        .favorites-list::-webkit-scrollbar {
+        .favorites-list-view::-webkit-scrollbar {
             display: none;
         }
 
         .favorite-item {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            padding: 5px;
+            padding: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
             backdrop-filter: blur(5px);
-            max-height: calc((100vh - 48px - 20px - 20px) / 2);
+            max-height: calc((100vh - 48px - 20px - 40px) / 2);
             min-width: 150px;
-            display: none;
         }
 
         .favorite-item:hover {
@@ -688,146 +837,87 @@
             justify-content: center;
         }
 
-        .favorites-content {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            background: #000;
-            overflow: hidden;
-            min-height: 0;
-            padding: 0;
-            padding-bottom: 70px;
-        }
-
-        .favorites-canvas {
-            display: block;
-            width: auto;
-            height: auto;
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            opacity: 1;
-            transition: opacity 0.3s ease;
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
-            z-index: 100;
-        }
-
-        .favorites-canvas-hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .favorites-canvas-next {
+        .remove-favorite-x {
             position: absolute;
-            opacity: 0;
-            z-index: -1;
-        }
-
-        .favorites-nav-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.6);
+            top: 5px;
+            right: 5px;
+            background: rgba(255, 0, 0, 0.6);
             color: white;
             border: none;
-            width: 50px;
-            height: 50px;
+            width: 25px;
+            height: 25px;
             border-radius: 50%;
-            font-size: 24px;
+            font-size: 16px;
             cursor: pointer;
-            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 101;
-            padding: 0;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
         }
 
-        .favorites-nav-btn:hover {
-            background: rgba(0, 0, 0, 0.8);
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .favorites-nav-btn:disabled {
-            background: rgba(255, 255, 255, 0.06);
-            cursor: not-allowed;
-            opacity: 0.4;
-            transform: translateY(-50%);
-        }
-
-        .favorites-prev-btn {
-            left: 20px;
-        }
-
-        .favorites-next-btn {
-            right: 20px;
+        .remove-favorite-x::before {
+            content: '×';
         }
 
         @media (max-width: 768px) {
             .header { height: 48px; padding: 8px; }
             .header-logo { max-width: 40px; max-height: 40px; }
-            .header-title { font-size: 16px; margin-left: 56px; }
+            .header-title { font-size: 16px; }
             .main-menu { padding-top: 48px; padding: 5px; }
             .pdf-selection { gap: 5px; padding: 5px; }
-            .pdf-group { gap: 5px; padding: 0 5px; }
-            .pdf-item { padding: 5px; width: calc(25% - 3.75px); margin: 2.5px; }
+            .pdf-group { gap: 10px; padding: 10px; }
+            .pdf-item { padding: 10px; }
             .nav-btn { width: 42px; height: 42px; font-size: 20px; background: rgba(0, 0, 0, 0.6); }
             .top-buttons { top: 15px; right: 15px; gap: 5px; }
-            .back-btn { bottom: 30px; left: 10px; width: 50px; height: 50px; font-size: 24px; background: rgba(255, 255, 255, 0.9); color: #000; border: 2px solid #000; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7); }
+            .back-btn { bottom: 20px; left: 10px; width: 50px; height: 50px; font-size: 24px; background: rgba(255, 255, 255, 0.9); color: #000; border: 2px solid #000; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7); }
             .favorites-btn, .share-btn { width: 42px; height: 42px; font-size: 20px; background: rgba(0, 0, 0, 0.6); }
             .prev-btn { left: 10px; }
             .next-btn { right: 10px; }
-            .bottom-buttons { bottom: 30px; right: 10px; gap: 8px; }
+            .bottom-buttons { bottom: 20px; right: 10px; gap: 8px; }
             .favorite-label { font-size: 10px; }
-            .footer { padding: 4px 0; font-size: 10px; }
-            .dots-container { bottom: 24px; }
+            .footer { padding: 6px; font-size: 10px; height: 30px; }
+            .dots-container { margin-top: 5px; margin-bottom: 5px; }
             .dot { width: 6px; height: 6px; }
             .tooltip { font-size: 12px; padding: 8px 12px; }
             .favorite-item { min-width: 120px; }
             .favorites-nav-btn { width: 42px; height: 42px; font-size: 20px; }
-            .favorites-prev-btn { left: 10px; }
-            .favorites-next-btn { right: 10px; }
+            .remove-favorite-btn { width: 42px; height: 42px; font-size: 20px; }
+            .favorites-back-btn { width: 50px; height: 50px; font-size: 24px; }
         }
 
         @media (max-width: 480px) {
             .header { height: 48px; padding: 6px; }
             .header-logo { max-width: 36px; max-height: 36px; }
-            .header-title { font-size: 14px; margin-left: 50px; }
+            .header-title { font-size: 14px; }
             .main-menu { padding: 5px; padding-top: 48px; }
             .pdf-selection { gap: 5px; padding: 5px; }
-            .pdf-group { gap: 5px; padding: 0 5px; }
-            .pdf-item { padding: 5px; width: calc(25% - 3.75px); margin: 2.5px; }
+            .pdf-group { gap: 10px; padding: 10px; }
+            .pdf-item { padding: 10px; }
             .nav-btn { width: 38px; height: 38px; font-size: 18px; background: rgba(0, 0, 0, 0.6); }
             .top-buttons { top: 10px; right: 10px; gap: 3px; }
-            .back-btn { bottom: 30px; left: 8px; width: 50px; height: 50px; font-size: 24px; background: rgba(255, 255, 255, 0.9); color: #000; border: 2px solid #000; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7); }
+            .back-btn { bottom: 20px; left: 8px; width: 50px; height: 50px; font-size: 24px; background: rgba(255, 255, 255, 0.9); color: #000; border: 2px solid #000; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7); }
             .favorites-btn, .share-btn { width: 38px; height: 38px; font-size: 18px; background: rgba(0, 0, 0, 0.6); }
             .prev-btn { left: 8px; }
             .next-btn { right: 8px; }
-            .bottom-buttons { bottom: 30px; right: 8px; gap: 6px; }
+            .bottom-buttons { bottom: 20px; right: 8px; gap: 6px; }
             .favorite-label { font-size: 9px; }
-            .footer { font-size: 9px; padding: 2px 0; }
-            .dots-container { bottom: 20px; }
+            .footer { font-size: 9px; padding: 5px; height: 30px; }
+            .dots-container { margin-top: 5px; margin-bottom: 5px; }
             .dot { width: 5px; height: 5px; }
             .tooltip { font-size: 11px; padding: 6px 10px; }
             .favorite-item { min-width: 100px; }
             .favorites-nav-btn { width: 38px; height: 38px; font-size: 18px; }
-            .favorites-prev-btn { left: 8px; }
-            .favorites-next-btn { right: 8px; }
+            .remove-favorite-btn { width: 38px; height: 38px; font-size: 18px; }
+            .favorites-back-btn { width: 50px; height: 50px; font-size: 24px; }
         }
 
         @media (min-width: 1200px) {
             .header { height: 64px; padding: 12px; }
             .header-logo { max-width: 48px; max-height: 48px; }
-            .header-title { font-size: 20px; margin-left: 64px; }
+            .header-title { font-size: 20px; }
             .main-menu { padding-top: 64px; height: calc(100vh - 64px - 20px); padding: 10px; }
             .pdf-selection { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scroll-snap-type: x mandatory; gap: 15px; }
             .pdf-group { display: none; }
-            .pdf-item { width: 200px; min-width: 200px; max-width: 220px; padding: 12px; max-height: calc(100vh - 64px - 20px - 20px); margin: 5px; }
+            .pdf-item { width: 200px; min-width: 200px; max-width: 220px; padding: 12px; max-height: calc(100vh - 64px - 20px - 20px); }
             .nav-btn { width: 60px; height: 60px; font-size: 28px; background: rgba(0, 0, 0, 0.6); }
             .back-btn { bottom: 20px; width: 60px; height: 60px; font-size: 28px; background: rgba(255, 255, 255, 0.9); color: #000; border: 2px solid #000; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7); }
             .top-buttons { top: 25px; right: 25px; gap: 10px; }
@@ -836,7 +926,7 @@
             .next-btn { right: 30px; }
             .bottom-buttons { bottom: 20px; right: 25px; }
             .favorite-label { font-size: 12px; }
-            .footer { padding: 4px 0; font-size: 12px; }
+            .footer { padding: 12px; font-size: 12px; height: 30px; }
             .dots-container { display: none; }
             .tooltip { font-size: 14px; padding: 12px 18px; }
             .favorite-item { min-width: 200px; }
@@ -844,14 +934,14 @@
             .prev-menu-btn { left: 30px; }
             .next-menu-btn { right: 30px; }
             .favorites-nav-btn { width: 60px; height: 60px; font-size: 28px; }
-            .favorites-prev-btn { left: 30px; }
-            .favorites-next-btn { right: 30px; }
+            .remove-favorite-btn { width: 60px; height: 60px; font-size: 28px; }
+            .favorites-back-btn { width: 60px; height: 60px; font-size: 28px; }
         }
 
         @media (min-width: 1920px) {
             .header { height: 64px; padding: 12px; }
             .header-logo { max-width: 56px; max-height: 56px; }
-            .header-title { font-size: 22px; margin-left: 72px; }
+            .header-title { font-size: 22px; }
             .main-menu { padding-top: 64px; }
             .pdf-item { width: 220px; min-width: 220px; max-width: 240px; }
             .nav-btn { width: 70px; height: 70px; font-size: 32px; }
@@ -866,8 +956,8 @@
             .prev-menu-btn { left: 40px; }
             .next-menu-btn { right: 40px; }
             .favorites-nav-btn { width: 70px; height: 70px; font-size: 32px; }
-            .favorites-prev-btn { left: 40px; }
-            .favorites-next-btn { right: 40px; }
+            .remove-favorite-btn { width: 70px; height: 70px; font-size: 32px; }
+            .favorites-back-btn { width: 70px; height: 70px; font-size: 32px; }
         }
 
         body {
@@ -885,8 +975,10 @@
         <img src="https://lazo-idua.github.io/lazo-idua/Logo.png" alt="Loading Logo">
     </div>
     <div class="header" id="header">
-        <img class="header-logo" src="https://lazo-idua.github.io/lazo-idua/Logo.png" alt="TD MELNYK Logo">
-        <span class="header-title">MELNYK</span>
+        <div class="header-left">
+            <img class="header-logo" src="https://lazo-idua.github.io/lazo-idua/Logo.png" alt="TD MELNYK Logo">
+            <span class="header-title">MELNYK</span>
+        </div>
         <button class="favorites-header-btn" onclick="openFavoritesModal()" title="Обрані малюнки">
             <span>♥</span>
             <span class="favorites-header-label">Обране</span>
@@ -959,16 +1051,27 @@
     <div class="favorites-modal" id="favoritesModal">
         <div class="favorites-header">
             <span class="favorites-title">Обрані малюнки</span>
-            <button class="close-btn" onclick="clearGlobalFavorites()" title="Очистити всі">×</button>
+            <button class="trash-btn" onclick="clearGlobalFavorites()" title="Очистити всі">🗑️</button>
         </div>
-        <div class="favorites-list" id="favoritesList"></div>
-        <div class="favorites-content" id="favoritesContent">
+        
+        <div class="favorites-content" id="favoritesContentView" style="display: none;">
             <button class="favorites-nav-btn favorites-prev-btn" onclick="prevFavoritePage()" disabled>〈</button>
-            <canvas id="favorites-canvas"></canvas>
-            <canvas id="favorites-canvas-next" class="favorites-canvas-next"></canvas>
+            
+            <div class="favorites-pdf-container">
+                <canvas id="favorites-canvas"></canvas>
+                <canvas id="favorites-canvas-next" class="canvas-next"></canvas>
+                
+                <div class="favorites-bottom-buttons">
+                    <button class="remove-favorite-btn" onclick="removeCurrentFavorite()" title="Видалити з обраного">×</button>
+                </div>
+                <button class="favorites-back-btn" onclick="closeFavoritesView()" title="Назад">←</button>
+            </div>
+            
             <button class="favorites-nav-btn favorites-next-btn" onclick="nextFavoritePage()">〉</button>
-            <button class="back-btn" onclick="goBackToFavoritesList()" title="Назад">←</button>
-            <div class="tooltip pdf-view" id="favoritesTooltip">Використовуйте стрілки для навігації. Натисніть ← для повернення.</div>
+        </div>
+        
+        <div class="favorites-list-view" id="favoritesListView">
+            <!-- Favorites list will be rendered here -->
         </div>
     </div>
 
@@ -1023,31 +1126,31 @@
         const mainTooltip = document.getElementById('mainTooltip');
         const pdfTooltip = document.getElementById('pdfTooltip');
         const favoritesModal = document.getElementById('favoritesModal');
-        const favoritesList = document.getElementById('favoritesList');
-        const favoritesContent = document.getElementById('favoritesContent');
+        const favoritesListView = document.getElementById('favoritesListView');
+        const favoritesContentView = document.getElementById('favoritesContentView');
+        const prevMenuBtn = document.querySelector('.prev-menu-btn');
+        const nextMenuBtn = document.querySelector('.next-menu-btn');
         const favoritesCanvas = document.getElementById('favorites-canvas');
         const favoritesCanvasNext = document.getElementById('favorites-canvas-next');
         const favoritesCtx = favoritesCanvas.getContext('2d', { willReadFrequently: true });
         const favoritesCtxNext = favoritesCanvasNext.getContext('2d', { willReadFrequently: true });
         const favoritesPrevBtn = document.querySelector('.favorites-prev-btn');
         const favoritesNextBtn = document.querySelector('.favorites-next-btn');
-        const prevMenuBtn = document.querySelector('.prev-menu-btn');
-        const nextMenuBtn = document.querySelector('.next-menu-btn');
-        const favoritesTooltip = document.getElementById('favoritesTooltip');
 
         let favoritePages = JSON.parse(localStorage.getItem('favoritePages')) || {};
         let currentFavoriteIndex = 0;
+        let favoriteItems = [];
 
         let renderQuality = isIOS ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
         const isLargeScreen = window.innerWidth >= 1200;
         const pageCache = new Map();
-        const favoritesCache = new Map();
+        const favoritesPageCache = new Map();
         const preloadNextPages = isIOS ? 1 : 3;
 
         // Group cards into 2x2 groups for mobile
         function groupCards() {
             if (isLargeScreen) return;
-            const items = Array.from(pdfSelection.queryAll('.pdf-item'));
+            const items = Array.from(pdfSelection.querySelectorAll('.pdf-item'));
             const numItems = items.length;
             const itemsPerGroup = 4;
             const numGroups = Math.ceil(numItems / itemsPerGroup);
@@ -1076,7 +1179,7 @@
                 dotsContainer.style.display = 'none';
                 return;
             }
-            const groups = pdfSelection.queryAll('.pdf-group');
+            const groups = pdfSelection.querySelectorAll('.pdf-group');
             const numGroups = groups.length || 1;
             dotsContainer.innerHTML = '';
             for (let i = 0; i < numGroups; i++) {
@@ -1091,11 +1194,11 @@
         // Update active dot based on scroll position
         function updateDots() {
             if (isLargeScreen) return;
-            const groups = pdfSelection.queryAll('.pdf-group');
+            const groups = pdfSelection.querySelectorAll('.pdf-group');
             const scrollLeft = pdfSelection.scrollLeft;
             const groupWidth = groups[0]?.offsetWidth + 5 || 1;
             const currentPage = Math.floor(scrollLeft / groupWidth);
-            const dots = dotsContainer.queryAll('.dot');
+            const dots = dotsContainer.querySelectorAll('.dot');
             dots.forEach((dot, index) => {
                 dot.classList.toggle('active', index === currentPage);
             });
@@ -1108,8 +1211,6 @@
                 mainTooltip.style.display = 'none';
                 pdfTooltip.style.opacity = '0';
                 pdfTooltip.style.display = 'none';
-                favoritesTooltip.style.opacity = '0';
-                favoritesTooltip.style.display = 'none';
             }, 15000);
         }
 
@@ -1135,29 +1236,27 @@
         // Open global favorites modal
         function openFavoritesModal() {
             favoritesModal.style.display = 'flex';
-            favoritesList.style.display = 'flex';
-            favoritesContent.style.display = 'none';
             renderFavoritesList();
         }
 
         // Close global favorites modal
         function closeFavoritesModal() {
             favoritesModal.style.display = 'none';
-            favoritesList.style.display = 'none';
-            favoritesContent.style.display = 'none';
+            favoritesContentView.style.display = 'none';
+            favoritesListView.style.display = 'flex';
         }
 
-        // Go back to favorites list from viewer
-        function goBackToFavoritesList() {
-            favoritesList.style.display = 'flex';
-            favoritesContent.style.display = 'none';
-            renderFavoritesList();
-            favoritesTooltip.style.display = 'none';
+        // Close favorites view and return to list
+        function closeFavoritesView() {
+            favoritesContentView.style.display = 'none';
+            favoritesListView.style.display = 'flex';
         }
 
         // Render favorites list in modal
         function renderFavoritesList() {
-            favoritesList.innerHTML = '';
+            favoritesListView.innerHTML = '';
+            favoriteItems = [];
+            
             for (const pdfName in favoritePages) {
                 favoritePages[pdfName].forEach(page => {
                     const item = document.createElement('div');
@@ -1170,35 +1269,156 @@
                     info.classList.add('favorite-info');
                     info.textContent = `${pdfName.toUpperCase()} - Сторінка ${page}`;
                     const removeBtn = document.createElement('button');
-                    removeBtn.classList.add('remove-favorite');
-                    removeBtn.textContent = '×';
+                    removeBtn.classList.add('remove-favorite-x');
                     removeBtn.onclick = (e) => { e.stopPropagation(); removeGlobalFavorite(pdfName, page); };
                     item.appendChild(thumbnail);
                     item.appendChild(info);
                     item.appendChild(removeBtn);
-                    favoritesList.appendChild(item);
+                    favoritesListView.appendChild(item);
+                    
+                    // Store favorite item for navigation
+                    favoriteItems.push({ pdfName, page });
                 });
             }
         }
 
-        // Open favorite PDF page
+        // Open favorite PDF page in viewer mode
         function openFavoritePdf(pdfName, page) {
-            currentPdf = pdfName;
-            pageNum = page;
-            favoritesList.style.display = 'none';
-            favoritesContent.style.display = 'flex';
-            if (backButton) backButton.style.display = 'flex';
-            favoritesTooltip.style.display = 'block';
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctxNext.clearRect(0, 0, canvasNext.width, canvasNext.height);
-            canvas.width = 0;
-            canvas.height = 0;
-            canvasNext.width = 0;
-            canvasNext.height = 0;
+            // Find the index of the clicked favorite
+            currentFavoriteIndex = favoriteItems.findIndex(item => 
+                item.pdfName === pdfName && item.page === page
+            );
+            
+            if (currentFavoriteIndex === -1) return;
+            
+            // Switch to viewer mode
+            favoritesListView.style.display = 'none';
+            favoritesContentView.style.display = 'flex';
+            
+            // Load and render the favorite page
+            loadFavoritePdf(pdfName, page);
+        }
 
-            pageCache.clear();
-            favoritesCache.clear();
-            loadFavoritePdf();
+        // Load favorite PDF for viewing
+        function loadFavoritePdf(pdfName, page) {
+            const url = getPdfUrl(pdfName);
+            if (!url) return;
+
+            favoritesCtx.clearRect(0, 0, favoritesCanvas.width, favoritesCanvas.height);
+            favoritesCtxNext.clearRect(0, 0, favoritesCanvasNext.width, favoritesCanvasNext.height);
+            favoritesCanvas.width = 0;
+            favoritesCanvas.height = 0;
+            favoritesCanvasNext.width = 0;
+            favoritesCanvasNext.height = 0;
+
+            pdfjsLib.getDocument({
+                url: url,
+                cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+                cMapPacked: true,
+                maxImageSize: isIOS ? 4096 * 4096 : 8192 * 8192,
+                disableFontFace: true,
+                standardFontDataUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/',
+                useSystemFonts: true,
+                isEvalSupported: false,
+                disableRange: isIOS,
+                disableStream: isIOS
+            }).promise.then(function(pdf) {
+                renderFavoritePage(pdf, page);
+                updateFavoritesNavigation();
+            }).catch(function(error) {
+                console.error(`Помилка завантаження PDF ${pdfName}:`, error);
+            });
+        }
+
+        // Render favorite page
+        function renderFavoritePage(pdf, pageNum) {
+            pdf.getPage(pageNum).then(function(page) {
+                const scale = calculateOptimalScale(page);
+                const viewport = page.getViewport({ scale: scale });
+
+                const maxWidth = isIOS ? 4096 : 8192;
+                const maxHeight = isIOS ? 4096 : 8192;
+
+                let outputScale = Math.min(renderQuality, maxWidth / viewport.width, maxHeight / viewport.height);
+                outputScale = Math.min(outputScale, isIOS ? 1.8 : 2.5);
+
+                favoritesCanvas.width = Math.floor(viewport.width * outputScale);
+                favoritesCanvas.height = Math.floor(viewport.height * outputScale);
+
+                favoritesCanvas.style.width = Math.floor(viewport.width) + 'px';
+                favoritesCanvas.style.height = Math.floor(viewport.height) + 'px';
+
+                const transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
+
+                const renderContext = {
+                    canvasContext: favoritesCtx,
+                    viewport: viewport,
+                    transform: transform,
+                    enableWebGL: !isIOS,
+                    textLayer: false,
+                    enhanceTextSelection: false
+                };
+
+                page.render(renderContext).promise.then(function() {
+                    favoritesCanvas.classList.add('high-quality');
+                    updateFavoritesNavigation();
+                }).catch(function(error) {
+                    console.error(`Помилка рендерингу сторінки ${pageNum}:`, error);
+                });
+            }).catch(function(error) {
+                console.error(`Помилка завантаження сторінки ${pageNum}:`, error);
+            });
+        }
+
+        // Update favorites navigation buttons
+        function updateFavoritesNavigation() {
+            favoritesPrevBtn.disabled = currentFavoriteIndex <= 0;
+            favoritesNextBtn.disabled = currentFavoriteIndex >= favoriteItems.length - 1;
+        }
+
+        // Navigate to previous favorite
+        function prevFavoritePage() {
+            if (currentFavoriteIndex <= 0) return;
+            currentFavoriteIndex--;
+            const favorite = favoriteItems[currentFavoriteIndex];
+            loadFavoritePdf(favorite.pdfName, favorite.page);
+        }
+
+        // Navigate to next favorite
+        function nextFavoritePage() {
+            if (currentFavoriteIndex >= favoriteItems.length - 1) return;
+            currentFavoriteIndex++;
+            const favorite = favoriteItems[currentFavoriteIndex];
+            loadFavoritePdf(favorite.pdfName, favorite.page);
+        }
+
+        // Remove current favorite from view
+        function removeCurrentFavorite() {
+            if (currentFavoriteIndex >= 0 && currentFavoriteIndex < favoriteItems.length) {
+                const favorite = favoriteItems[currentFavoriteIndex];
+                removeGlobalFavorite(favorite.pdfName, favorite.page);
+                
+                // Remove from local array
+                favoriteItems.splice(currentFavoriteIndex, 1);
+                
+                if (favoriteItems.length === 0) {
+                    // No favorites left, return to list
+                    closeFavoritesView();
+                    renderFavoritesList();
+                } else {
+                    // Adjust index and load next favorite
+                    if (currentFavoriteIndex >= favoriteItems.length) {
+                        currentFavoriteIndex = favoriteItems.length - 1;
+                    }
+                    if (currentFavoriteIndex >= 0) {
+                        const nextFavorite = favoriteItems[currentFavoriteIndex];
+                        loadFavoritePdf(nextFavorite.pdfName, nextFavorite.page);
+                    } else {
+                        closeFavoritesView();
+                        renderFavoritesList();
+                    }
+                }
+            }
         }
 
         // Remove single favorite from global
@@ -1207,16 +1427,6 @@
             if (favoritePages[pdfName].length === 0) delete favoritePages[pdfName];
             localStorage.setItem('favoritePages', JSON.stringify(favoritePages));
             renderFavoritesList();
-            if (favoritesContent.style.display === 'flex') {
-                const favoritePagesList = getFavoritePagesList();
-                if (favoritePagesList.length === 0) {
-                    goBackToFavoritesList();
-                } else {
-                    currentFavoriteIndex = Math.min(currentFavoriteIndex, favoritePagesList.length - 1);
-                    pageNum = favoritePagesList[currentFavoriteIndex];
-                    renderFavoritePage();
-                }
-            }
         }
 
         // Clear all global favorites
@@ -1225,8 +1435,9 @@
                 favoritePages = {};
                 localStorage.setItem('favoritePages', JSON.stringify(favoritePages));
                 renderFavoritesList();
-                if (favoritesContent.style.display === 'flex') {
-                    goBackToFavoritesList();
+                // If in view mode, close it
+                if (favoritesContentView.style.display === 'flex') {
+                    closeFavoritesView();
                 }
             }
         }
@@ -1778,50 +1989,38 @@
         }
 
         window.addEventListener('load', function() {
-            const preloadPromises = [
-                generateThumbnail('gadassa', 'thumbnail-gadassa'),
-                generateThumbnail('medunia', 'thumbnail-medunia'),
-                generateThumbnail('dobryi_vechir', 'thumbnail-dobryi_vechir'),
-                generateThumbnail('biscotti', 'thumbnail-biscotti'),
-                generateThumbnail('rsv', 'thumbnail-rsv')
-            ];
-
-            Promise.all(preloadPromises).then(() => {
-                setTimeout(() => {
-                    document.querySelector('.loader').style.display = 'none';
-                    mainMenu.style.display = 'flex';
-                    header.style.display = 'flex';
-                    mainTooltip.style.display = 'block';
-                    setupThumbnailObserver();
-                    groupCards();
-                    initDots();
-                    pdfSelection.addEventListener('scroll', () => {
-                        updateDots();
-                        updateMenuButtons();
-                    });
+            setTimeout(() => {
+                document.querySelector('.loader').style.display = 'none';
+                mainMenu.style.display = 'flex';
+                header.style.display = 'flex';
+                mainTooltip.style.display = 'block';
+                setupThumbnailObserver();
+                groupCards();
+                initDots();
+                pdfSelection.addEventListener('scroll', () => {
+                    updateDots();
                     updateMenuButtons();
-                    const hash = window.location.hash;
-                    if (hash && hash.includes('page=') && hash.includes('pdf=')) {
-                        const params = new URLSearchParams(hash.substring(1));
-                        const page = parseInt(params.get('page'));
-                        const pdfName = params.get('pdf');
-                        if (!isNaN(page) && page > 0 && (pdfName === 'gadassa' || pdfName === 'medunia' || pdfName === 'dobryi_vechir' || pdfName === 'biscotti' || pdfName === 'rsv')) {
-                            pageNum = page;
-                            openPdf(pdfName);
-                        }
+                });
+                updateMenuButtons();
+                const hash = window.location.hash;
+                if (hash && hash.includes('page=') && hash.includes('pdf=')) {
+                    const params = new URLSearchParams(hash.substring(1));
+                    const page = parseInt(params.get('page'));
+                    const pdfName = params.get('pdf');
+                    if (!isNaN(page) && page > 0 && (pdfName === 'gadassa' || pdfName === 'medunia' || pdfName === 'dobryi_vechir' || pdfName === 'biscotti' || pdfName === 'rsv')) {
+                        pageNum = page;
+                        openPdf(pdfName);
                     }
-                    hideTooltips();
-                }, 2000); // Затримка для анімації
-            });
+                }
+                hideTooltips();
+            }, 2000);
         });
 
         document.addEventListener('keydown', function(e) {
             if (e.key === 'ArrowLeft') {
-                if (favoritesContent.style.display === 'flex') prevFavoritePage();
-                else prevPage();
+                prevPage();
             } else if (e.key === 'ArrowRight') {
-                if (favoritesContent.style.display === 'flex') nextFavoritePage();
-                else nextPage();
+                nextPage();
             } else if (e.key === 'End') {
                 if (!favoritesMode && pdfDoc) {
                     pageNum = pdfDoc.numPages;
@@ -1851,9 +2050,6 @@
                     pdfTooltip.style.display = 'block';
                     hideTooltips();
                 }
-                if (favoritesDoc && !favoritesRendering) {
-                    renderFavoritePage();
-                }
                 groupCards();
                 initDots();
                 updateDots();
@@ -1878,12 +2074,10 @@
                 const deltaTime = touchEndTime - touchStartTime;
 
                 if (deltaTime < 300 && Math.abs(deltaX) > 50) {
-                    if (favoritesContent.style.display === 'flex') {
-                        if (deltaX > 0) prevFavoritePage();
-                        else nextFavoritePage();
+                    if (deltaX > 0) {
+                        prevPage();
                     } else {
-                        if (deltaX > 0) prevPage();
-                        else nextPage();
+                        nextPage();
                     }
                 }
             }
@@ -1892,12 +2086,10 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === ' ' && !e.shiftKey) {
                 e.preventDefault();
-                if (favoritesContent.style.display === 'flex') nextFavoritePage();
-                else nextPage();
+                nextPage();
             } else if (e.key === ' ' && e.shiftKey) {
                 e.preventDefault();
-                if (favoritesContent.style.display === 'flex') prevFavoritePage();
-                else prevPage();
+                prevPage();
             }
         });
 
@@ -1916,282 +2108,12 @@
                     hideTooltips();
                 }, 350);
             }
-            if (favoritesDoc && !favoritesRendering) {
-                setTimeout(function() {
-                    renderFavoritePage();
-                    if (backButton) backButton.style.display = 'flex';
-                    favoritesTooltip.style.display = 'block';
-                    hideTooltips();
-                }, 350);
-            }
             groupCards();
             initDots();
             updateDots();
             updateMenuButtons();
         });
         setAppHeight();
-
-        let favoritesDoc = null;
-        let favoritesRendering = false;
-        let favoritesPageNumPending = null;
-
-        function calculateFavoriteScale(page) {
-            const container = document.querySelector('.favorites-content');
-            const availableWidth = container.clientWidth - (isLargeScreen ? 80 : 40);
-            const availableHeight = container.clientHeight;
-
-            const viewport = page.getViewport({ scale: 1 });
-            const scaleX = availableWidth / viewport.width;
-            const scaleY = availableHeight / viewport.height;
-
-            let scale = Math.min(scaleX, scaleY) * 1.2;
-
-            if (isIOS) {
-                scale = Math.min(scale, 1 .8);
-            } else if (isLargeScreen) {
-                scale = Math.min(scale * 1.3, 3.0);
-            } else {
-                scale = Math.min(scale, 2.5);
-            }
-
-            return scale * renderQuality;
-        }
-
-        function loadFavoritePdf() {
-            const url = getPdfUrl(currentPdf);
-            if (!url) {
-                favoritesContent.innerHTML = `
-                    <div class="error-message">
-                        <p>Помилка: PDF не знайдено</p>
-                        <small>Перевірте URL каталогу ${currentPdf.toUpperCase()}</small>
-                    </div>
-                `;
-                if (backButton) backButton.style.display = 'flex';
-                favoritesTooltip.style.display = 'block';
-                updateFavoritesNavigation();
-                hideTooltips();
-                return;
-            }
-
-            checkPdfAvailability(url).then(isAvailable => {
-                if (!isAvailable) {
-                    favoritesContent.innerHTML = `
-                        <div class="error-message">
-                            <p>Не вдалося завантажити каталог ${currentPdf.toUpperCase()}</p>
-                            <small>PDF недоступний. Перевірте URL або підключення до інтернету.</small>
-                        </div>
-                    `;
-                    if (backButton) backButton.style.display = 'flex';
-                    favoritesTooltip.style.display = 'block';
-                    console.error(`PDF ${currentPdf} недоступний за URL: ${url}`);
-                    updateFavoritesNavigation();
-                    hideTooltips();
-                    return;
-                }
-
-                pdfjsLib.getDocument({
-                    url: url,
-                    cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
-                    cMapPacked: true,
-                    maxImageSize: isIOS ? 4096 * 4096 : 8192 * 8192,
-                    disableFontFace: true,
-                    standardFontDataUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/',
-                    useSystemFonts: true,
-                    isEvalSupported: false,
-                    disableRange: isIOS,
-                    disableStream: isIOS
-                }).promise.then(function(pdf) {
-                    favoritesDoc = pdf;
-                    renderFavoritePage();
-                    preloadFavoritePages(pageNum + 1, preloadNextPages + 2);
-                    updateFavoritesNavigation();
-                    favoritesTooltip.style.display = 'block';
-                    favoritesTooltip.style.opacity = '1';
-                    hideTooltips();
-                }).catch(function(error) {
-                    console.error(`Помилка завантаження PDF ${currentPdf} для обраних:`, error);
-                    favoritesContent.innerHTML = `
-                        <div class="error-message">
-                            <p>Не вдалося завантажити каталог ${currentPdf.toUpperCase()}</p>
-                            <small>${error.message || 'Перевірте підключення до інтернету'}</small>
-                        </div>
-                    `;
-                    if (backButton) backButton.style.display = 'flex';
-                    favoritesTooltip.style.display = 'block';
-                    updateFavoritesNavigation();
-                    hideTooltips();
-                });
-            });
-        }
-
-        function preloadFavoritePages(startPage, count) {
-            if (!favoritesDoc) return;
-            for (let i = startPage; i < startPage + count && i <= favoritesDoc.numPages; i++) {
-                if (!favoritesCache.has(i)) {
-                    favoritesDoc.getPage(i).then(function(page) {
-                        favoritesCache.set(i, page);
-                    }).catch(function(error) {
-                        console.error(`Помилка попереднього завантаження сторінки ${i} для обраних:`, error);
-                    });
-                }
-            }
-        }
-
-        function renderFavoritePage() {
-            if (!favoritesDoc) return;
-            favoritesRendering = true;
-            if (backButton) backButton.style.display = 'flex';
-            favoritesTooltip.style.display = 'block';
-            favoritesTooltip.style.opacity = '1';
-
-            if (favoritesCache.has(pageNum)) {
-                renderFavoritePageFromCache(pageNum);
-            } else {
-                favoritesDoc.getPage(pageNum).then(function(page) {
-                    favoritesCache.set(pageNum, page);
-                    renderFavoritePageFromCache(pageNum);
-                    preloadFavoritePages(pageNum + 1, preloadNextPages);
-                }).catch(function(error) {
-                    console.error(`Помилка відображення сторінки ${pageNum} для обраних:`, error);
-                    if (backButton) backButton.style.display = 'flex';
-                    favoritesTooltip.style.display = 'block';
-                    favoritesRendering = false;
-                    hideTooltips();
-                });
-            }
-        }
-
-        function renderFavoritePageFromCache(num) {
-            const page = favoritesCache.get(num);
-            const scale = calculateFavoriteScale(page);
-            const viewport = page.getViewport({ scale: scale });
-
-            const maxWidth = isIOS ? 4096 : 8192;
-            const maxHeight = isIOS ? 4096 : 8192;
-
-            let outputScale = Math.min(renderQuality, maxWidth / viewport.width, maxHeight / viewport.height);
-
-            outputScale = Math.min(outputScale, isIOS ? 1.8 : 2.5);
-
-            const targetCanvas = favoritesCanvasNext;
-            const targetCtx = favoritesCtxNext;
-
-            targetCanvas.width = Math.floor(viewport.width * outputScale);
-            targetCanvas.height = Math.floor(viewport.height * outputScale);
-
-            targetCanvas.style.width = Math.floor(viewport.width) + 'px';
-            targetCanvas.style.height = Math.floor(viewport.height) + 'px';
-
-            const transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
-
-            const renderContext = {
-                canvasContext: targetCtx,
-                viewport: viewport,
-                transform: transform,
-                enableWebGL: !isIOS,
-                textLayer: false,
-                enhanceTextSelection: false
-            };
-
-            const renderTask = page.render(renderContext);
-
-            renderTask.promise.then(function() {
-                favoritesRendering = false;
-
-                favoritesCanvas.classList.add('favorites-canvas-hidden');
-                setTimeout(() => {
-                    favoritesCanvas.width = targetCanvas.width;
-                    favoritesCanvas.height = targetCanvas.height;
-                    favoritesCanvas.style.width = targetCanvas.style.width;
-                    favoritesCanvas.style.height = targetCanvas.style.height;
-
-                    favoritesCtx.clearRect(0, 0, favoritesCanvas.width, favoritesCanvas.height);
-                    favoritesCtx.drawImage(targetCanvas, 0, 0);
-
-                    favoritesCanvas.classList.remove('favorites-canvas-hidden');
-                    favoritesCanvas.classList.add('high-quality');
-                    targetCanvas.classList.add('favorites-canvas-next');
-                }, 50);
-
-                if (favoritesPageNumPending !== null) {
-                    renderFavoritePage(favoritesPageNumPending);
-                    favoritesPageNumPending = null;
-                }
-
-                if (backButton) backButton.style.display = 'flex';
-                favoritesTooltip.style.display = 'block';
-                favoritesTooltip.style.opacity = '1';
-                updateFavoritesNavigation();
-                hideTooltips();
-            }).catch(function(error) {
-                console.error(`Помилка рендерингу сторінки ${num} для обраних:`, error);
-                if (backButton) backButton.style.display = 'flex';
-                favoritesTooltip.style.display = 'block';
-                favoritesRendering = false;
-                hideTooltips();
-            });
-        }
-
-        function updateFavoritesNavigation() {
-            if (!favoritesDoc) {
-                favoritesPrevBtn.disabled = true;
-                favoritesNextBtn.disabled = true;
-                if (backButton) backButton.style.display = 'flex';
-                favoritesTooltip.style.display = 'block';
-                hideTooltips();
-                return;
-            }
-
-            const favoritePagesList = getFavoritePagesList();
-            const currentIndex = favoritePagesList.indexOf(pageNum);
-
-            favoritesPrevBtn.disabled = currentIndex <= 0;
-            favoritesNextBtn.disabled = currentIndex >= favoritePagesList.length - 1;
-
-            if (backButton) backButton.style.display = 'flex';
-            favoritesTooltip.style.display = 'block';
-            hideTooltips();
-        }
-
-        function prevFavoritePage() {
-            if (!favoritesDoc) return;
-            const favoritePagesList = getFavoritePagesList();
-            const currentIndex = favoritePagesList.indexOf(pageNum);
-
-            if (currentIndex > 0) {
-                pageNum = favoritePagesList[currentIndex - 1];
-                queueRenderFavoritePage(pageNum);
-            }
-            if (backButton) backButton.style.display = 'flex';
-            favoritesTooltip.style.display = 'block';
-            hideTooltips();
-        }
-
-        function nextFavoritePage() {
-            if (!favoritesDoc) return;
-            const favoritePagesList = getFavoritePagesList();
-            const currentIndex = favoritePagesList.indexOf(pageNum);
-
-            if (currentIndex < favoritePagesList.length - 1) {
-                pageNum = favoritePagesList[currentIndex + 1];
-                queueRenderFavoritePage(pageNum);
-            }
-            if (backButton) backButton.style.display = 'flex';
-            favoritesTooltip.style.display = 'block';
-            hideTooltips();
-        }
-
-        function queueRenderFavoritePage(num) {
-            if (!favoritesDoc) return;
-            if (favoritesRendering) {
-                favoritesPageNumPending = num;
-            } else {
-                renderFavoritePage(num);
-            }
-            if (backButton) backButton.style.display = 'flex';
-            favoritesTooltip.style.display = 'block';
-            hideTooltips();
-        }
     </script>
 </body>
 </html>
