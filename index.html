@@ -292,8 +292,8 @@
 
         .main-content {
             position: absolute;
-            top: 40px; /* Висота хедера */
-            bottom: 30px; /* Висота футера */
+            top: 40px;
+            bottom: 30px;
             left: 0;
             right: 0;
             display: flex;
@@ -834,17 +834,27 @@
             }
         }
 
-        @media (max-width: 480px) {
-            .pdf-item, .favorite-item {
-                flex-basis: calc(50% - 10px);
-                max-width: calc(50% - 10px);
-                gap: 10px;
+        /* ----- Мобільна версія (до 767px) ----- */
+        @media (max-width: 767px) {
+            .pdf-item {
+                flex-basis: calc(100% - 20px);
+                max-width: calc(100% - 20px);
+                margin: 0;
             }
-            .pdf-selection, .favorites-list-view {
-                gap: 10px;
+            .pdf-selection {
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 20px;
+                padding: 10px;
+                overflow-y: auto;
+            }
+            .main-menu {
+                justify-content: flex-start;
+                overflow-y: auto;
             }
         }
-
+        
         body {
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
@@ -1197,7 +1207,7 @@
             if (currentFavoriteIndex >= favoriteItems.length - 1) return;
             currentFavoriteIndex++;
             const favorite = favoriteItems[currentFavoriteIndex];
-            loadFavoritePdf(favorite.pdfName, favorite.page);
+            loadFavoritePdf(nextFavorite.pdfName, nextFavorite.page);
         }
 
         // Remove current favorite from view
@@ -1717,7 +1727,7 @@
             const thumbnails = [
                 { pdfName: 'gadassa', id: 'thumbnail-gadassa' },
                 { pdfName: 'medunia', id: 'thumbnail-medunia' },
-                { pdfName: 'dobryi_vechir', id: 'thumbnail-dobryi-vechir' },
+                { pdfName: 'dobryi_vechir', id: 'thumbnail-dobryi_vechir' },
                 { pdfName: 'biscotti', id: 'thumbnail-biscotti' },
                 { pdfName: 'rsv', id: 'thumbnail-rsv' }
             ];
