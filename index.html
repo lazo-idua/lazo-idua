@@ -33,7 +33,7 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
-            height: 100vh;
+            height: var(--app-height); /* Змінено 100vh на змінну */
             overscroll-behavior: none;
             -webkit-overflow-scrolling: touch;
         }
@@ -546,9 +546,7 @@
             height: 30px;
         }
 
-        .footer span {
-            letter-spacing: 0.5px;
-        }
+    
 
         .error-message {
             text-align: center;
