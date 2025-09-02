@@ -307,8 +307,8 @@
         
         @media (max-width: 480px) {
             .main-content {
-                top: 0; /* Зміщено догори */
-                bottom: 80px; /* Збільшено відступ знизу для кнопок */
+                top: 0;
+                bottom: 80px;
             }
         }
 
@@ -843,7 +843,7 @@
 
         @media (max-width: 480px) {
             .pdf-thumbnail img {
-                object-fit: contain; /* Змінено для запобігання розтягуванню */
+                object-fit: contain;
             }
 
             .pdf-item, .favorite-item {
@@ -905,7 +905,8 @@
     <div class="favorites-modal" id="favorites-modal">
         <div class="favorites-header">
             <h2 class="favorites-title">Обрані</h2>
-            <button id="close-favorites-btn" class="favorites-back-btn">&#x2190;</button> </div>
+            <button id="close-favorites-btn" class="favorites-back-btn">&#x2190;</button>
+        </div>
         <div class="favorites-content" id="favorites-content">
             <p class="error-message" id="no-favorites-message" style="display: none;">Ви ще не додали жодного каталогу в обрані. <br> <small>Натисніть на &#10084; в режимі перегляду, щоб додати.</small></p>
             <div class="favorites-list-view" id="favorites-list-view">
@@ -1066,7 +1067,6 @@
             // Placeholder for page indicator, not used in this version of UI
         }
 
-        // Handle native back button for mobile
         window.addEventListener('popstate', function(e) {
             if (mainContent.style.display === 'flex' || favoritesModal.style.display === 'flex') {
                 closePdfViewer();
@@ -1074,7 +1074,6 @@
             }
         });
 
-        // Add history state for back button functionality
         backBtn.addEventListener('click', function() {
             closePdfViewer();
         });
@@ -1256,7 +1255,6 @@
             showFavorites();
         });
 
-        // Swipe navigation for main menu
         let mainTouchStartX = 0;
         let mainTouchEndTime = 0;
         let mainTouchStartTime = 0;
@@ -1273,9 +1271,9 @@
             const deltaTime = mainTouchEndTime - mainTouchStartTime;
             
             if (deltaTime < 300 && Math.abs(deltaX) > 50) {
-                if (deltaX < 0) { // Swipe left
+                if (deltaX < 0) {
                     nextCatalogPage();
-                } else { // Swipe right
+                } else {
                     prevCatalogPage();
                 }
             }
