@@ -292,10 +292,10 @@
 
         .main-content {
             position: absolute;
-            top: 40px;
-            bottom: 30px;
-            left: 0;
-            right: 0;
+            top: 10px; /* Висота хедера */
+            bottom: 60px; /* Висота футера */
+            left: 8px;
+            right: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -303,13 +303,6 @@
             overflow: hidden;
             padding: 0;
             display: none;
-        }
-        
-        @media (max-width: 480px) {
-            .main-content {
-                top: 0;
-                bottom: 80px;
-            }
         }
 
         .main-content.opening {
@@ -429,7 +422,7 @@
         
         .bottom-right-container {
             position: absolute;
-            bottom: 20px;
+            bottom: 5px;
             right: 15px;
             display: flex;
             align-items: center;
@@ -439,7 +432,7 @@
 
         .bottom-left-container {
             position: absolute;
-            bottom: 20px;
+            bottom: 5px;
             left: 15px;
             display: flex;
             align-items: center;
@@ -842,10 +835,6 @@
         }
 
         @media (max-width: 480px) {
-            .pdf-thumbnail img {
-                object-fit: contain;
-            }
-
             .pdf-item, .favorite-item {
                 flex-basis: calc(50% - 10px);
                 max-width: calc(50% - 10px);
@@ -867,434 +856,984 @@
     </style>
 </head>
 <body>
-
     <div class="loader">
-        <img src="https://lazo-idua.github.io/lazo-idua/Logo.png" alt="Loading">
+        <img src="https://lazo-idua.github.io/lazo-idua/Logo.png" alt="Loading Logo">
     </div>
-
-    <header class="header">
+    <div class="header" id="header">
         <div class="header-left">
-            <img src="https://lazo-idua.github.io/lazo-idua/Logo.png" alt="Logo" class="header-logo">
-            <h1 class="header-title">TD MELNYK</h1>
+            <img class="header-logo" src="https://lazo-idua.github.io/lazo-idua/Logo.png" alt="TD MELNYK Logo">
+            <span class="header-title">MELNYK</span>
         </div>
-        <button id="favorites-header-btn" class="favorites-header-btn" style="display: none;"><span class="icon">&#10084;</span></button>
-    </header>
-
-    <main class="main-menu" id="main-menu">
-        <div class="pdf-selection" id="pdf-selection">
-            </div>
-        <div class="dots-container" id="dots-container" style="display: none;"></div>
-        <div class="tooltip" id="tooltip"></div>
-    </main>
-
-    <div class="main-content" id="main-content">
-        <div class="pdf-container">
-            <canvas id="pdf-canvas" class="pdf-canvas"></canvas>
-            <button id="prev-btn" class="nav-btn prev-btn">&lt;</button>
-            <button id="next-btn" class="nav-btn next-btn">&gt;</button>
-        </div>
-        <div class="bottom-left-container">
-            <button id="back-btn" class="back-btn">&#x2190;</button>
-        </div>
-        <div class="bottom-right-container">
-            <button id="favorites-btn" class="favorites-btn">&#10084;</button>
-            <button id="share-btn" class="share-btn">&#x2192;</button>
-        </div>
+        <button class="favorites-header-btn" onclick="openFavoritesModal()" title="Обрані малюнки">
+            <span>♥</span>
+            <span class="favorites-header-label">Обране</span>
+        </button>
     </div>
-    
-    <div class="favorites-modal" id="favorites-modal">
-        <div class="favorites-header">
-            <h2 class="favorites-title">Обрані</h2>
-            <button id="close-favorites-btn" class="favorites-back-btn">&#x2190;</button>
-        </div>
-        <div class="favorites-content" id="favorites-content">
-            <p class="error-message" id="no-favorites-message" style="display: none;">Ви ще не додали жодного каталогу в обрані. <br> <small>Натисніть на &#10084; в режимі перегляду, щоб додати.</small></p>
-            <div class="favorites-list-view" id="favorites-list-view">
+    <div class="main-menu" id="mainMenu">
+        <div class="pdf-selection" id="pdfSelection">
+            <div class="pdf-item" onclick="openPdf('gadassa')">
+                <div class="pdf-thumbnail" id="thumbnail-gadassa">
+                    <div class="thumbnail-placeholder">GADASSA<br>Каталог</div>
+                    <div class="loading-spinner"></div>
                 </div>
-            <div class="favorites-pdf-container" id="favorites-pdf-container" style="display: none;">
-                <canvas id="favorites-pdf-canvas" class="favorites-pdf-canvas"></canvas>
-                <button id="favorites-prev-btn" class="favorites-nav-btn favorites-prev-btn">&lt;</button>
-                <button id="favorites-next-btn" class="favorites-nav-btn favorites-next-btn">&gt;</button>
+                <div class="pdf-name">GADASSA</div>
             </div>
-            <div class="favorites-bottom-buttons" id="favorites-bottom-buttons" style="display: none;">
-                <button id="remove-favorite-btn" class="remove-favorite-btn">&#10006;</button>
+            <div class="pdf-item" onclick="openPdf('medunia')">
+                <div class="pdf-thumbnail" id="thumbnail-medunia">
+                    <div class="thumbnail-placeholder">MEDUNIA<br>Каталог</div>
+                    <div class="loading-spinner"></div>
+                </div>
+                <div class="pdf-name">MEDUNIA</div>
+            </div>
+            <div class="pdf-item" onclick="openPdf('dobryi_vechir')">
+                <div class="pdf-thumbnail" id="thumbnail-dobryi_vechir">
+                    <div class="thumbnail-placeholder">DOBRYI VECHIR<br>Каталог</div>
+                    <div class="loading-spinner"></div>
+                </div>
+                <div class="pdf-name">DOBRYI VECHIR</div>
+            </div>
+            <div class="pdf-item" onclick="openPdf('biscotti')">
+                <div class="pdf-thumbnail" id="thumbnail-biscotti">
+                    <div class="thumbnail-placeholder">BISCOTTI<br>Каталог</div>
+                    <div class="loading-spinner"></div>
+                </div>
+                <div class="pdf-name">BISCOTTI</div>
+            </div>
+            <div class="pdf-item" onclick="openPdf('rsv')">
+                <div class="pdf-thumbnail" id="thumbnail-rsv">
+                    <div class="thumbnail-placeholder">R&V<br>Каталог</div>
+                    <div class="loading-spinner"></div>
+                </div>
+                <div class="pdf-name">R&V</div>
             </div>
         </div>
+        <div class="tooltip" id="mainTooltip">Свайпайте вправо/вліво, щоб переглянути каталоги. Натисніть на картку, щоб відкрити PDF.</div>
     </div>
 
-    <footer class="footer">
-        <span>&copy; 2024 TD MELNYK</span>
-    </footer>
+    <div class="main-content" id="mainContent">
+        <button class="nav-btn prev-btn" onclick="prevPage()" disabled>〈</button>
 
-    <script src="https://lazo-idua.github.io/lazo-idua/pdf.min.mjs" type="module"></script>
-    <script type="module">
-        import * as pdfjsLib from 'https://lazo-idua.github.io/lazo-idua/pdf.min.mjs';
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://lazo-idua.github.io/lazo-idua/pdf.worker.min.mjs';
+        <div class="pdf-container">
+            <canvas id="pdf-canvas"></canvas>
+            <canvas id="pdf-canvas-next" class="canvas-next"></canvas>
+
+            <div class="top-buttons">
+            </div>
+            <div class="bottom-left-container">
+                <button class="back-btn" onclick="goBackToMainMenu()" title="Назад">←</button>
+            </div>
+            <div class="bottom-right-container">
+                <button class="favorites-btn" onclick="toggleFavorite()" title="Додати до обраного">♥</button>
+                <button class="share-btn" onclick="sharePage()" title="Поділитися">↗</button>
+            </div>
+            
+        </div>
+
+        <button class="nav-btn next-btn" onclick="nextPage()">〉</button>
+    </div>
+
+    <div class="favorites-modal" id="favoritesModal">
+        <div class="favorites-header">
+            <span class="favorites-title">Обрані малюнки</span>
+            <button class="trash-btn" onclick="clearGlobalFavorites()" title="Очистити всі">🗑️</button>
+        </div>
+        
+        <div class="favorites-content" id="favoritesContentView" style="display: none;">
+            <button class="favorites-nav-btn favorites-prev-btn" onclick="prevFavoritePage()" disabled>〈</button>
+            
+            <div class="favorites-pdf-container">
+                <canvas id="favorites-canvas"></canvas>
+                <canvas id="favorites-canvas-next" class="canvas-next"></canvas>
+                
+                <div class="favorites-bottom-buttons">
+                    <button class="remove-favorite-btn" onclick="removeCurrentFavorite()" title="Видалити з обраного">×</button>
+                </div>
+                <button class="favorites-back-btn" onclick="closeFavoritesView()" title="Назад">←</button>
+            </div>
+            
+            <button class="favorites-nav-btn favorites-next-btn" onclick="nextFavoritePage()">〉</button>
+        </div>
+        
+        <div class="favorites-list-view" id="favoritesListView">
+            </div>
+    </div>
+
+    <div class="footer">
+        <span>Created by LAZO.</span>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        document.addEventListener('wheel', function(e) {
+            if (e.ctrlKey) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+        document.addEventListener('touchmove', function(e) {
+            if (e.touches.length > 1 && isIOS) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
         let pdfDoc = null;
         let pageNum = 1;
         let pageRendering = false;
         let pageNumPending = null;
-        let scale = 1.0;
-        let currentPageNum = 1;
+        let favoritesMode = false;
+        let currentPdf = '';
+        const canvas = document.getElementById('pdf-canvas');
+        const canvasNext = document.getElementById('pdf-canvas-next');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        const ctxNext = canvasNext.getContext('2d', { willReadFrequently: true });
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        const favoritesBtn = document.querySelector('.favorites-btn');
+        const shareBtn = document.querySelector('.share-btn');
+        const mainMenu = document.getElementById('mainMenu');
+        const mainContent = document.getElementById('mainContent');
+        const backButton = document.querySelector('.back-btn');
+        const header = document.getElementById('header');
+        const pdfSelection = document.getElementById('pdfSelection');
+        const dotsContainer = document.getElementById('dotsContainer');
+        const mainTooltip = document.getElementById('mainTooltip');
+        const favoritesModal = document.getElementById('favoritesModal');
+        const favoritesListView = document.getElementById('favoritesListView');
+        const favoritesContentView = document.getElementById('favoritesContentView');
+        const prevMenuBtn = document.querySelector('.prev-menu-btn');
+        const nextMenuBtn = document.querySelector('.next-menu-btn');
+        const favoritesCanvas = document.getElementById('favorites-canvas');
+        const favoritesCanvasNext = document.getElementById('favorites-canvas-next');
+        const favoritesCtx = favoritesCanvas.getContext('2d', { willReadFrequently: true });
+        const favoritesCtxNext = favoritesCanvasNext.getContext('2d', { willReadFrequently: true });
+        const favoritesPrevBtn = document.querySelector('.favorites-prev-btn');
+        const favoritesNextBtn = document.querySelector('.favorites-next-btn');
+        const bottomrightcontainer = document.querySelector('.bottom-right-container');
+        const bottomleftcontainer = document.querySelector('.bottom-left-container');
 
-        const mainContent = document.getElementById('main-content');
-        const pdfSelection = document.getElementById('pdf-selection');
-        const pdfCanvas = document.getElementById('pdf-canvas');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const backBtn = document.getElementById('back-btn');
-        const favoritesBtn = document.getElementById('favorites-btn');
-        const shareBtn = document.getElementById('share-btn');
-        const loader = document.getElementById('loader');
-        const mainMenu = document.getElementById('main-menu');
-        const favoritesModal = document.getElementById('favorites-modal');
-        const closeFavoritesBtn = document.getElementById('close-favorites-btn');
-        const favoritesHeaderBtn = document.getElementById('favorites-header-btn');
-        const favoritesContent = document.getElementById('favorites-content');
-        const favoritesListView = document.getElementById('favorites-list-view');
-        const noFavoritesMessage = document.getElementById('no-favorites-message');
-        const dotsContainer = document.getElementById('dots-container');
-        const favoritesPdfContainer = document.getElementById('favorites-pdf-container');
-        const favoritesPdfCanvas = document.getElementById('favorites-pdf-canvas');
-        const favoritesPrevBtn = document.getElementById('favorites-prev-btn');
-        const favoritesNextBtn = document.getElementById('favorites-next-btn');
-        const favoritesBottomButtons = document.getElementById('favorites-bottom-buttons');
-        const removeFavoriteBtn = document.getElementById('remove-favorite-btn');
-        const footer = document.querySelector('.footer');
+        let favoritePages = JSON.parse(localStorage.getItem('favoritePages')) || {};
+        let currentFavoriteIndex = 0;
+        let favoriteItems = [];
 
-        let isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-        let touchStartX = 0;
-        let touchStartTime = 0;
-        let currentPdfUrl = '';
-        let currentPdfTitle = '';
-        const catalogsPerPage = 4;
-        let currentCatalogPage = 0;
-        let pdfs = [];
+        let renderQuality = isIOS ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
+        const isLargeScreen = window.innerWidth >= 1200;
+        const pageCache = new Map();
+        const favoritesPageCache = new Map();
+        const preloadNextPages = isIOS ? 1 : 3;
 
-        function setPageNavButtonsState(page) {
-            prevBtn.disabled = page <= 1;
-            nextBtn.disabled = page >= pdfDoc.numPages;
+        // Hide tooltips after 15 seconds
+        function hideTooltips() {
+            setTimeout(() => {
+                if (mainTooltip) {
+                    mainTooltip.style.opacity = '0';
+                    mainTooltip.style.display = 'none';
+                }
+            }, 15000);
         }
 
-        function setFavoritesNavButtonsState(page, numPages) {
-            favoritesPrevBtn.disabled = page <= 1;
-            favoritesNextBtn.disabled = page >= numPages;
+        // Open global favorites modal
+        function openFavoritesModal() {
+            favoritesModal.style.display = 'flex';
+            renderFavoritesList();
+        }
+
+        // Close global favorites modal
+        function closeFavoritesModal() {
+            favoritesModal.style.display = 'none';
+            favoritesContentView.style.display = 'none';
+            favoritesListView.style.display = 'flex';
+        }
+
+        // Close favorites view and return to list
+        function closeFavoritesView() {
+            favoritesContentView.style.display = 'none';
+            favoritesListView.style.display = 'flex';
+        }
+
+        // Render favorites list in modal
+        function renderFavoritesList() {
+            favoritesListView.innerHTML = '';
+            favoriteItems = [];
+            
+            for (const pdfName in favoritePages) {
+                favoritePages[pdfName].forEach(page => {
+                    const item = document.createElement('div');
+                    item.classList.add('favorite-item');
+                    item.onclick = () => openFavoritePdf(pdfName, page);
+                    const thumbnail = document.createElement('div');
+                    thumbnail.classList.add('favorite-thumbnail');
+                    thumbnail.innerHTML = `<div class="thumbnail-placeholder">${pdfName.toUpperCase()}<br>Сторінка ${page}</div>`;
+                    const info = document.createElement('div');
+                    info.classList.add('favorite-info');
+                    info.textContent = `${pdfName.toUpperCase()} - Сторінка ${page}`;
+                    const removeBtn = document.createElement('button');
+                    removeBtn.classList.add('remove-favorite-x');
+                    removeBtn.onclick = (e) => { e.stopPropagation(); removeGlobalFavorite(pdfName, page); };
+                    item.appendChild(thumbnail);
+                    item.appendChild(info);
+                    item.appendChild(removeBtn);
+                    favoritesListView.appendChild(item);
+                    
+                    // Store favorite item for navigation
+                    favoriteItems.push({ pdfName, page });
+                });
+            }
+        }
+
+        // Open favorite PDF page in viewer mode
+        function openFavoritePdf(pdfName, page) {
+            // Find the index of the clicked favorite
+            currentFavoriteIndex = favoriteItems.findIndex(item => 
+                item.pdfName === pdfName && item.page === page
+            );
+            
+            if (currentFavoriteIndex === -1) return;
+            
+            // Switch to viewer mode
+            favoritesListView.style.display = 'none';
+            favoritesContentView.style.display = 'flex';
+            
+            // Load and render the favorite page
+            loadFavoritePdf(pdfName, page);
+        }
+
+        // Load favorite PDF for viewing
+        function loadFavoritePdf(pdfName, page) {
+            const url = getPdfUrl(pdfName);
+            if (!url) return;
+
+            favoritesCtx.clearRect(0, 0, favoritesCanvas.width, favoritesCanvas.height);
+            favoritesCtxNext.clearRect(0, 0, favoritesCanvasNext.width, favoritesCanvasNext.height);
+            favoritesCanvas.width = 0;
+            favoritesCanvas.height = 0;
+            favoritesCanvasNext.width = 0;
+            favoritesCanvasNext.height = 0;
+
+            pdfjsLib.getDocument({
+                url: url,
+                cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+                cMapPacked: true,
+                maxImageSize: isIOS ? 4096 * 4096 : 8192 * 8192,
+                disableFontFace: true,
+                standardFontDataUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/',
+                useSystemFonts: true,
+                isEvalSupported: false,
+                disableRange: isIOS,
+                disableStream: isIOS
+            }).promise.then(function(pdf) {
+                renderFavoritePage(pdf, page);
+                updateFavoritesNavigation();
+            }).catch(function(error) {
+                console.error(`Помилка завантаження PDF ${pdfName}:`, error);
+            });
+        }
+
+        // Render favorite page
+        function renderFavoritePage(pdf, pageNum) {
+            pdf.getPage(pageNum).then(function(page) {
+                const scale = calculateOptimalScale(page);
+                const viewport = page.getViewport({ scale: scale });
+
+                const maxWidth = isIOS ? 4096 : 8192;
+                const maxHeight = isIOS ? 4096 : 8192;
+
+                let outputScale = Math.min(renderQuality, maxWidth / viewport.width, maxHeight / viewport.height);
+                outputScale = Math.min(outputScale, isIOS ? 1.8 : 2.5);
+
+                favoritesCanvas.width = Math.floor(viewport.width * outputScale);
+                favoritesCanvas.height = Math.floor(viewport.height * outputScale);
+
+                favoritesCanvas.style.width = Math.floor(viewport.width) + 'px';
+                favoritesCanvas.style.height = Math.floor(viewport.height) + 'px';
+
+                const transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
+
+                const renderContext = {
+                    canvasContext: favoritesCtx,
+                    viewport: viewport,
+                    transform: transform,
+                    enableWebGL: !isIOS,
+                    textLayer: false,
+                    enhanceTextSelection: false
+                };
+
+                page.render(renderContext).promise.then(function() {
+                    favoritesCanvas.classList.add('high-quality');
+                    updateFavoritesNavigation();
+                }).catch(function(error) {
+                    console.error(`Помилка рендерингу сторінки ${pageNum}:`, error);
+                });
+            }).catch(function(error) {
+                console.error(`Помилка завантаження сторінки ${pageNum}:`, error);
+            });
+        }
+
+        // Update favorites navigation buttons
+        function updateFavoritesNavigation() {
+            favoritesPrevBtn.disabled = currentFavoriteIndex <= 0;
+            favoritesNextBtn.disabled = currentFavoriteIndex >= favoriteItems.length - 1;
+        }
+
+        // Navigate to previous favorite
+        function prevFavoritePage() {
+            if (currentFavoriteIndex <= 0) return;
+            currentFavoriteIndex--;
+            const favorite = favoriteItems[currentFavoriteIndex];
+            loadFavoritePdf(favorite.pdfName, favorite.page);
+        }
+
+        // Navigate to next favorite
+        function nextFavoritePage() {
+            if (currentFavoriteIndex >= favoriteItems.length - 1) return;
+            currentFavoriteIndex++;
+            const favorite = favoriteItems[currentFavoriteIndex];
+            loadFavoritePdf(favorite.pdfName, favorite.page);
+        }
+
+        // Remove current favorite from view
+        function removeCurrentFavorite() {
+            if (currentFavoriteIndex >= 0 && currentFavoriteIndex < favoriteItems.length) {
+                const favorite = favoriteItems[currentFavoriteIndex];
+                removeGlobalFavorite(favorite.pdfName, favorite.page);
+                
+                // Remove from local array
+                favoriteItems.splice(currentFavoriteIndex, 1);
+                
+                if (favoriteItems.length === 0) {
+                    // No favorites left, return to list
+                    closeFavoritesView();
+                    renderFavoritesList();
+                } else {
+                    // Adjust index and load next favorite
+                    if (currentFavoriteIndex >= favoriteItems.length) {
+                        currentFavoriteIndex = favoriteItems.length - 1;
+                    }
+                    if (currentFavoriteIndex >= 0) {
+                        const nextFavorite = favoriteItems[currentFavoriteIndex];
+                        loadFavoritePdf(nextFavorite.pdfName, nextFavorite.page);
+                    } else {
+                        closeFavoritesView();
+                        renderFavoritesList();
+                    }
+                }
+            }
+        }
+
+        // Remove single favorite from global
+        function removeGlobalFavorite(pdfName, page) {
+            favoritePages[pdfName] = favoritePages[pdfName].filter(p => p !== page);
+            if (favoritePages[pdfName].length === 0) delete favoritePages[pdfName];
+            localStorage.setItem('favoritePages', JSON.stringify(favoritePages));
+            renderFavoritesList();
+        }
+
+        // Clear all global favorites
+        function clearGlobalFavorites() {
+            if (confirm('Ви впевнені, що хочете видалити всі обрані малюнки?')) {
+                favoritePages = {};
+                localStorage.setItem('favoritePages', JSON.stringify(favoritePages));
+                renderFavoritesList();
+                // If in view mode, close it
+                if (favoritesContentView.style.display === 'flex') {
+                    closeFavoritesView();
+                }
+            }
+        }
+
+        async function checkPdfAvailability(url) {
+            try {
+                const response = await fetch(url, { method: 'HEAD', cache: 'no-cache' });
+                return response.ok;
+            } catch {
+                return false;
+            }
+        }
+
+        function getPdfUrl(pdfName) {
+            const pdfUrls = {
+                gadassa: 'https://lazo-idua.github.io/lazo-idua/gadassa.pdf',
+                medunia: 'https://lazo-idua.github.io/lazo-idua/medunia.pdf',
+                dobryi_vechir: 'https://lazo-idua.github.io/lazo-idua/dobryi_vechir.pdf',
+                biscotti: 'https://lazo-idua.github.io/lazo-idua/biscotti.pdf',
+                rsv: 'https://lazo-idua.github.io/lazo-idua/rsv.pdf'
+            };
+            return pdfUrls[pdfName] || '';
+        }
+
+        function generateThumbnail(pdfName, thumbnailId) {
+            const url = getPdfUrl(pdfName);
+            if (!url) return;
+
+            const thumbnailContainer = document.getElementById(thumbnailId);
+            if (!thumbnailContainer) return;
+            thumbnailContainer.classList.add('loading');
+
+            checkPdfAvailability(url).then(isAvailable => {
+                if (!isAvailable) {
+                    console.error(`PDF ${pdfName} недоступний за URL: ${url}`);
+                    thumbnailContainer.classList.remove('loading');
+                    thumbnailContainer.innerHTML = `<div class="thumbnail-placeholder">Помилка завантаження<br>${pdfName.toUpperCase()}</div>`;
+                    return;
+                }
+
+                const loadingTask = pdfjsLib.getDocument({
+                    url: url,
+                    cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+                    cMapPacked: true,
+                    maxImageSize: 2048 * 2048,
+                    disableFontFace: true,
+                    standardFontDataUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/',
+                    isEvalSupported: false,
+                    useSystemFonts: true
+                });
+
+                loadingTask.promise.then(function(pdf) {
+                    pdf.getPage(1).then(function(page) {
+                        const viewport = page.getViewport({ scale: 1.0 });
+                        const canvas = document.createElement('canvas');
+                        const context = canvas.getContext('2d', { willReadFrequently: true });
+                        canvas.width = viewport.width;
+                        canvas.height = viewport.height;
+
+                        const renderContext = {
+                            canvasContext: context,
+                            viewport: viewport
+                        };
+
+                        page.render(renderContext).promise.then(function() {
+                            const img = document.createElement('img');
+                            img.src = canvas.toDataURL('image/jpeg', 0.9);
+                            img.onload = function() {
+                                thumbnailContainer.innerHTML = '';
+                                thumbnailContainer.appendChild(img);
+                                thumbnailContainer.classList.remove('loading');
+                            };
+                        }).catch(function(error) {
+                            console.error(`Помилка рендерингу мініатюри для ${pdfName}:`, error);
+                            thumbnailContainer.classList.remove('loading');
+                            thumbnailContainer.innerHTML = `<div class="thumbnail-placeholder">Помилка завантаження<br>${pdfName.toUpperCase()}</div>`;
+                        });
+                    }).catch(function(error) {
+                        console.error(`Помилка завантаження сторінки для мініатюри ${pdfName}:`, error);
+                        thumbnailContainer.classList.remove('loading');
+                        thumbnailContainer.innerHTML = `<div class="thumbnail-placeholder">Помилка завантаження<br>${pdfName.toUpperCase()}</div>`;
+                    });
+                }).catch(function(error) {
+                    console.error(`Помилка завантаження PDF для мініатюри ${pdfName}:`, error);
+                    thumbnailContainer.classList.remove('loading');
+                    thumbnailContainer.innerHTML = `<div class="thumbnail-placeholder">Помилка завантаження<br>${pdfName.toUpperCase()}</div>`;
+                });
+            });
+        }
+
+        function openPdf(pdfName) {
+            currentPdf = pdfName;
+            mainMenu.style.display = 'none';
+            mainContent.style.display = 'flex';
+            header.style.display = 'none';
+            mainContent.classList.add('opening');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctxNext.clearRect(0, 0, canvasNext.width, canvasNext.height);
+            canvas.width = 0;
+            canvas.height = 0;
+            canvasNext.width = 0;
+            canvasNext.height = 0;
+            pageCache.clear();
+            loadPdf();
+            hideTooltips();
+        }
+
+        function goBackToMainMenu() {
+            mainMenu.style.display = 'flex';
+            mainContent.style.display = 'none';
+            header.style.display = 'flex';
+            mainContent.classList.remove('opening');
+            pageRendering = false;
+            pageNumPending = null;
+            pageCache.clear();
+            pdfDoc = null;
+            pageNum = 1;
+            favoritesMode = false;
+            updateNavigation();
+            updateFavoriteButton();
+            hideTooltips();
+        }
+
+        function calculateOptimalScale(page) {
+            const container = document.querySelector('.pdf-container');
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+            const viewport = page.getViewport({ scale: 1 });
+            const scaleX = containerWidth / viewport.width;
+            const scaleY = containerHeight / viewport.height;
+            let scale = Math.min(scaleX, scaleY);
+            return scale;
+        }
+
+        function loadPdf() {
+            const url = getPdfUrl(currentPdf);
+            if (!url) {
+                mainContent.innerHTML = `
+                    <div class="error-message">
+                        <p>Помилка: PDF не знайдено</p>
+                        <small>Перевірте URL каталогу ${currentPdf.toUpperCase()}</small>
+                    </div>
+                `;
+                updateNavigation();
+                hideTooltips();
+                return;
+            }
+
+            checkPdfAvailability(url).then(isAvailable => {
+                if (!isAvailable) {
+                    mainContent.innerHTML = `
+                        <div class="error-message">
+                            <p>Не вдалося завантажити каталог ${currentPdf.toUpperCase()}</p>
+                            <small>PDF недоступний. Перевірте URL або підключення до інтернету.</small>
+                        </div>
+                    `;
+                    console.error(`PDF ${currentPdf} недоступний за URL: ${url}`);
+                    updateNavigation();
+                    hideTooltips();
+                    return;
+                }
+
+                pdfjsLib.getDocument({
+                    url: url,
+                    cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+                    cMapPacked: true,
+                    maxImageSize: isIOS ? 4096 * 4096 : 8192 * 8192,
+                    disableFontFace: true,
+                    standardFontDataUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/',
+                    useSystemFonts: true,
+                    isEvalSupported: false,
+                    disableRange: isIOS,
+                    disableStream: isIOS
+                }).promise.then(function(pdf) {
+                    pdfDoc = pdf;
+                    renderPage(pageNum);
+                    preloadPages(pageNum + 1, preloadNextPages + 2);
+                    updateNavigation();
+                    hideTooltips();
+                }).catch(function(error) {
+                    console.error(`Помилка завантаження PDF ${currentPdf}:`, error);
+                    mainContent.innerHTML = `
+                        <div class="error-message">
+                            <p>Не вдалося завантажити каталог ${currentPdf.toUpperCase()}</p>
+                            <small>${error.message || 'Перевірте підключення до інтернету'}</small>
+                        </div>
+                    `;
+                    updateNavigation();
+                    hideTooltips();
+                });
+            });
+        }
+
+        function preloadPages(startPage, count) {
+            if (!pdfDoc) return;
+            for (let i = startPage; i < startPage + count && i <= pdfDoc.numPages; i++) {
+                if (!pageCache.has(i)) {
+                    pdfDoc.getPage(i).then(function(page) {
+                        pageCache.set(i, page);
+                    }).catch(function(error) {
+                        console.error(`Помилка попереднього завантаження сторінки ${i}:`, error);
+                    });
+                }
+            }
         }
 
         function renderPage(num) {
+            if (!pdfDoc) return;
             pageRendering = true;
-            pdfDoc.getPage(num).then(function(page) {
-                const viewport = page.getViewport({ scale: scale });
-                const canvas = pdfCanvas;
-                const canvasWrapper = canvas.parentNode;
-                const desiredWidth = canvasWrapper.clientWidth;
-                const desiredHeight = canvasWrapper.clientHeight;
-                const viewportScale = Math.min(desiredWidth / viewport.width, desiredHeight / viewport.height);
-                const newViewport = page.getViewport({ scale: viewportScale });
-                
-                canvas.height = newViewport.height;
-                canvas.width = newViewport.width;
 
-                const renderContext = {
-                    canvasContext: canvas.getContext('2d'),
-                    viewport: newViewport
-                };
-                
-                const renderTask = page.render(renderContext);
-
-                renderTask.promise.then(function() {
+            if (pageCache.has(num)) {
+                renderPageFromCache(num);
+            } else {
+                pdfDoc.getPage(num).then(function(page) {
+                    pageCache.set(num, page);
+                    renderPageFromCache(num);
+                    preloadPages(num + 1, preloadNextPages);
+                }).catch(function(error) {
+                    console.error(`Помилка відображення сторінки ${num}:`, error);
                     pageRendering = false;
-                    if (pageNumPending !== null) {
-                        renderPage(pageNumPending);
-                        pageNumPending = null;
-                    }
+                    hideTooltips();
                 });
-            });
+            }
+        }
 
-            document.getElementById('page-count').textContent = `${num}/${pdfDoc.numPages}`;
-            setPageNavButtonsState(num);
+        function renderPageFromCache(num) {
+            const page = pageCache.get(num);
+            const scale = calculateOptimalScale(page);
+            const viewport = page.getViewport({ scale: scale });
+
+            const maxWidth = isIOS ? 4096 : 8192;
+            const maxHeight = isIOS ? 4096 : 8192;
+
+            let outputScale = Math.min(renderQuality, maxWidth / viewport.width, maxHeight / viewport.height);
+
+            outputScale = Math.min(outputScale, isIOS ? 1.8 : 2.5);
+
+            const targetCanvas = canvasNext;
+            const targetCtx = ctxNext;
+
+            targetCanvas.width = Math.floor(viewport.width * outputScale);
+            targetCanvas.height = Math.floor(viewport.height * outputScale);
+
+            targetCanvas.style.width = Math.floor(viewport.width) + 'px';
+            targetCanvas.style.height = Math.floor(viewport.height) + 'px';
+
+            const transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
+
+            const renderContext = {
+                canvasContext: targetCtx,
+                viewport: viewport,
+                transform: transform,
+                enableWebGL: !isIOS,
+                textLayer: false,
+                enhanceTextSelection: false
+            };
+
+            const renderTask = page.render(renderContext);
+
+            renderTask.promise.then(function() {
+                pageRendering = false;
+
+                canvas.classList.add('canvas-hidden');
+                setTimeout(() => {
+                    canvas.width = targetCanvas.width;
+                    canvas.height = targetCanvas.height;
+                    canvas.style.width = targetCanvas.style.width;
+                    canvas.style.height = targetCanvas.style.height;
+
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(targetCanvas, 0, 0);
+
+                    canvas.classList.remove('canvas-hidden');
+                    canvas.classList.add('high-quality');
+                    targetCanvas.classList.add('canvas-next');
+                }, 50);
+
+                if (pageNumPending !== null) {
+                    renderPage(pageNumPending);
+                    pageNumPending = null;
+                }
+
+                updateNavigation();
+                updateFavoriteButton();
+                hideTooltips();
+            }).catch(function(error) {
+                console.error(`Помилка рендерингу сторінки ${num}:`, error);
+                pageRendering = false;
+                hideTooltips();
+            });
+        }
+
+        function updateNavigation() {
+            if (!pdfDoc) {
+                prevBtn.disabled = true;
+                nextBtn.disabled = true;
+                favoritesBtn.classList.toggle('active', favoritesMode);
+                hideTooltips();
+                return;
+            }
+
+            if (favoritesMode) {
+                const favoritePagesList = getFavoritePagesList();
+                const currentIndex = favoritePagesList.indexOf(pageNum);
+
+                prevBtn.disabled = currentIndex <= 0;
+                nextBtn.disabled = currentIndex >= favoritePagesList.length - 1;
+            } else {
+                prevBtn.disabled = pageNum <= 1;
+                nextBtn.disabled = pageNum >= pdfDoc.numPages;
+            }
+
+            favoritesBtn.classList.toggle('active', favoritesMode);
+            hideTooltips();
+        }
+
+        function updateFavoriteButton() {
+            favoritesBtn.classList.toggle('active', favoritePages[currentPdf]?.includes(pageNum) || false);
+        }
+
+        function clearAllFavorites() {
+            if (confirm('Ви впевнені, що хочете видалити всі обрані малюнки?')) {
+                favoritePages[currentPdf] = [];
+                localStorage.setItem('favoritePages', JSON.stringify(favoritePages));
+
+                if (favoritesMode) {
+                    favoritesMode = false;
+                    pageNum = 1;
+                    queueRenderPage(pageNum);
+                }
+
+                updateFavoriteButton();
+                favoritesBtn.classList.remove('active');
+                hideTooltips();
+            }
+        }
+
+        function toggleFavorite() {
+            if (!pdfDoc) return;
+            if (!favoritePages[currentPdf]) favoritePages[currentPdf] = [];
+            const index = favoritePages[currentPdf].indexOf(pageNum);
+
+            if (index === -1) {
+                favoritePages[currentPdf].push(pageNum);
+                favoritesBtn.classList.add('active');
+            } else {
+                favoritePages[currentPdf].splice(index, 1);
+                favoritesBtn.classList.remove('active');
+            }
+
+            localStorage.setItem('favoritePages', JSON.stringify(favoritePages));
+
+            if (favoritesMode && index !== -1) {
+                const favoritePagesList = getFavoritePagesList();
+                if (favoritePagesList.length === 0) {
+                    toggleFavoritesView();
+                } else {
+                    const nextPageIndex = Math.min(index, favoritePagesList.length - 1);
+                    pageNum = favoritePagesList[nextPageIndex];
+                    queueRenderPage(pageNum);
+                }
+            }
+            hideTooltips();
+        }
+
+        function toggleFavoritesView() {
+            if (!pdfDoc) return;
+            favoritesMode = !favoritesMode;
+
+            if (favoritesMode) {
+                const favoritePagesList = getFavoritePagesList();
+
+                if (favoritePagesList.length === 0) {
+                    favoritesMode = false;
+                    alert('У вас немає обраних сторінок');
+                    hideTooltips();
+                    return;
+                }
+
+                if (!favoritePagesList.includes(pageNum)) {
+                    pageNum = favoritePagesList[0];
+                    queueRenderPage(pageNum);
+                }
+            } else {
+                pageNum = 1;
+                queueRenderPage(pageNum);
+            }
+
+            updateNavigation();
+            hideTooltips();
+        }
+
+        function getFavoritePagesList() {
+            return [...(favoritePages[currentPdf] || [])].sort((a, b) => a - b);
+        }
+
+        function sharePage() {
+            if (!pdfDoc) return;
+            const pageUrl = window.location.href.split('#')[0] + '#page=' + pageNum + '&pdf=' + currentPdf;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'TD MELNYK - ' + currentPdf.toUpperCase() + ' - Сторінка ' + pageNum,
+                    url: pageUrl
+                }).catch(console.error);
+            } else {
+                navigator.clipboard.writeText(pageUrl).then(function() {
+                    alert('Посилання на сторінку скопійовано в буфер обміну!');
+                }).catch(function() {
+                    const tempInput = document.createElement('input');
+                    tempInput.value = pageUrl;
+                    document.body.appendChild(tempInput);
+                    tempInput.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(tempInput);
+                    alert('Посилання на сторінку скопійовано в буфер обміну!');
+                });
+            }
+            hideTooltips();
         }
 
         function queueRenderPage(num) {
+            if (!pdfDoc) return;
             if (pageRendering) {
                 pageNumPending = num;
             } else {
                 renderPage(num);
             }
-        }
-
-        function showPdf(pdfUrl, pdfTitle) {
-            currentPdfUrl = pdfUrl;
-            currentPdfTitle = pdfTitle;
-            pdfjsLib.getDocument(pdfUrl).promise.then(function(doc) {
-                pdfDoc = doc;
-                pageNum = 1;
-                renderPage(pageNum);
-                mainMenu.style.display = 'none';
-                mainContent.style.display = 'flex';
-                mainContent.classList.add('opening');
-                footer.style.display = 'none';
-                document.getElementById('back-btn').style.display = 'flex';
-                updateFavoriteButtonState(pdfUrl);
-            }).catch(function(error) {
-                console.error('Error loading PDF:', error);
-                mainMenu.style.display = 'flex';
-                mainContent.style.display = 'none';
-                footer.style.display = 'block';
-                alert('Не вдалося завантажити PDF-файл. Перевірте підключення до мережі.');
-            });
-        }
-
-        function nextPage() {
-            if (pageNum >= pdfDoc.numPages) return;
-            pageNum++;
-            queueRenderPage(pageNum);
-            updatePageIndicator();
+            hideTooltips();
         }
 
         function prevPage() {
-            if (pageNum <= 1) return;
-            pageNum--;
-            queueRenderPage(pageNum);
-            updatePageIndicator();
-        }
+            if (!pdfDoc) return;
+            if (favoritesMode) {
+                const favoritePagesList = getFavoritePagesList();
+                const currentIndex = favoritePagesList.indexOf(pageNum);
 
-        prevBtn.addEventListener('click', prevPage);
-        nextBtn.addEventListener('click', nextPage);
-
-        function updatePageIndicator() {
-            // Placeholder for page indicator, not used in this version of UI
-        }
-
-        window.addEventListener('popstate', function(e) {
-            if (mainContent.style.display === 'flex' || favoritesModal.style.display === 'flex') {
-                closePdfViewer();
-                closeFavoritesModal();
-            }
-        });
-
-        backBtn.addEventListener('click', function() {
-            closePdfViewer();
-        });
-
-        function closePdfViewer() {
-            mainContent.style.display = 'none';
-            mainMenu.style.display = 'flex';
-            footer.style.display = 'flex';
-            window.history.pushState(null, '', window.location.pathname);
-        }
-
-        closeFavoritesBtn.addEventListener('click', function() {
-            closeFavoritesModal();
-        });
-
-        function closeFavoritesModal() {
-            favoritesModal.style.display = 'none';
-            mainMenu.style.display = 'flex';
-            footer.style.display = 'flex';
-            window.history.pushState(null, '', window.location.pathname);
-        }
-
-        favoritesHeaderBtn.addEventListener('click', showFavorites);
-
-        function showFavorites() {
-            mainMenu.style.display = 'none';
-            favoritesModal.style.display = 'flex';
-            footer.style.display = 'none';
-            renderFavorites();
-            window.history.pushState({modal: 'favorites'}, '', '#favorites');
-        }
-
-        function renderFavorites() {
-            const favorites = JSON.parse(localStorage.getItem('favorites')) || {};
-            const favoriteKeys = Object.keys(favorites);
-            favoritesListView.innerHTML = '';
-            
-            if (favoriteKeys.length === 0) {
-                noFavoritesMessage.style.display = 'block';
-                favoritesListView.style.display = 'none';
+                if (currentIndex > 0) {
+                    pageNum = favoritePagesList[currentIndex - 1];
+                    queueRenderPage(pageNum);
+                }
             } else {
-                noFavoritesMessage.style.display = 'none';
-                favoritesListView.style.display = 'flex';
-                favoriteKeys.forEach(key => {
-                    const favorite = favorites[key];
-                    const item = document.createElement('div');
-                    item.className = 'favorite-item';
-                    item.innerHTML = `
-                        <div class="favorite-thumbnail">
-                            <img src="${favorite.thumbnail}" alt="Thumbnail">
-                            <button class="remove-favorite-x" data-url="${key}">&#10006;</button>
-                        </div>
-                        <div class="favorite-info">${favorite.title}</div>
-                    `;
-                    item.addEventListener('click', (e) => {
-                        if (e.target.classList.contains('remove-favorite-x')) {
-                            removeFavorite(e.target.dataset.url);
-                        } else {
-                            showPdf(favorite.url, favorite.title);
-                            closeFavoritesModal();
+                if (pageNum <= 1) return;
+                pageNum--;
+                queueRenderPage(pageNum);
+            }
+            hideTooltips();
+        }
+
+        function nextPage() {
+            if (!pdfDoc) return;
+            if (favoritesMode) {
+                const favoritePagesList = getFavoritePagesList();
+                const currentIndex = favoritePagesList.indexOf(pageNum);
+
+                if (currentIndex < favoritePagesList.length - 1) {
+                    pageNum = favoritePagesList[currentIndex + 1];
+                    queueRenderPage(pageNum);
+                }
+            } else {
+                if (pageNum >= pdfDoc.numPages) return;
+                pageNum++;
+                queueRenderPage(pageNum);
+            }
+            hideTooltips();
+        }
+
+        function setupThumbnailObserver() {
+            const thumbnails = [
+                { pdfName: 'gadassa', id: 'thumbnail-gadassa' },
+                { pdfName: 'medunia', id: 'thumbnail-medunia' },
+                { pdfName: 'dobryi_vechir', id: 'thumbnail-dobryi-vechir' },
+                { pdfName: 'biscotti', id: 'thumbnail-biscotti' },
+                { pdfName: 'rsv', id: 'thumbnail-rsv' }
+            ];
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const thumbnailId = entry.target.id;
+                        const pdfName = thumbnails.find(t => t.id === thumbnailId)?.pdfName;
+                        if (pdfName && !entry.target.classList.contains('loaded')) {
+                            generateThumbnail(pdfName, thumbnailId);
+                            entry.target.classList.add('loaded');
                         }
-                    });
-                    favoritesListView.appendChild(item);
-                });
-            }
-        }
-
-        function removeFavorite(url) {
-            let favorites = JSON.parse(localStorage.getItem('favorites')) || {};
-            delete favorites[url];
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-            renderFavorites();
-            updateFavoriteButtonState(url);
-        }
-
-        function toggleFavorite() {
-            let favorites = JSON.parse(localStorage.getItem('favorites')) || {};
-            if (favorites[currentPdfUrl]) {
-                delete favorites[currentPdfUrl];
-            } else {
-                favorites[currentPdfUrl] = {
-                    url: currentPdfUrl,
-                    title: currentPdfTitle,
-                    thumbnail: pdfCanvas.toDataURL('image/jpeg', 0.8)
-                };
-            }
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-            updateFavoriteButtonState(currentPdfUrl);
-        }
-
-        favoritesBtn.addEventListener('click', toggleFavorite);
-
-        function updateFavoriteButtonState(url) {
-            const favorites = JSON.parse(localStorage.getItem('favorites')) || {};
-            if (favorites[url]) {
-                favoritesBtn.classList.add('active');
-            } else {
-                favoritesBtn.classList.remove('active');
-            }
-        }
-
-        shareBtn.addEventListener('click', function() {
-            if (navigator.share) {
-                navigator.share({
-                    title: currentPdfTitle,
-                    url: currentPdfUrl
-                }).catch(console.error);
-            } else {
-                alert('Функція "Поділитися" не підтримується вашим пристроєм.');
-            }
-        });
-
-        fetch('https://lazo-idua.github.io/lazo-idua/catalogs.json')
-            .then(response => response.json())
-            .then(data => {
-                pdfs = data.catalogs;
-                renderPdfSelection(currentCatalogPage);
-                renderDots();
-            })
-            .catch(error => {
-                console.error('Error fetching catalog data:', error);
-                document.getElementById('main-menu').innerHTML = '<p class="error-message">Не вдалося завантажити каталоги. <small>Будь ласка, перевірте підключення до інтернету.</small></p>';
-            });
-
-        function renderPdfSelection(page) {
-            pdfSelection.innerHTML = '';
-            const start = page * catalogsPerPage;
-            const end = start + catalogsPerPage;
-            const catalogsToRender = pdfs.slice(start, end);
-
-            catalogsToRender.forEach(pdf => {
-                const pdfItem = document.createElement('div');
-                pdfItem.className = 'pdf-item';
-                pdfItem.innerHTML = `
-                    <div class="pdf-thumbnail">
-                        <img src="${pdf.thumbnail_url}" alt="${pdf.name} thumbnail">
-                    </div>
-                    <div class="pdf-name">${pdf.name}</div>
-                `;
-                pdfItem.addEventListener('click', () => {
-                    showPdf(pdf.url, pdf.name);
-                    window.history.pushState({view: 'pdf'}, '', '#pdf');
-                });
-                pdfSelection.appendChild(pdfItem);
-            });
-        }
-
-        function renderDots() {
-            const numPages = Math.ceil(pdfs.length / catalogsPerPage);
-            if (numPages > 1) {
-                dotsContainer.style.display = 'flex';
-                dotsContainer.innerHTML = '';
-                for (let i = 0; i < numPages; i++) {
-                    const dot = document.createElement('div');
-                    dot.className = 'dot';
-                    if (i === currentCatalogPage) {
-                        dot.classList.add('active');
                     }
-                    dot.addEventListener('click', () => {
-                        currentCatalogPage = i;
-                        renderPdfSelection(currentCatalogPage);
-                        updateDots();
-                    });
-                    dotsContainer.appendChild(dot);
-                }
-            } else {
-                dotsContainer.style.display = 'none';
-            }
-        }
+                });
+            }, { root: null, rootMargin: '0px', threshold: 0.1 });
 
-        function updateDots() {
-            const dots = dotsContainer.querySelectorAll('.dot');
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentCatalogPage);
+            thumbnails.forEach(thumbnail => {
+                const element = document.getElementById(thumbnail.id);
+                if (element) observer.observe(element);
             });
         }
 
-        document.getElementById('favorites-header-btn').addEventListener('click', function() {
-            showFavorites();
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.querySelector('.loader').style.display = 'none';
+                mainMenu.style.display = 'flex';
+                header.style.display = 'flex';
+                if (mainTooltip) {
+                    mainTooltip.style.display = 'block';
+                }
+                setupThumbnailObserver();
+                const hash = window.location.hash;
+                if (hash && hash.includes('page=') && hash.includes('pdf=')) {
+                    const params = new URLSearchParams(hash.substring(1));
+                    const page = parseInt(params.get('page'));
+                    const pdfName = params.get('pdf');
+                    if (!isNaN(page) && page > 0 && (pdfName === 'gadassa' || pdfName === 'medunia' || pdfName === 'dobryi_vechir' || pdfName === 'biscotti' || pdfName === 'rsv')) {
+                        pageNum = page;
+                        openPdf(pdfName);
+                    }
+                }
+                hideTooltips();
+            }, 2000);
         });
 
-        let mainTouchStartX = 0;
-        let mainTouchEndTime = 0;
-        let mainTouchStartTime = 0;
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') {
+                prevPage();
+            } else if (e.key === 'ArrowRight') {
+                nextPage();
+            } else if (e.key === 'End') {
+                if (!favoritesMode && pdfDoc) {
+                    pageNum = pdfDoc.numPages;
+                    queueRenderPage(pageNum);
+                }
+            } else if (e.key === 'f' || e.key === 'F') {
+                toggleFavorite();
+            } else if (e.key === 's' || e.key === 'S') {
+                sharePage();
+            } else if (e.key === 'Escape') {
+                if (mainContent.style.display === 'flex') {
+                    goBackToMainMenu();
+                } else if (favoritesModal.style.display === 'flex') {
+                    closeFavoritesModal();
+                }
+            }
+        });
 
-        mainMenu.addEventListener('touchstart', function(e) {
-            mainTouchStartX = e.changedTouches[0].clientX;
-            mainTouchStartTime = Date.now();
+        let resizeTimeout;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(function() {
+                if (pdfDoc && !pageRendering) {
+                    renderQuality = isIOS ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
+                    renderPage(pageNum);
+                    hideTooltips();
+                }
+            }, 100);
+        });
+
+        let touchStartX = 0;
+        let touchStartTime = 0;
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length === 1) {
+                touchStartX = e.touches[0].clientX;
+                touchStartTime = Date.now();
+            }
         }, { passive: true });
 
-        mainMenu.addEventListener('touchend', function(e) {
-            const mainTouchEndX = e.changedTouches[0].clientX;
-            mainTouchEndTime = Date.now();
-            const deltaX = mainTouchEndX - mainTouchStartX;
-            const deltaTime = mainTouchEndTime - mainTouchStartTime;
-            
-            if (deltaTime < 300 && Math.abs(deltaX) > 50) {
-                if (deltaX < 0) {
-                    nextCatalogPage();
-                } else {
-                    prevCatalogPage();
+        document.addEventListener('touchend', function(e) {
+            if (e.changedTouches.length === 1) {
+                const touchEndX = e.changedTouches[0].clientX;
+                const touchEndTime = Date.now();
+                const deltaX = touchEndX - touchStartX;
+                const deltaTime = touchEndTime - touchStartTime;
+
+                if (deltaTime < 300 && Math.abs(deltaX) > 50) {
+                    if (deltaX > 0) {
+                        prevPage();
+                    } else {
+                        nextPage();
+                    }
                 }
             }
         }, { passive: true });
 
-        function nextCatalogPage() {
-            const numPages = Math.ceil(pdfs.length / catalogsPerPage);
-            if (currentCatalogPage < numPages - 1) {
-                currentCatalogPage++;
-                renderPdfSelection(currentCatalogPage);
-                updateDots();
+        document.addEventListener('keydown', function(e) {
+            if (e.key === ' ' && !e.shiftKey) {
+                e.preventDefault();
+                nextPage();
+            } else if (e.key === ' ' && e.shiftKey) {
+                e.preventDefault();
+                prevPage();
             }
-        }
-
-        function prevCatalogPage() {
-            if (currentCatalogPage > 0) {
-                currentCatalogPage--;
-                renderPdfSelection(currentCatalogPage);
-                updateDots();
-            }
-        }
+        });
 
         function setAppHeight() {
             document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
@@ -1306,6 +1845,7 @@
             if (pdfDoc && !pageRendering) {
                 setTimeout(function() {
                     renderPage(pageNum);
+                    hideTooltips();
                 }, 350);
             }
         });
