@@ -833,6 +833,11 @@
         }
 
         @media (max-width: 480px) {
+            .main-content {
+                top: 0; /* Змінюємо для маленьких екранів */
+                bottom: 50px; /* Збільшуємо для маленьких екранів */
+            }
+
             .pdf-item, .favorite-item {
                 flex-basis: calc(50% - 10px);
                 max-width: calc(50% - 10px);
@@ -842,7 +847,6 @@
                 gap: 10px;
             }
         }
-
         body {
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
