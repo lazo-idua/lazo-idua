@@ -132,14 +132,47 @@
         .favorites-header-label {
             display: none;
         }
+        
+        .pdf-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background: #000;
+            z-index: 104;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 12px;
+
+        }
+        
+        .pdf-header-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .pdf-header-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .pdf-title {
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+        }
 
         .main-menu {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* Виправлено: тепер контент починається зверху */
-            padding-top: 60px; /* Додано відступ від хедера */
+            justify-content: flex-start;
+            padding-top: 60px;
             background: #000;
             position: relative;
             height: calc(100vh - 40px - 30px);
@@ -150,10 +183,10 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            align-content: flex-start; /* Вирівнювання елементів до початку */
-            gap: 15px; /* Залишаємо відступ для великих екранів */
+            align-content: flex-start;
+            gap: 15px;
             padding: 10px;
-            max-width: 1200px; /* Обмеження ширини для великих екранів */
+            max-width: 1200px;
         }
 
         .pdf-selection::-webkit-scrollbar {
@@ -271,12 +304,13 @@
         }
 
         .main-content {
-            position: absolute;
-            top: 10px;
-            bottom: 70px;
-            left: 5px;
-            right: 5px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             background: #000;
@@ -295,9 +329,8 @@
         }
 
         .pdf-container {
-            position: relative;
-            display: flex;
             flex: 1;
+            display: flex;
             align-items: center;
             justify-content: center;
             width: 100%;
@@ -375,119 +408,14 @@
             right: 5px;
         }
 
-        .menu-nav-btn {
-            display: none;
-        }
-
-        .top-buttons {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            z-index: 101;
-        }
-
-        .favorite-container {
-            display: none;
-        }
-
-        .favorite-label {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 11px;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-        }
-
-        .bottom-right-container {
-            position: absolute;
-            bottom: 10px;
-            right: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 101;
-        }
-
-        .bottom-left-container {
-            position: absolute;
-            bottom: 10px;
-            left: 15px;
-            display: flex;
-            align-items: center;
-            z-index: 101;
-        }
-
-        .back-btn {
-            background: rgba(255, 255, 255, 0.9);
-            color: #000;
-            border: 2px solid #000;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
-        }
-
-        .back-btn:hover {
-            background: #fff;
-            transform: scale(1.1);
-        }
-
-        .favorites-btn, .share-btn {
-            background: rgba(0, 0, 0, 0.6);
-            color: white;
-            border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            font-size: 24px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .favorites-btn:hover, .share-btn:hover {
-            background: rgba(0, 0, 0, 0.8);
-            transform: scale(1.1);
-        }
-
-        .favorites-btn.active {
-            background: rgba(255, 0, 0, 0.5);
-            color: #ff5252;
-        }
-
         .bottom-buttons {
-            position: absolute;
-            bottom: 20px;
-            right: 15px;
-            display: flex;
-            gap: 10px;
-            z-index: 101;
-        }
-
-        .heart-btn, .clear-favorites-btn {
             display: none;
         }
-
-        .clear-favorites-btn {
-            background: rgba(255, 0, 0, 0.6);
-            color: white;
+        
+        .header-btn {
+            background: none;
             border: none;
+            color: white;
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -497,18 +425,20 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0;
             backdrop-filter: blur(5px);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
         }
 
-        .clear-favorites-btn:hover {
-            background: rgba(255, 0, 0, 0.8);
+        .header-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
             transform: scale(1.1);
         }
 
-        .clear-favorites-btn.visible {
-            display: flex;
+        .back-btn {
+            font-size: 24px;
+        }
+        
+        .favorites-btn.active {
+            color: #ff5252;
         }
 
         .footer {
@@ -797,26 +727,26 @@
         /* Стилі для великих екранів (десктоп, > 767px) */
         @media (min-width: 768px) {
             .pdf-item, .favorite-item {
-                flex-basis: calc(20% - 15px); /* 5 колонок з відступом */
-                max-width: 200px; /* Максимальна ширина картки */
+                flex-basis: calc(20% - 15px);
+                max-width: 200px;
             }
             .pdf-selection {
-                gap: 20px; /* Відступ між картками */
-                max-width: 1200px; /* Обмеження ширини контейнера */
-                justify-content: center; /* Центрування на великих екранах */
+                gap: 20px;
+                max-width: 1200px;
+                justify-content: center;
             }
         }
         
         /* Стилі для мобільних екранів (смартфони, <= 767px) */
         @media (max-width: 767px) {
             .pdf-selection {
-                padding: 10px 5px; /* Зменшення бічних відступів */
-                gap: 10px; /* Менший відступ між картками для мобільних */
+                padding: 10px 5px;
+                gap: 10px;
             }
 
             .pdf-item, .favorite-item {
-                flex-basis: calc(50% - 10px); /* 2 колонки з відступом */
-                max-width: 200px; /* Обмеження ширини картки на мобільних */
+                flex-basis: calc(50% - 10px);
+                max-width: 200px;
             }
         }
 
@@ -851,24 +781,24 @@
     </div>
 
     <div class="main-content" id="mainContent">
-        <button class="nav-btn prev-btn" onclick="prevPage()" disabled>〈</button>
+        <div class="pdf-header" id="pdfHeader">
+            <div class="pdf-header-left">
+                <button class="header-btn back-btn" onclick="goBackToMainMenu()" title="Назад">←</button>
+                <span class="pdf-title" id="pdfTitle"></span>
+            </div>
+            <div class="pdf-header-right">
+    <button class="header-btn share-btn" id="pdfShareBtn" onclick="sharePage()" title="Поділитися">↗</button>
+    <button class="header-btn favorites-btn" id="pdfFavoriteBtn" onclick="toggleFavorite()" title="Додати до обраного">♥</button>
+</div>
+        </div>
+        <button class="nav-btn prev-btn" id="prevBtn" onclick="prevPage()" disabled>〈</button>
 
         <div class="pdf-container">
             <canvas id="pdf-canvas"></canvas>
             <canvas id="pdf-canvas-next" class="canvas-next"></canvas>
-
-            <div class="top-buttons">
-            </div>
-            <div class="bottom-left-container">
-                <button class="back-btn" onclick="goBackToMainMenu()" title="Назад">←</button>
-            </div>
-            <div class="bottom-right-container">
-                <button class="favorites-btn" onclick="toggleFavorite()" title="Додати до обраного">♥</button>
-                <button class="share-btn" onclick="sharePage()" title="Поділитися">↗</button>
-            </div>
         </div>
 
-        <button class="nav-btn next-btn" onclick="nextPage()">〉</button>
+        <button class="nav-btn next-btn" id="nextBtn" onclick="nextPage()">〉</button>
     </div>
 
     <div class="favorites-modal" id="favoritesModal">
@@ -935,13 +865,15 @@
         const canvasNext = document.getElementById('pdf-canvas-next');
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
         const ctxNext = canvasNext.getContext('2d', { willReadFrequently: true });
-        const prevBtn = document.querySelector('.prev-btn');
-        const nextBtn = document.querySelector('.next-btn');
-        const favoritesBtn = document.querySelector('.favorites-btn');
-        const shareBtn = document.querySelector('.share-btn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const pdfHeader = document.getElementById('pdfHeader');
+        const pdfTitle = document.getElementById('pdfTitle');
+        const pdfFavoriteBtn = document.getElementById('pdfFavoriteBtn');
+        const pdfShareBtn = document.getElementById('pdfShareBtn');
         const mainMenu = document.getElementById('mainMenu');
         const mainContent = document.getElementById('mainContent');
-        const backButton = document.querySelector('.back-btn');
+        const mainHeader = document.getElementById('header');
         const pdfSelection = document.getElementById('pdfSelection');
         const mainTooltip = document.getElementById('mainTooltip');
         const favoritesModal = document.getElementById('favoritesModal');
@@ -953,8 +885,6 @@
         const favoritesCtxNext = favoritesCanvasNext.getContext('2d', { willReadFrequently: true });
         const favoritesPrevBtn = document.querySelector('.favorites-prev-btn');
         const favoritesNextBtn = document.querySelector('.favorites-next-btn');
-        const bottomrightcontainer = document.querySelector('.bottom-right-container');
-        const bottomleftcontainer = document.querySelector('.bottom-left-container');
         
         let favoritePages = JSON.parse(localStorage.getItem('favoritePages')) || {};
         let currentFavoriteIndex = 0;
@@ -1258,8 +1188,10 @@
         function openPdf(pdfName) {
             currentPdf = pdfName;
             mainMenu.style.display = 'none';
+            mainHeader.style.display = 'none';
             mainContent.style.display = 'flex';
-            header.style.display = 'none';
+            pdfHeader.style.display = 'flex';
+            pdfTitle.textContent = pdfName.toUpperCase();
             mainContent.classList.add('opening');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctxNext.clearRect(0, 0, canvasNext.width, canvasNext.height);
@@ -1275,7 +1207,8 @@
         function goBackToMainMenu() {
             mainMenu.style.display = 'flex';
             mainContent.style.display = 'none';
-            header.style.display = 'flex';
+            mainHeader.style.display = 'flex';
+            pdfHeader.style.display = 'none';
             mainContent.classList.remove('opening');
             pageRendering = false;
             pageNumPending = null;
@@ -1461,7 +1394,7 @@
             if (!pdfDoc) {
                 prevBtn.disabled = true;
                 nextBtn.disabled = true;
-                favoritesBtn.classList.toggle('active', favoritesMode);
+                pdfFavoriteBtn.classList.toggle('active', favoritesMode);
                 hideTooltips();
                 return;
             }
@@ -1477,12 +1410,12 @@
                 nextBtn.disabled = pageNum >= pdfDoc.numPages;
             }
 
-            favoritesBtn.classList.toggle('active', favoritesMode);
+            pdfFavoriteBtn.classList.toggle('active', favoritesMode);
             hideTooltips();
         }
 
         function updateFavoriteButton() {
-            favoritesBtn.classList.toggle('active', favoritePages[currentPdf]?.includes(pageNum) || false);
+            pdfFavoriteBtn.classList.toggle('active', favoritePages[currentPdf]?.includes(pageNum) || false);
         }
 
         function clearAllFavorites() {
@@ -1497,7 +1430,7 @@
                 }
 
                 updateFavoriteButton();
-                favoritesBtn.classList.remove('active');
+                pdfFavoriteBtn.classList.remove('active');
                 hideTooltips();
             }
         }
@@ -1509,10 +1442,10 @@
 
             if (index === -1) {
                 favoritePages[currentPdf].push(pageNum);
-                favoritesBtn.classList.add('active');
+                pdfFavoriteBtn.classList.add('active');
             } else {
                 favoritePages[currentPdf].splice(index, 1);
-                favoritesBtn.classList.remove('active');
+                pdfFavoriteBtn.classList.remove('active');
             }
 
             localStorage.setItem('favoritePages', JSON.stringify(favoritePages));
@@ -1676,7 +1609,7 @@
             setTimeout(() => {
                 document.querySelector('.loader').style.display = 'none';
                 mainMenu.style.display = 'flex';
-                document.getElementById('header').style.display = 'flex'; // Показуємо хедер
+                mainHeader.style.display = 'flex';
                 if (mainTooltip) {
                     mainTooltip.style.display = 'block';
                 }
@@ -1732,10 +1665,9 @@
                     renderPage(pageNum);
                     hideTooltips();
                 }
-                // Перегенерація контенту для оновлення стилів на мобільних пристроях при зміні орієнтації
                 if (mainMenu.style.display === 'flex') {
                     generateSelectionContent();
-                    setupThumbnailObserver(); // Повторне налаштування спостерігача
+                    setupThumbnailObserver();
                 }
             }, 100);
         });
