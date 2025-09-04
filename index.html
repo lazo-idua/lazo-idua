@@ -304,21 +304,44 @@
         }
 
         .main-content {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: #000;
-            overflow: hidden;
-            padding: 0;
-            display: none;
-        }
+    position: fixed;
+    top: 60px; /* Висота шапки */
+    bottom: 30px; /* Висота підвалу */
+    left: 0;
+    right: 0;
+display: none; /* Залишаємо display: none; тут, щоб приховати PDF-переглядач спочатку */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    overflow: hidden;
+    padding: 0;
+    
+}
 
+         .back-btn {
+    display: none; /* Ця властивість приховає кнопку на головному екрані */
+    position: fixed;
+    bottom: 40px;
+    left: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #000;
+    border: 2px solid #000;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    backdrop-filter: blur(5px);
+    z-index: 102;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+}
         .main-content.opening {
             animation: fadeInSlideUp 0.7s ease-out forwards;
         }
@@ -781,25 +804,24 @@
     </div>
 
     <div class="main-content" id="mainContent">
-        <div class="pdf-header" id="pdfHeader">
-            <div class="pdf-header-left">
-                <button class="header-btn back-btn" onclick="goBackToMainMenu()" title="Назад">←</button>
-                <span class="pdf-title" id="pdfTitle"></span>
-            </div>
-            <div class="pdf-header-right">
-    <button class="header-btn share-btn" id="pdfShareBtn" onclick="sharePage()" title="Поділитися">↗</button>
-    <button class="header-btn favorites-btn" id="pdfFavoriteBtn" onclick="toggleFavorite()" title="Додати до обраного">♥</button>
-</div>
-        </div>
-        <button class="nav-btn prev-btn" id="prevBtn" onclick="prevPage()" disabled>〈</button>
+    <button class="nav-btn prev-btn" id="prevBtn" onclick="prevPage()" disabled>〈</button>
 
-        <div class="pdf-container">
-            <canvas id="pdf-canvas"></canvas>
-            <canvas id="pdf-canvas-next" class="canvas-next"></canvas>
-        </div>
-
-        <button class="nav-btn next-btn" id="nextBtn" onclick="nextPage()">〉</button>
+    <div class="pdf-container">
+        <canvas id="pdf-canvas"></canvas>
+        <canvas id="pdf-canvas-next" class="canvas-next"></canvas>
     </div>
+
+    <button class="nav-btn next-btn" id="nextBtn" onclick="nextPage()">〉</button>
+</div>
+
+<div class="pdf-header" id="pdfHeader">
+    <span class="pdf-title" id="pdfTitle"></span>
+    <div class="pdf-header-right">
+        <button class="header-btn share-btn" id="pdfShareBtn" onclick="sharePage()" title="Поділитися">↗</button>
+        <button class="header-btn favorites-btn" id="pdfFavoriteBtn" onclick="toggleFavorite()" title="Додати до обраного">♥</button>
+    </div>
+</div>
+<button class="back-btn" onclick="goBackToMainMenu()" title="Назад">←</button>
 
     <div class="favorites-modal" id="favoritesModal">
         <div class="favorites-header">
@@ -1190,6 +1212,7 @@
             mainMenu.style.display = 'none';
             mainHeader.style.display = 'none';
             mainContent.style.display = 'flex';
+            document.querySelector('.back-btn').style.display = 'flex'; //      Додайте цей рядок
             pdfHeader.style.display = 'flex';
             pdfTitle.textContent = pdfName.toUpperCase();
             mainContent.classList.add('opening');
@@ -1209,6 +1232,7 @@
             mainContent.style.display = 'none';
             mainHeader.style.display = 'flex';
             pdfHeader.style.display = 'none';
+            document.querySelector('.back-btn').style.display = 'none'; // Додайте цей рядок
             mainContent.classList.remove('opening');
             pageRendering = false;
             pageNumPending = null;
@@ -1606,28 +1630,30 @@
         }
 
         window.addEventListener('load', function() {
-            setTimeout(() => {
-                document.querySelector('.loader').style.display = 'none';
-                mainMenu.style.display = 'flex';
-                mainHeader.style.display = 'flex';
-                if (mainTooltip) {
-                    mainTooltip.style.display = 'block';
-                }
-                generateSelectionContent();
-                setupThumbnailObserver();
-                const hash = window.location.hash;
-                if (hash && hash.includes('page=') && hash.includes('pdf=')) {
-                    const params = new URLSearchParams(hash.substring(1));
-                    const page = parseInt(params.get('page'));
-                    const pdfName = params.get('pdf');
-                    if (!isNaN(page) && page > 0 && catalogs.find(c => c.name === pdfName)) {
-                        pageNum = page;
-                        openPdf(pdfName);
-                    }
-                }
-                hideTooltips();
-            }, 2000);
-        });
+    setTimeout(() => {
+        // Просто ховаємо лоадер. Головне меню та хедер будуть видимими,
+        // як це вказано в CSS.
+        document.querySelector('.loader').style.display = 'none';
+        if (mainTooltip) {
+            mainTooltip.style.display = 'block';
+        }
+    }, 2000);
+
+    generateSelectionContent();
+    setupThumbnailObserver();
+
+    const hash = window.location.hash;
+    if (hash && hash.includes('page=') && hash.includes('pdf=')) {
+        const params = new URLSearchParams(hash.substring(1));
+        const page = parseInt(params.get('page'));
+        const pdfName = params.get('pdf');
+        if (!isNaN(page) && page > 0 && catalogs.find(c => c.name === pdfName)) {
+            pageNum = page;
+            openPdf(pdfName);
+        }
+    }
+    hideTooltips();
+});
 
         document.addEventListener('keydown', function(e) {
             if (e.key === 'ArrowLeft') {
@@ -1657,6 +1683,7 @@
         });
 
         let resizeTimeout;
+
         window.addEventListener('resize', function() {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(function() {
