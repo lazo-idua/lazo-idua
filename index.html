@@ -99,7 +99,8 @@
             width: 32px;
             height: 32px;
             opacity: 1;
-            animation: fadeIn 0.5s ease-out 0.2s forwards;
+            /* ВИДАЛЕНО: animation: fadeIn 0.5s ease-out 0.2s forwards; */
+            /* ЛОГОТИП ТЕПЕР ЗАВЖДИ ВИДИМИЙ */
         }
 
         .header-title {
@@ -141,11 +142,10 @@
             height: 50px;
             background: #000;
             z-index: 104;
-            display: flex;
+            display: none; /* ВИПРАВЛЕНО: Ховаємо PDF-шапку спочатку */
             align-items: center;
             justify-content: space-between;
             padding: 0 12px;
-
         }
         
         .pdf-header-left {
@@ -304,44 +304,43 @@
         }
 
         .main-content {
-    position: fixed;
-    top: 60px; /* Висота шапки */
-    bottom: 30px; /* Висота підвалу */
-    left: 0;
-    right: 0;
-display: none; /* Залишаємо display: none; тут, щоб приховати PDF-переглядач спочатку */
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: #000;
-    overflow: hidden;
-    padding: 0;
-    
-}
+            position: fixed;
+            top: 60px; /* Висота шапки */
+            bottom: 30px; /* Висота підвалу */
+            left: 0;
+            right: 0;
+            display: none; /* Залишаємо display: none; тут, щоб приховати PDF-переглядач спочатку */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+            overflow: hidden;
+            padding: 0;
+        }
 
-         .back-btn {
-    display: none; /* Ця властивість приховає кнопку на головному екрані */
-    position: fixed;
-    bottom: 40px;
-    left: 15px;
-    background: rgba(255, 255, 255, 0.9);
-    color: #000;
-    border: 2px solid #000;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    backdrop-filter: blur(5px);
-    z-index: 102;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
-}
+        .back-btn {
+            position: fixed;
+            bottom: 40px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #000;
+            border: 2px solid #000;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: none; /* ВИПРАВЛЕНО: Ця властивість приховає кнопку на головному екрані */
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            backdrop-filter: blur(5px);
+            z-index: 102;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+        }
+
         .main-content.opening {
             animation: fadeInSlideUp 0.7s ease-out forwards;
         }
@@ -804,25 +803,23 @@ display: none; /* Залишаємо display: none; тут, щоб прихов�
     </div>
 
     <div class="main-content" id="mainContent">
-    <button class="nav-btn prev-btn" id="prevBtn" onclick="prevPage()" disabled>〈</button>
-
-    <div class="pdf-container">
-        <canvas id="pdf-canvas"></canvas>
-        <canvas id="pdf-canvas-next" class="canvas-next"></canvas>
+        <button class="nav-btn prev-btn" id="prevBtn" onclick="prevPage()" disabled>〈</button>
+        <div class="pdf-container">
+            <canvas id="pdf-canvas"></canvas>
+            <canvas id="pdf-canvas-next" class="canvas-next"></canvas>
+        </div>
+        <button class="nav-btn next-btn" id="nextBtn" onclick="nextPage()">〉</button>
     </div>
 
-    <button class="nav-btn next-btn" id="nextBtn" onclick="nextPage()">〉</button>
-</div>
-
-<div class="pdf-header" id="pdfHeader">
-    <span class="pdf-title" id="pdfTitle"></span>
-    <div class="pdf-header-right">
-        <button class="header-btn share-btn" id="pdfShareBtn" onclick="sharePage()" title="Поділитися">↗</button>
-        <button class="header-btn favorites-btn" id="pdfFavoriteBtn" onclick="toggleFavorite()" title="Додати до обраного">♥</button>
+    <div class="pdf-header" id="pdfHeader">
+        <span class="pdf-title" id="pdfTitle"></span>
+        <div class="pdf-header-right">
+            <button class="header-btn share-btn" id="pdfShareBtn" onclick="sharePage()" title="Поділитися">↗</button>
+            <button class="header-btn favorites-btn" id="pdfFavoriteBtn" onclick="toggleFavorite()" title="Додати до обраного">♥</button>
+        </div>
     </div>
-</div>
-<button class="back-btn" onclick="goBackToMainMenu()" title="Назад">←</button>
-
+    <button class="back-btn" id="backBtn" onclick="goBackToMainMenu()" title="Назад">←</button>
+    
     <div class="favorites-modal" id="favoritesModal">
         <div class="favorites-header">
             <span class="favorites-title">Обрані малюнки</span>
@@ -907,7 +904,8 @@ display: none; /* Залишаємо display: none; тут, щоб прихов�
         const favoritesCtxNext = favoritesCanvasNext.getContext('2d', { willReadFrequently: true });
         const favoritesPrevBtn = document.querySelector('.favorites-prev-btn');
         const favoritesNextBtn = document.querySelector('.favorites-next-btn');
-        
+        const backBtn = document.getElementById('backBtn'); // ВИПРАВЛЕНО: Отримуємо елемент кнопки "Назад"
+
         let favoritePages = JSON.parse(localStorage.getItem('favoritePages')) || {};
         let currentFavoriteIndex = 0;
         let favoriteItems = [];
@@ -923,8 +921,8 @@ display: none; /* Залишаємо display: none; тут, щоб прихов�
             { name: 'dobryi_vechir', url: 'https://lazo-idua.github.io/lazo-idua/dobryi_vechir.pdf' },
             { name: 'biscotti', url: 'https://lazo-idua.github.io/lazo-idua/biscotti.pdf' },
             { name: 'rsv', url: 'https://lazo-idua.github.io/lazo-idua/rsv.pdf' },
-            { name: 'new_catalog_1', url: 'https://lazo-idua.github.io/lazo-idua/gadassa.pdf' }, /* Додано для тестування 5+ карток */
-            { name: 'new_catalog_2', url: 'https://lazo-idua.github.io/lazo-idua/medunia.pdf' }  /* Додано для тестування 5+ карток */
+            { name: 'new_catalog_1', url: 'https://lazo-idua.github.io/lazo-idua/gadassa.pdf' },
+            { name: 'new_catalog_2', url: 'https://lazo-idua.github.io/lazo-idua/medunia.pdf' }
         ];
 
         function hideTooltips() {
@@ -1211,9 +1209,9 @@ display: none; /* Залишаємо display: none; тут, щоб прихов�
             currentPdf = pdfName;
             mainMenu.style.display = 'none';
             mainHeader.style.display = 'none';
+            pdfHeader.style.display = 'flex'; // ВИПРАВЛЕНО: Показуємо PDF-шапку
             mainContent.style.display = 'flex';
-            document.querySelector('.back-btn').style.display = 'flex'; //      Додайте цей рядок
-            pdfHeader.style.display = 'flex';
+            backBtn.style.display = 'flex'; // ВИПРАВЛЕНО: Показуємо кнопку "Назад"
             pdfTitle.textContent = pdfName.toUpperCase();
             mainContent.classList.add('opening');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1232,7 +1230,7 @@ display: none; /* Залишаємо display: none; тут, щоб прихов�
             mainContent.style.display = 'none';
             mainHeader.style.display = 'flex';
             pdfHeader.style.display = 'none';
-            document.querySelector('.back-btn').style.display = 'none'; // Додайте цей рядок
+            backBtn.style.display = 'none'; // ВИПРАВЛЕНО: Ховаємо кнопку "Назад"
             mainContent.classList.remove('opening');
             pageRendering = false;
             pageNumPending = null;
@@ -1630,30 +1628,28 @@ display: none; /* Залишаємо display: none; тут, щоб прихов�
         }
 
         window.addEventListener('load', function() {
-    setTimeout(() => {
-        // Просто ховаємо лоадер. Головне меню та хедер будуть видимими,
-        // як це вказано в CSS.
-        document.querySelector('.loader').style.display = 'none';
-        if (mainTooltip) {
-            mainTooltip.style.display = 'block';
-        }
-    }, 2000);
+            setTimeout(() => {
+                document.querySelector('.loader').style.display = 'none';
+                if (mainTooltip) {
+                    mainTooltip.style.display = 'block';
+                }
+            }, 2000);
 
-    generateSelectionContent();
-    setupThumbnailObserver();
+            generateSelectionContent();
+            setupThumbnailObserver();
 
-    const hash = window.location.hash;
-    if (hash && hash.includes('page=') && hash.includes('pdf=')) {
-        const params = new URLSearchParams(hash.substring(1));
-        const page = parseInt(params.get('page'));
-        const pdfName = params.get('pdf');
-        if (!isNaN(page) && page > 0 && catalogs.find(c => c.name === pdfName)) {
-            pageNum = page;
-            openPdf(pdfName);
-        }
-    }
-    hideTooltips();
-});
+            const hash = window.location.hash;
+            if (hash && hash.includes('page=') && hash.includes('pdf=')) {
+                const params = new URLSearchParams(hash.substring(1));
+                const page = parseInt(params.get('page'));
+                const pdfName = params.get('pdf');
+                if (!isNaN(page) && page > 0 && catalogs.find(c => c.name === pdfName)) {
+                    pageNum = page;
+                    openPdf(pdfName);
+                }
+            }
+            hideTooltips();
+        });
 
         document.addEventListener('keydown', function(e) {
             if (e.key === 'ArrowLeft') {
