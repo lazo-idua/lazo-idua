@@ -141,7 +141,7 @@
             height: 50px;
             background: #000;
             z-index: 104;
-            display: none; /* ВИПРАВЛЕНО: Прихований за замовчуванням */
+            display: none;
             align-items: center;
             justify-content: space-between;
             padding: 0 12px;
@@ -804,24 +804,24 @@
     </div>
 
     <div class="main-content" id="mainContent">
-    <button class="nav-btn prev-btn" id="prevBtn" onclick="prevPage()" disabled>〈</button>
+        <button class="nav-btn prev-btn" id="prevBtn" onclick="prevPage()" disabled>〈</button>
 
-    <div class="pdf-container">
-        <canvas id="pdf-canvas"></canvas>
-        <canvas id="pdf-canvas-next" class="canvas-next"></canvas>
+        <div class="pdf-container">
+            <canvas id="pdf-canvas"></canvas>
+            <canvas id="pdf-canvas-next" class="canvas-next"></canvas>
+        </div>
+
+        <button class="nav-btn next-btn" id="nextBtn" onclick="nextPage()">〉</button>
     </div>
 
-    <button class="nav-btn next-btn" id="nextBtn" onclick="nextPage()">〉</button>
-</div>
-
-<div class="pdf-header" id="pdfHeader">
-    <span class="pdf-title" id="pdfTitle"></span>
-    <div class="pdf-header-right">
-        <button class="header-btn share-btn" id="pdfShareBtn" onclick="sharePage()" title="Поділитися">↗</button>
-        <button class="header-btn favorites-btn" id="pdfFavoriteBtn" onclick="toggleFavorite()" title="Додати до обраного">♥</button>
+    <div class="pdf-header" id="pdfHeader">
+        <span class="pdf-title" id="pdfTitle"></span>
+        <div class="pdf-header-right">
+            <button class="header-btn share-btn" id="pdfShareBtn" onclick="sharePage()" title="Поділитися">↗</button>
+            <button class="header-btn favorites-btn" id="pdfFavoriteBtn" onclick="toggleFavorite()" title="Додати до обраного">♥</button>
+        </div>
     </div>
-</div>
-<button class="back-btn" onclick="goBackToMainMenu()" title="Назад">←</button>
+    <button class="back-btn" onclick="goBackToMainMenu()" title="Назад">←</button>
 
     <div class="favorites-modal" id="favoritesModal">
         <div class="favorites-header">
@@ -918,32 +918,13 @@
         const favoritesPageCache = new Map();
         const preloadNextPages = isIOS ? 1 : 3;
         
-        const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQjvBT8Y9qVo7XJrzEzP_aLgYdxWP2NH7aS3eWA8nCnkQ2Tdpy2TgaUTDJpEkew8b4tnNnvFNjDr1sh/pub?output=csv';
-        let catalogs = [];
-
-        async function loadCatalogsFromSheet() {
-            try {
-                const response = await fetch(GOOGLE_SHEET_URL);
-                if (!response.ok) {
-                    throw new Error('Не вдалося завантажити дані з Google Таблиці.');
-                }
-                const csvText = await response.text();
-                const rows = csvText.split('\n').slice(1);
-                const loadedCatalogs = rows.map(row => {
-                    const [name, url] = row.split(',').map(s => s.trim());
-                    return { name, url };
-                }).filter(item => item.name && item.url);
-                
-                return loadedCatalogs;
-            } catch (error) {
-                console.error('Помилка завантаження каталогів:', error);
-                const errorItem = document.createElement('div');
-                errorItem.classList.add('error-message');
-                errorItem.innerHTML = `<p>Не вдалося завантажити список каталогів.</p><small>Будь ласка, перевірте URL Google Таблиці.</small>`;
-                pdfSelection.appendChild(errorItem);
-                return [];
-            }
-        }
+        // ВАЖЛИВО! ВКАЖИ ТУТ СВОЇ КАТАЛОГИ
+        const catalogs = [
+            { name: 'Каталог 1', url: 'https://www.dropbox.com/scl/fi/rkc10olztsh3eav5qoks7/balu.pdf?rlkey=abrbv5q1lorxetmzvb4j5bivh&st=b0hzc6l9&dl=1' },
+            { name: 'Каталог 2', url: 'https://www.dropbox.com/s/abcdef1234567/catalog-2.pdf?dl=1' },
+            { name: 'Каталог 3', url: 'https://www.dropbox.com/s/abcdef1234567/catalog-3.pdf?dl=1' }
+            // Додай сюди інші каталоги в такому ж форматі
+        ];
 
         function hideTooltips() {
             setTimeout(() => {
@@ -1153,7 +1134,7 @@
         }
 
         function getPdfUrl(pdfName) {
-            const catalog = catalogs.find(c => c.name === pdfName);
+            const catalog = catalogs.find(c => c.name.toLowerCase() === pdfName.toLowerCase());
             return catalog ? catalog.url : '';
         }
 
@@ -1628,31 +1609,34 @@
         }
         
         async function generateSelectionContent() {
-            catalogs = await loadCatalogsFromSheet();
             const pdfSelection = document.getElementById('pdfSelection');
             pdfSelection.innerHTML = '';
-            catalogs.forEach(catalog => {
-                const item = document.createElement('div');
-                item.classList.add('pdf-item');
-                item.onclick = () => openPdf(catalog.name);
-                item.innerHTML = `
-                    <div class="pdf-thumbnail" id="thumbnail-${catalog.name}">
-                        <div class="thumbnail-placeholder">${catalog.name.toUpperCase()}<br>Каталог</div>
-                        <div class="loading-spinner"></div>
-                    </div>
-                    <div class="pdf-name">${catalog.name.toUpperCase()}</div>
-                `;
-                pdfSelection.appendChild(item);
-            });
+            if (catalogs.length === 0) {
+                 const errorItem = document.createElement('div');
+                errorItem.classList.add('error-message');
+                errorItem.innerHTML = `<p>Не знайдено жодного каталогу.</p><small>Будь ласка, додайте каталоги до змінної 'catalogs' у коді.</small>`;
+                pdfSelection.appendChild(errorItem);
+            } else {
+                catalogs.forEach(catalog => {
+                    const item = document.createElement('div');
+                    item.classList.add('pdf-item');
+                    item.onclick = () => openPdf(catalog.name);
+                    item.innerHTML = `
+                        <div class="pdf-thumbnail" id="thumbnail-${catalog.name}">
+                            <div class="thumbnail-placeholder">${catalog.name.toUpperCase()}<br>Каталог</div>
+                            <div class="loading-spinner"></div>
+                        </div>
+                        <div class="pdf-name">${catalog.name.toUpperCase()}</div>
+                    `;
+                    pdfSelection.appendChild(item);
+                });
+            }
             setupThumbnailObserver();
         }
 
-        // ВИПРАВЛЕНО: Змінена функція завантаження, щоб усе відбувалося по черзі
         window.addEventListener('load', async function() {
-            // Спершу завантажуємо список каталогів
             await generateSelectionContent();
             
-            // Тепер, коли список готовий, приховуємо лоадер і показуємо підказку
             setTimeout(() => {
                 document.querySelector('.loader').style.display = 'none';
                 if (mainTooltip) {
@@ -1660,13 +1644,12 @@
                 }
             }, 2000);
 
-            // Обробляємо URL, якщо в ньому є хеш (пряме посилання на PDF)
             const hash = window.location.hash;
             if (hash && hash.includes('page=') && hash.includes('pdf=')) {
                 const params = new URLSearchParams(hash.substring(1));
                 const page = parseInt(params.get('page'));
                 const pdfName = params.get('pdf');
-                if (!isNaN(page) && page > 0 && catalogs.find(c => c.name === pdfName)) {
+                if (!isNaN(page) && page > 0 && catalogs.find(c => c.name.toLowerCase() === pdfName.toLowerCase())) {
                     pageNum = page;
                     openPdf(pdfName);
                 }
