@@ -915,15 +915,28 @@
         const pageCache = new Map();
         const favoritesPageCache = new Map();
         const preloadNextPages = isIOS ? 1 : 3;
+        
+        // --- ЗМІНА ПОЧИНАЄТЬСЯ ТУТ ---
+        // 1. Оновлений масив каталогів з ID файлів з Google Drive
         const catalogs = [
-            { name: 'gadassa', url: 'https://lazo-idua.github.io/lazo-idua/gadassa.pdf' },
-            { name: 'медуня', url: 'https://lazo-idua.github.io/lazo-idua/medunia.pdf' },
-            { name: 'добрий вечір', url: 'https://lazo-idua.github.io/lazo-idua/dobryi_vechir.pdf' },
-            { name: 'biscotti', url: 'https://lazo-idua.github.io/lazo-idua/biscotti.pdf' },
-            { name: 'rsv', url: 'https://lazo-idua.github.io/lazo-idua/rsv.pdf' },
-            { name: 'балу', url: 'https://lazo-idua.github.io/lazo-idua/balu.pdf' },
-            { name: 'тест', url: 'https://lazo-idua.github.io/lazo-idua/medunia.pdf' }
+            { name: 'gadassa', url: 'https://drive.google.com/uc?export=download&id=ТВІЙ_ІДЕНТИФІКАТОР_ДЛЯ_GADASSA' },
+            { name: 'medunia', url: 'https://drive.google.com/uc?export=download&id=ТВІЙ_ІДЕНТИФІКАТОР_ДЛЯ_MEDUNIA' },
+            { name: 'dobryi_vechir', url: 'https://drive.google.com/uc?export=download&id=ТВІЙ_ІДЕНТИФІКАТОР_ДЛЯ_DOBRYI_VECHIR' },
+            { name: 'biscotti', url: 'https://drive.google.com/uc?export=download&id=ТВІЙ_ІДЕНТИФІКАТОР_ДЛЯ_BISCOTTI' },
+            { name: 'rsv', url: 'https://drive.google.com/uc?export=download&id=ТВІЙ_ІДЕНТИФІКАТОР_ДЛЯ_RSV' },
+            { name: 'балу', url: 'https://drive.google.com/uc?export=download&id=1uwGXAvvadgdPXDejwsStCcUAjd9NfGQ0' },
+            { name: 'new_catalog_2', url: 'https://drive.google.com/uc?export=download&id=ТВІЙ_ІДЕНТИФІКАТОР_ДЛЯ_НОВОГО_КАТАЛОГУ_2' }
         ];
+
+        // 2. Нова функція, яка перетворює ID файлу на URL для завантаження
+        function getPdfUrl(pdfName) {
+            const catalog = catalogs.find(c => c.name === pdfName);
+            if (!catalog || !catalog.fileId) {
+                return '';
+            }
+            return `https://drive.google.com/uc?export=download&id=${catalog.fileId}`;
+        }
+        // --- ЗМІНА ЗАКІНЧУЄТЬСЯ ТУТ ---
 
         function hideTooltips() {
             setTimeout(() => {
@@ -1131,14 +1144,6 @@
             }
         }
 
-        function getPdfUrl(pdfName) {
-            const pdfUrls = {};
-            catalogs.forEach(catalog => {
-                pdfUrls[catalog.name] = catalog.url;
-            });
-            return pdfUrls[pdfName] || '';
-        }
-
         function generateThumbnail(pdfName, thumbnailId) {
             const url = getPdfUrl(pdfName);
             if (!url) return;
@@ -1273,7 +1278,7 @@
                     mainContent.innerHTML = `
                         <div class="error-message">
                             <p>Не вдалося завантажити каталог ${currentPdf.toUpperCase()}</p>
-                            <small>PDF недоступний. Перевірте URL або підключення до інтернету.</small>
+                            <small>PDF недоступний. Перевірте ID файлу або дозволи на Google Диску.</small>
                         </div>
                     `;
                     console.error(`PDF ${currentPdf} недоступний за URL: ${url}`);
