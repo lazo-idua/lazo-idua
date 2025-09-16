@@ -910,11 +910,16 @@
         let currentFavoriteIndex = 0;
         let favoriteItems = [];
 
-        let renderQuality = isIOS ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
+        // ВИПРАВЛЕНО: Адаптуємо якість рендерингу та попереднє завантаження для мобільних пристроїв
+        const isMobile = window.innerWidth <= 767;
+        let renderQuality = isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 1.5);
+        const preloadNextPages = isMobile ? 1 : 3;
+
         const isLargeScreen = window.innerWidth >= 1200;
         const pageCache = new Map();
         const favoritesPageCache = new Map();
-        const preloadNextPages = isIOS ? 1 : 3;
+        // ВИПРАВЛЕНО: Тут ми також враховуємо розмір екрану для кількості попередньо завантажених сторінок.
+        // Це забезпечить кращу продуктивність на менших пристроях, не перевантажуючи їх пам'ять.
         const catalogs = [
             { name: 'gadassa', url: 'https://lazo-idua.github.io/lazo-idua/gadassa.pdf' },
             { name: 'медуня', url: 'https://lazo-idua.github.io/lazo-idua/medunia.pdf' },
@@ -1029,6 +1034,7 @@
                 const maxWidth = isIOS ? 4096 : 8192;
                 const maxHeight = isIOS ? 4096 : 8192;
 
+                // ВИПРАВЛЕНО: Використовуємо адаптивну якість рендерингу
                 let outputScale = Math.min(renderQuality, maxWidth / viewport.width, maxHeight / viewport.height);
                 outputScale = Math.min(outputScale, isIOS ? 1.8 : 2.5);
 
@@ -1286,7 +1292,8 @@
                     url: url,
                     cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
                     cMapPacked: true,
-                    maxImageSize: isIOS ? 4096 * 4096 : 8192 * 8192,
+                    // ВИПРАВЛЕНО: Зменшуємо максимальний розмір зображення для мобільних пристроїв, щоб запобігти помилкам "Canvas too large"
+                    maxImageSize: isMobile ? 2048 * 2048 : 4096 * 4096,
                     disableFontFace: true,
                     standardFontDataUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/',
                     useSystemFonts: true,
@@ -1296,6 +1303,7 @@
                 }).promise.then(function(pdf) {
                     pdfDoc = pdf;
                     renderPage(pageNum);
+                    // ВИПРАВЛЕНО: Використовуємо динамічне значення preloadNextPages
                     preloadPages(pageNum + 1, preloadNextPages + 2);
                     updateNavigation();
                     hideTooltips();
@@ -1315,10 +1323,14 @@
 
         function preloadPages(startPage, count) {
             if (!pdfDoc) return;
+            // ВИПРАВЛЕНО: Логуємо, скільки сторінок ми попередньо завантажуємо
+            console.log(`Попереднє завантаження ${count} сторінок, починаючи зі сторінки ${startPage}.`);
             for (let i = startPage; i < startPage + count && i <= pdfDoc.numPages; i++) {
                 if (!pageCache.has(i)) {
                     pdfDoc.getPage(i).then(function(page) {
                         pageCache.set(i, page);
+                        // ВИПРАВЛЕНО: Логуємо кожну попередньо завантажену сторінку
+                        console.log(`Сторінка ${i} попередньо завантажена.`);
                     }).catch(function(error) {
                         console.error(`Помилка попереднього завантаження сторінки ${i}:`, error);
                     });
@@ -1329,6 +1341,8 @@
         function renderPage(num) {
             if (!pdfDoc) return;
             pageRendering = true;
+            // ВИПРАВЛЕНО: Логуємо, яку сторінку ми намагаємося відобразити
+            console.log(`Відображення сторінки: ${num}.`);
 
             if (pageCache.has(num)) {
                 renderPageFromCache(num);
@@ -1336,6 +1350,7 @@
                 pdfDoc.getPage(num).then(function(page) {
                     pageCache.set(num, page);
                     renderPageFromCache(num);
+                    // ВИПРАВЛЕНО: Використовуємо динамічне значення preloadNextPages
                     preloadPages(num + 1, preloadNextPages);
                 }).catch(function(error) {
                     console.error(`Помилка відображення сторінки ${num}:`, error);
@@ -1350,8 +1365,9 @@
             const scale = calculateOptimalScale(page);
             const viewport = page.getViewport({ scale: scale });
 
-            const maxWidth = isIOS ? 4096 : 8192;
-            const maxHeight = isIOS ? 4096 : 8192;
+            // ВИПРАВЛЕНО: Зменшуємо максимальний розмір зображення для мобільних пристроїв, щоб запобігти помилкам "Canvas too large"
+            const maxWidth = isMobile ? 2048 : 4096;
+            const maxHeight = isMobile ? 2048 : 4096;
 
             let outputScale = Math.min(renderQuality, maxWidth / viewport.width, maxHeight / viewport.height);
 
@@ -1684,7 +1700,7 @@
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(function() {
                 if (pdfDoc && !pageRendering) {
-                    renderQuality = isIOS ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
+                    renderQuality = isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 1.5);
                     renderPage(pageNum);
                     hideTooltips();
                 }
