@@ -9,6 +9,10 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
+        :root {
+            --app-height: 100vh;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -33,9 +37,7 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
-            height: var(--app-height);
-            overscroll-behavior: none;
-            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
         }
 
         .loader {
@@ -44,220 +46,150 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #000;
+            background: rgba(0, 0, 0, 0.9);
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             z-index: 9999;
-            animation: fadeOut 0.5s ease-out 1.5s forwards;
+            flex-direction: column;
         }
 
         .loader img {
-            max-width: 50px;
-            max-height: 50px;
-            opacity: 0;
-            animation: growAndFade 1.5s ease-out forwards;
+            width: 80px;
+            height: 80px;
+            animation: bounce 1.5s infinite;
         }
 
-        @keyframes growAndFade {
-            0% { transform: scale(0.1); opacity: 0; }
-            70% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1.5); opacity: 0; }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
         }
 
-        @keyframes fadeOut {
-            0% { opacity: 1; }
-            100% { opacity: 0; display: none; }
-        }
-
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        .header {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 50px;
-            background: #000;
-            z-index: 104;
+        #header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 12px;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            background: #111;
+            color: #fff;
+            padding: 10px 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            -webkit-app-region: drag;
         }
 
         .header-logo {
-            width: 32px;
-            height: 32px;
-            opacity: 1;
-            /* ВИДАЛЕНО: animation: fadeIn 0.5s ease-out 0.2s forwards; */
-            /* ЛОГОТИП ТЕПЕР ЗАВЖДИ ВИДИМИЙ */
-        }
-
-        .header-title {
-            color: white;
-            font-size: 16px;
-            font-weight: 500;
-        }
-
-        .favorites-header-btn {
-            background: rgba(0, 0, 0, 0.6);
-            color: white;
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
             display: flex;
             align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
         }
 
-        .favorites-header-btn:hover {
-            background: rgba(0, 0, 0, 0.8);
-            transform: scale(1.1);
+        .header-logo img {
+            height: 40px;
+            margin-right: 10px;
         }
 
-        .favorites-header-label {
-            display: none;
-        }
-        
-        .pdf-header {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 50px;
-            background: #000;
-            z-index: 104;
-            display: none; /* ВИПРАВЛЕНО: Ховаємо PDF-шапку спочатку */
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 12px;
-        }
-        
-        .pdf-header-left {
+        .header-buttons {
             display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .pdf-header-right {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .pdf-title {
-            color: white;
-            font-size: 16px;
-            font-weight: 500;
-        }
-
-        .main-menu {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding-top: 60px;
-            background: #000;
-            position: relative;
-            height: calc(100vh - 40px - 30px);
-            overflow-y: auto; 
-        }
-
-        .pdf-selection {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-content: flex-start;
             gap: 15px;
-            padding: 10px;
-            max-width: 1200px;
         }
 
-        .pdf-selection::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .pdf-item {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 10px;
+        .header-buttons .menu-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            backdrop-filter: blur(5px);
+            transition: color 0.2s ease;
+        }
+
+        .header-buttons .menu-btn:hover {
+            color: #aaa;
+        }
+
+        #mainMenu {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            aspect-ratio: 148 / 210;
+            justify-content: center;
+            align-items: center;
+            padding-top: 80px;
+            height: 100%;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
-        
-        .pdf-item:hover {
+
+        #mainTooltip {
+            position: absolute;
+            top: 75px;
             background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            z-index: 90;
+            transition: opacity 1s ease;
+            white-space: nowrap;
+            display: none;
+        }
+
+        #pdfSelection {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .pdf-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .pdf-item:hover {
             transform: translateY(-5px);
         }
 
         .pdf-thumbnail {
             width: 100%;
-            flex: 1;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 5px;
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding-top: 141.42%; /* 210 / 297 A4 ratio */
+            background-color: #333;
+            border-radius: 8px;
             overflow: hidden;
             position: relative;
-        }
-
-        .pdf-thumbnail img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .pdf-thumbnail .thumbnail-placeholder {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 12px;
-            text-align: center;
-            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
         }
 
         .pdf-thumbnail .loading-spinner {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid white;
+            border-top: 4px solid #fff;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        .pdf-thumbnail.loading .thumbnail-placeholder {
+            position: absolute;
             display: none;
         }
 
@@ -265,590 +197,425 @@
             display: block;
         }
 
-        .pdf-name {
-            color: white;
-            font-size: 12px;
-            font-weight: 500;
-            margin-top: 5px;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        .dots-container {
-            display: none; 
-        }
-        
-        .tooltip {
-            position: fixed;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 14px;
-            z-index: 105;
-            max-width: 90%;
-            text-align: center;
-            opacity: 0;
-            animation: fadeInTooltip 0.5s ease-out forwards, fadeOutTooltip 0.5s ease-out 14.5s forwards;
-        }
-
-        @keyframes fadeInTooltip {
-            0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
-            100% { opacity: 1; transform: translateX(-50%) translateY(0); }
-        }
-
-        @keyframes fadeOutTooltip {
-            0% { opacity: 1; }
-            100% { opacity: 0; display: none; }
-        }
-
-        .main-content {
-            position: fixed;
-            top: 60px; /* Висота шапки */
-            bottom: 30px; /* Висота підвалу */
+        .pdf-thumbnail img {
+            position: absolute;
+            top: 0;
             left: 0;
-            right: 0;
-            display: none; /* Залишаємо display: none; тут, щоб приховати PDF-переглядач спочатку */
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: #000;
-            overflow: hidden;
-            padding: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .back-btn {
+        .thumbnail-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            line-height: 1.2;
+        }
+
+        .pdf-name {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        #pdfHeader {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            background: #111;
+            color: #fff;
+            padding: 10px 20px;
             position: fixed;
-            bottom: 40px;
-            left: 15px;
-            background: rgba(255, 255, 255, 0.9);
-            color: #000;
-            border: 2px solid #000;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            font-size: 24px;
-            font-weight: bold;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            -webkit-app-region: drag;
+        }
+
+        #pdfHeader button, #pdfHeader a {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
             cursor: pointer;
-            transition: all 0.2s ease;
-            display: none; /* ВИПРАВЛЕНО: Ця властивість приховає кнопку на головному екрані */
-            align-items: center;
+            transition: color 0.2s ease;
+            padding: 5px;
+        }
+
+        #pdfHeader button.active {
+            color: #ffcc00;
+        }
+
+        #pdfHeader #pdfTitle {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        #mainContent {
+            display: none;
+            flex-direction: column;
             justify-content: center;
-            padding: 0;
-            backdrop-filter: blur(5px);
-            z-index: 102;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
-        }
-
-        .main-content.opening {
-            animation: fadeInSlideUp 0.7s ease-out forwards;
-        }
-
-        @keyframes fadeInSlideUp {
-            0% { opacity: 0; transform: translateY(50px); }
-            100% { opacity: 1; transform: translateY(0); }
+            align-items: center;
+            height: calc(100% - 60px);
+            margin-top: 60px;
+            position: relative;
+            overflow: hidden;
         }
 
         .pdf-container {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             width: 100%;
             height: 100%;
-            max-width: 100%;
-            max-height: 100%;
-            padding: 0;
-            overflow: hidden;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+            touch-action: pan-y pinch-zoom;
         }
 
-        canvas {
+        .pdf-container #pdf-canvas,
+        .pdf-container #pdf-canvas-next {
             display: block;
             width: auto;
             height: auto;
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            opacity: 1;
-            transition: opacity 0.3s ease;
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
-            z-index: 100;
-        }
-
-        .canvas-hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .canvas-next {
-            position: absolute;
-            opacity: 0;
-            z-index: -1;
-        }
-
-        .nav-btn {
+            max-width: none;
+            max-height: none;
             position: absolute;
             top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.6);
-            color: white;
-            border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            font-size: 24px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 101;
-            padding: 0;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease;
+        }
+        .pdf-container #pdf-canvas.high-quality {
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
         }
 
-        .nav-btn:hover {
-            background: rgba(0, 0, 0, 0.8);
-            transform: translateY(-50%) scale(1.1);
+        .pdf-container #pdf-canvas-next {
+            opacity: 0;
+            z-index: 1;
         }
 
-        .nav-btn:disabled {
-            background: rgba(255, 255, 255, 0.06);
-            cursor: not-allowed;
-            opacity: 0.4;
-            transform: translateY(-50%);
+        .pdf-container #pdf-canvas.canvas-hidden {
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
 
-        .prev-btn {
-            left: 5px;
+        .pdf-container .high-quality {
+            image-rendering: auto;
         }
 
-        .next-btn {
-            right: 5px;
-        }
-
-        .bottom-buttons {
-            display: none;
-        }
-        
-        .header-btn {
-            background: none;
-            border: none;
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            font-size: 20px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(5px);
-        }
-
-        .header-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: scale(1.1);
-        }
-
-        .back-btn {
-            font-size: 24px;
-        }
-        
-        .favorites-btn.active {
-            color: #ff5252;
-        }
-
-        .footer {
+        .navigation-btn {
             position: fixed;
-            bottom: 0;
-            width: 100%;
-            text-align: center;
-            padding: 6px;
-            background: #000;
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 11px;
-            border-top: 1px solid #222;
-            min-height: 20px;
-            z-index: 103;
-            height: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.4);
+            color: white;
+            border: none;
+            font-size: 2rem;
+            padding: 15px 10px;
+            cursor: pointer;
+            z-index: 50;
+            transition: background 0.2s ease, opacity 0.2s ease;
+            height: 100%;
+            width: 50px;
+            max-height: calc(100% - 60px);
+        }
+
+        .navigation-btn:hover {
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .navigation-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        #prevBtn {
+            left: 0;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        #nextBtn {
+            right: 0;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
         }
 
         .error-message {
+            color: white;
             text-align: center;
-            color: #ff6b6b;
-            padding: 30px;
-            font-size: 16px;
+            font-size: 1.2rem;
         }
 
         .error-message small {
-            display: block;
-            margin-top: 10px;
-            color: #999;
-            font-size: 14px;
+            font-size: 0.9rem;
+            color: #aaa;
         }
 
-        .favorites-modal {
+        #favoritesModal {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.9);
-            z-index: 106;
-            display: none;
+            z-index: 1000;
             flex-direction: column;
-            padding: 20px;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
+            align-items: center;
         }
 
         .favorites-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            height: 40px;
-        }
-
-        .favorites-title {
-            color: white;
-            font-size: 18px;
-        }
-
-        .trash-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .trash-btn:hover {
-            color: #ff5252;
-        }
-
-        .favorites-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            background: #000;
-            overflow: hidden;
-            min-height: 0;
-            padding: 0;
-        }
-
-        .favorites-pdf-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             width: 100%;
-            height: 100%;
-            max-width: 100%;
-            max-height: calc(100% - 40px);
-            padding: 0;
+            background: #222;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         }
 
-        .favorites-nav-btn {
+        .favorites-header h2 {
+            font-size: 1.2rem;
+        }
+
+        .close-favorites-btn, .clear-favorites-btn, .close-favorites-view-btn {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.6);
-            color: white;
+            background: none;
             border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            font-size: 24px;
+            color: #fff;
+            font-size: 1.5rem;
             cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 101;
-            padding: 0;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            transition: color 0.2s ease;
         }
 
-        .favorites-nav-btn:hover {
-            background: rgba(0, 0, 0, 0.8);
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .favorites-nav-btn:disabled {
-            background: rgba(255, 255, 255, 0.06);
-            cursor: not-allowed;
-            opacity: 0.4;
-            transform: translateY(-50%);
-        }
-
-        .favorites-prev-btn {
-            left: 10px;
-        }
-
-        .favorites-next-btn {
-            right: 10px;
-        }
-
-        .favorites-bottom-buttons {
-            position: absolute;
-            bottom: 20px;
+        .close-favorites-btn {
             right: 15px;
-            display: flex;
-            gap: 10px;
-            z-index: 101;
         }
 
-        .remove-favorite-btn {
-            background: rgba(255, 0, 0, 0.6);
-            color: white;
-            border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            font-size: 24px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .remove-favorite-btn:hover {
-            background: rgba(255, 0, 0, 0.8);
-            transform: scale(1.1);
-        }
-
-        .favorites-back-btn {
-            position: absolute;
-            bottom: 20px;
+        .clear-favorites-btn {
             left: 15px;
-            background: rgba(255, 255, 255, 0.9);
-            color: #000;
-            border: 2px solid #000;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            backdrop-filter: blur(5px);
-            z-index: 102;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
         }
 
-        .favorites-back-btn:hover {
-            background: #fff;
-            transform: scale(1.1);
-        }
-
-        .favorites-list-view {
+        #favoritesListView {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            align-content: flex-start;
             gap: 15px;
-            max-width: 100%;
-            padding: 10px;
-            flex: 1;
+            padding: 20px;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
-        }
-
-        .favorites-list-view::-webkit-scrollbar {
-            display: none;
+            width: 100%;
+            flex: 1;
         }
 
         .favorite-item {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            backdrop-filter: blur(5px);
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            aspect-ratio: 148 / 210;
-        }
-
-        .favorite-item:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-5px);
+            align-items: center;
+            width: 150px;
+            cursor: pointer;
+            position: relative;
         }
 
         .favorite-thumbnail {
             width: 100%;
-            flex: 1;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 5px;
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding-top: 141.42%;
+            background: #444;
+            border-radius: 8px;
             overflow: hidden;
             position: relative;
         }
 
-        .favorite-thumbnail img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
         .favorite-info {
-            color: white;
-            font-size: 12px;
-            font-weight: 500;
+            color: #fff;
+            font-size: 0.8rem;
+            margin-top: 5px;
         }
 
         .remove-favorite-x {
             position: absolute;
             top: 5px;
             right: 5px;
-            background: rgba(255, 0, 0, 0.6);
-            color: white;
+            background: rgba(0, 0, 0, 0.5);
             border: none;
-            width: 25px;
-            height: 25px;
+            color: #fff;
             border-radius: 50%;
-            font-size: 16px;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            font-size: 1rem;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            transition: background 0.2s;
         }
 
-        .remove-favorite-x::before {
+        .remove-favorite-x::after {
             content: '×';
         }
 
-        /* Стилі для великих екранів (десктоп, > 767px) */
-        @media (min-width: 768px) {
-            .pdf-item, .favorite-item {
-                flex-basis: calc(20% - 15px);
-                max-width: 200px;
-            }
-            .pdf-selection {
-                gap: 20px;
-                max-width: 1200px;
-                justify-content: center;
-            }
+        .remove-favorite-x:hover {
+            background: rgba(255, 0, 0, 0.7);
         }
-        
-        /* Стилі для мобільних екранів (смартфони, <= 767px) */
+
+        #favoritesContentView {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .favorites-canvas-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+            touch-action: pan-y pinch-zoom;
+        }
+
+        .favorites-canvas-container #favorites-canvas,
+        .favorites-canvas-container #favorites-canvas-next {
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: none;
+            max-height: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .favorites-canvas-container .navigation-btn {
+            z-index: 1010;
+        }
+
+        .favorites-controls {
+            position: absolute;
+            bottom: 20px;
+            display: flex;
+            gap: 15px;
+            z-index: 1020;
+        }
+        .favorites-controls button {
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
         @media (max-width: 767px) {
-            .pdf-selection {
-                padding: 10px 5px;
-                gap: 10px;
+            #pdfSelection {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             }
-
-            .pdf-item, .favorite-item {
-                flex-basis: calc(50% - 10px);
-                max-width: 200px;
+            .navigation-btn {
+                width: 30px;
+                font-size: 1.5rem;
             }
-        }
-
-        body {
-            -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-        }
-
-        .high-quality {
-            image-rendering: high-quality;
+            #pdfHeader button, #pdfHeader a {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="loader">
-        <img src="https://lazo-idua.github.io/lazo-idua/Logo.png" alt="Loading Logo">
+        <img src="https://lazo-idua.github.io/lazo-idua/Logo.png" alt="Loading">
     </div>
-    <div class="header" id="header">
-        <div class="header-left">
-            <img class="header-logo" src="https://lazo-idua.github.io/lazo-idua/Logo.png" alt="TD MELNYK Logo">
-            <span class="header-title">MELNYK</span>
+    <header id="header">
+        <div class="header-logo">
+            <img src="https://lazo-idua.github.io/lazo-idua/Logo.png" alt="Логотип">
+            TD MELNYK
         </div>
-        <button class="favorites-header-btn" onclick="openFavoritesModal()" title="Обрані малюнки">
-            <span>♥</span>
-            <span class="favorites-header-label">Обране</span>
-        </button>
-    </div>
-    <div class="main-menu" id="mainMenu">
-        <div class="pdf-selection" id="pdfSelection">
+        <div class="header-buttons">
+            <button class="menu-btn" onclick="openFavoritesModal()">Обрані</button>
         </div>
-        <div class="tooltip" id="mainTooltip">Натисніть на картку, щоб відкрити PDF.</div>
-    </div>
+    </header>
 
-    <div class="main-content" id="mainContent">
-        <button class="nav-btn prev-btn" id="prevBtn" onclick="prevPage()" disabled>〈</button>
+    <main id="mainMenu">
+        <div id="mainTooltip">Гортай вправо, щоб вибрати</div>
+        <div id="pdfSelection"></div>
+    </main>
+
+    <header id="pdfHeader">
+        <button id="backBtn" onclick="goBackToMainMenu()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <span id="pdfTitle"></span>
+        <div>
+            <button id="pdfFavoriteBtn" onclick="toggleFavorite()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            </button>
+            <button id="pdfShareBtn" onclick="sharePage()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share-2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+            </button>
+        </div>
+    </header>
+
+    <main id="mainContent">
         <div class="pdf-container">
             <canvas id="pdf-canvas"></canvas>
-            <canvas id="pdf-canvas-next" class="canvas-next"></canvas>
+            <canvas id="pdf-canvas-next"></canvas>
+            <button id="prevBtn" class="navigation-btn" onclick="prevPage()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <button id="nextBtn" class="navigation-btn" onclick="nextPage()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
         </div>
-        <button class="nav-btn next-btn" id="nextBtn" onclick="nextPage()">〉</button>
-    </div>
+    </main>
 
-    <div class="pdf-header" id="pdfHeader">
-        <span class="pdf-title" id="pdfTitle"></span>
-        <div class="pdf-header-right">
-            <button class="header-btn share-btn" id="pdfShareBtn" onclick="sharePage()" title="Поділитися">↗</button>
-            <button class="header-btn favorites-btn" id="pdfFavoriteBtn" onclick="toggleFavorite()" title="Додати до обраного">♥</button>
-        </div>
-    </div>
-    <button class="back-btn" id="backBtn" onclick="goBackToMainMenu()" title="Назад">←</button>
-    
-    <div class="favorites-modal" id="favoritesModal">
+    <div id="favoritesModal">
         <div class="favorites-header">
-            <span class="favorites-title">Обрані малюнки</span>
-            <button class="trash-btn" onclick="clearGlobalFavorites()" title="Очистити всі">🗑️</button>
+            <h2>Обрані</h2>
+            <button class="close-favorites-btn" onclick="closeFavoritesModal()">&times;</button>
         </div>
-
-        <div class="favorites-content" id="favoritesContentView" style="display: none;">
-            <button class="favorites-nav-btn favorites-prev-btn" onclick="prevFavoritePage()" disabled>〈</button>
-
-            <div class="favorites-pdf-container">
+        <div id="favoritesListView"></div>
+        <div id="favoritesContentView">
+            <div class="favorites-canvas-container">
                 <canvas id="favorites-canvas"></canvas>
-                <canvas id="favorites-canvas-next" class="canvas-next"></canvas>
-
-                <div class="favorites-bottom-buttons">
-                    <button class="remove-favorite-btn" onclick="removeCurrentFavorite()" title="Видалити з обраного">×</button>
-                </div>
-                <button class="favorites-back-btn" onclick="closeFavoritesView()" title="Назад">←</button>
+                <canvas id="favorites-canvas-next"></canvas>
+                <button class="navigation-btn favorites-prev-btn" onclick="prevFavoritePage()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <button class="navigation-btn favorites-next-btn" onclick="nextFavoritePage()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
             </div>
-
-            <button class="favorites-nav-btn favorites-next-btn" onclick="nextFavoritePage()">〉</button>
-        </div>
-
-        <div class="favorites-list-view" id="favoritesListView">
+            <div class="favorites-controls">
+                <button onclick="removeCurrentFavorite()">Видалити</button>
+                <button onclick="closeFavoritesView()">Закрити</button>
+            </div>
         </div>
     </div>
-
-    <div class="footer">
-        <span>Created by LAZO.</span>
-    </div>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -862,16 +629,8 @@
                 e.preventDefault();
             }
         }, { passive: false });
-        document.addEventListener('touchstart', function(e) {
-            if (e.touches.length > 1) {
-                e.preventDefault();
-            }
-        }, { passive: false });
-        document.addEventListener('touchmove', function(e) {
-            if (e.touches.length > 1 && isIOS) {
-                e.preventDefault();
-            }
-        }, { passive: false });
+        // ВИДАЛЕНО: обмеження на touchstart/touchmove для дозволу масштабування.
+
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
         let pdfDoc = null;
@@ -880,6 +639,7 @@
         let pageNumPending = null;
         let favoritesMode = false;
         let currentPdf = '';
+        let currentScale = 1.0; // Додана змінна для відстеження масштабу
         const canvas = document.getElementById('pdf-canvas');
         const canvasNext = document.getElementById('pdf-canvas-next');
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
@@ -904,22 +664,20 @@
         const favoritesCtxNext = favoritesCanvasNext.getContext('2d', { willReadFrequently: true });
         const favoritesPrevBtn = document.querySelector('.favorites-prev-btn');
         const favoritesNextBtn = document.querySelector('.favorites-next-btn');
-        const backBtn = document.getElementById('backBtn'); // ВИПРАВЛЕНО: Отримуємо елемент кнопки "Назад"
+        const backBtn = document.getElementById('backBtn');
 
         let favoritePages = JSON.parse(localStorage.getItem('favoritePages')) || {};
         let currentFavoriteIndex = 0;
         let favoriteItems = [];
 
-        // ВИПРАВЛЕНО: Адаптуємо якість рендерингу та попереднє завантаження для мобільних пристроїв
         const isMobile = window.innerWidth <= 767;
-        let renderQuality = isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 1.5);
+        let renderQuality = isMobile ? Math.min(window.devicePixelRatio || 1, 2.5) : Math.min(window.devicePixelRatio || 1, 1.5);
         const preloadNextPages = isMobile ? 1 : 3;
 
         const isLargeScreen = window.innerWidth >= 1200;
         const pageCache = new Map();
         const favoritesPageCache = new Map();
-        // ВИПРАВЛЕНО: Тут ми також враховуємо розмір екрану для кількості попередньо завантажених сторінок.
-        // Це забезпечить кращу продуктивність на менших пристроях, не перевантажуючи їх пам'ять.
+
         const catalogs = [
             { name: 'gadassa', url: 'https://lazo-idua.github.io/lazo-idua/gadassa.pdf' },
             { name: 'медуня', url: 'https://lazo-idua.github.io/lazo-idua/medunia.pdf' },
@@ -1034,7 +792,6 @@
                 const maxWidth = isIOS ? 4096 : 8192;
                 const maxHeight = isIOS ? 4096 : 8192;
 
-                // ВИПРАВЛЕНО: Використовуємо адаптивну якість рендерингу
                 let outputScale = Math.min(renderQuality, maxWidth / viewport.width, maxHeight / viewport.height);
                 outputScale = Math.min(outputScale, isIOS ? 1.8 : 2.5);
 
@@ -1052,7 +809,8 @@
                     transform: transform,
                     enableWebGL: !isIOS,
                     textLayer: false,
-                    enhanceTextSelection: false
+                    enhanceTextSelection: false,
+                    useDisplayValues: true
                 };
 
                 page.render(renderContext).promise.then(function() {
@@ -1215,9 +973,9 @@
             currentPdf = pdfName;
             mainMenu.style.display = 'none';
             mainHeader.style.display = 'none';
-            pdfHeader.style.display = 'flex'; // ВИПРАВЛЕНО: Показуємо PDF-шапку
+            pdfHeader.style.display = 'flex';
             mainContent.style.display = 'flex';
-            backBtn.style.display = 'flex'; // ВИПРАВЛЕНО: Показуємо кнопку "Назад"
+            backBtn.style.display = 'flex';
             pdfTitle.textContent = pdfName.toUpperCase();
             mainContent.classList.add('opening');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1236,7 +994,7 @@
             mainContent.style.display = 'none';
             mainHeader.style.display = 'flex';
             pdfHeader.style.display = 'none';
-            backBtn.style.display = 'none'; // ВИПРАВЛЕНО: Ховаємо кнопку "Назад"
+            backBtn.style.display = 'none';
             mainContent.classList.remove('opening');
             pageRendering = false;
             pageNumPending = null;
@@ -1244,6 +1002,7 @@
             pdfDoc = null;
             pageNum = 1;
             favoritesMode = false;
+            currentScale = 1.0; // Скидаємо масштаб при поверненні
             updateNavigation();
             updateFavoriteButton();
             hideTooltips();
@@ -1292,8 +1051,7 @@
                     url: url,
                     cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
                     cMapPacked: true,
-                    // ВИПРАВЛЕНО: Зменшуємо максимальний розмір зображення для мобільних пристроїв, щоб запобігти помилкам "Canvas too large"
-                    maxImageSize: isMobile ? 2048 * 2048 : 4096 * 4096,
+                    maxImageSize: isMobile ? 4096 * 4096 : 8192 * 8192,
                     disableFontFace: true,
                     standardFontDataUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/',
                     useSystemFonts: true,
@@ -1303,7 +1061,6 @@
                 }).promise.then(function(pdf) {
                     pdfDoc = pdf;
                     renderPage(pageNum);
-                    // ВИПРАВЛЕНО: Використовуємо динамічне значення preloadNextPages
                     preloadPages(pageNum + 1, preloadNextPages + 2);
                     updateNavigation();
                     hideTooltips();
@@ -1323,13 +1080,11 @@
 
         function preloadPages(startPage, count) {
             if (!pdfDoc) return;
-            // ВИПРАВЛЕНО: Логуємо, скільки сторінок ми попередньо завантажуємо
             console.log(`Попереднє завантаження ${count} сторінок, починаючи зі сторінки ${startPage}.`);
             for (let i = startPage; i < startPage + count && i <= pdfDoc.numPages; i++) {
                 if (!pageCache.has(i)) {
                     pdfDoc.getPage(i).then(function(page) {
                         pageCache.set(i, page);
-                        // ВИПРАВЛЕНО: Логуємо кожну попередньо завантажену сторінку
                         console.log(`Сторінка ${i} попередньо завантажена.`);
                     }).catch(function(error) {
                         console.error(`Помилка попереднього завантаження сторінки ${i}:`, error);
@@ -1341,7 +1096,6 @@
         function renderPage(num) {
             if (!pdfDoc) return;
             pageRendering = true;
-            // ВИПРАВЛЕНО: Логуємо, яку сторінку ми намагаємося відобразити
             console.log(`Відображення сторінки: ${num}.`);
 
             if (pageCache.has(num)) {
@@ -1350,7 +1104,6 @@
                 pdfDoc.getPage(num).then(function(page) {
                     pageCache.set(num, page);
                     renderPageFromCache(num);
-                    // ВИПРАВЛЕНО: Використовуємо динамічне значення preloadNextPages
                     preloadPages(num + 1, preloadNextPages);
                 }).catch(function(error) {
                     console.error(`Помилка відображення сторінки ${num}:`, error);
@@ -1362,15 +1115,17 @@
 
         function renderPageFromCache(num) {
             const page = pageCache.get(num);
-            const scale = calculateOptimalScale(page);
+            const container = document.querySelector('.pdf-container');
+            
+            // Якщо масштаб був змінений вручну, ми не будемо перераховувати його, а просто застосуємо поточний
+            const scale = currentScale === 1.0 ? calculateOptimalScale(page) : currentScale;
+            
             const viewport = page.getViewport({ scale: scale });
 
-            // ВИПРАВЛЕНО: Зменшуємо максимальний розмір зображення для мобільних пристроїв, щоб запобігти помилкам "Canvas too large"
-            const maxWidth = isMobile ? 2048 : 4096;
-            const maxHeight = isMobile ? 2048 : 4096;
+            const maxWidth = isMobile ? 4096 : 8192;
+            const maxHeight = isMobile ? 4096 : 8192;
 
             let outputScale = Math.min(renderQuality, maxWidth / viewport.width, maxHeight / viewport.height);
-
             outputScale = Math.min(outputScale, isIOS ? 1.8 : 2.5);
 
             const targetCanvas = canvasNext;
@@ -1390,14 +1145,16 @@
                 transform: transform,
                 enableWebGL: !isIOS,
                 textLayer: false,
-                enhanceTextSelection: false
+                enhanceTextSelection: false,
+                useDisplayValues: true
             };
 
             const renderTask = page.render(renderContext);
 
             renderTask.promise.then(function() {
                 pageRendering = false;
-
+                
+                // Це нова логіка, яка перемикає канваси
                 canvas.classList.add('canvas-hidden');
                 setTimeout(() => {
                     canvas.width = targetCanvas.width;
@@ -1426,6 +1183,18 @@
                 pageRendering = false;
                 hideTooltips();
             });
+        }
+
+        // Функція для скидання масштабу
+        function resetZoom() {
+            const container = document.querySelector('.pdf-container');
+            container.scrollTo(0, 0); // Скидаємо скрол
+            const currentZoom = container.style.zoom || 1;
+            if (currentZoom !== 1) {
+                container.style.zoom = 1;
+                return true; // Повертаємо true, якщо масштаб був скинутий
+            }
+            return false;
         }
 
         function updateNavigation() {
@@ -1568,11 +1337,26 @@
         }
 
         function prevPage() {
+            const container = document.querySelector('.pdf-container');
+            // Перевіряємо, чи був змінений масштаб
+            const isZoomed = container.scrollWidth > container.clientWidth || container.scrollHeight > container.clientHeight;
+            if (isZoomed) {
+                // Якщо так, скидаємо масштаб і не перегортаємо сторінку
+                container.scrollTo(0, 0);
+                const page = pageCache.get(pageNum);
+                const scale = calculateOptimalScale(page);
+                const viewport = page.getViewport({ scale: scale });
+                canvas.style.width = Math.floor(viewport.width) + 'px';
+                canvas.style.height = Math.floor(viewport.height) + 'px';
+                currentScale = 1.0;
+                // Не перегортаємо сторінку, просто оновлюємо вигляд
+                return;
+            }
+            
             if (!pdfDoc) return;
             if (favoritesMode) {
                 const favoritePagesList = getFavoritePagesList();
                 const currentIndex = favoritePagesList.indexOf(pageNum);
-
                 if (currentIndex > 0) {
                     pageNum = favoritePagesList[currentIndex - 1];
                     queueRenderPage(pageNum);
@@ -1586,11 +1370,26 @@
         }
 
         function nextPage() {
+            const container = document.querySelector('.pdf-container');
+            // Перевіряємо, чи був змінений масштаб
+            const isZoomed = container.scrollWidth > container.clientWidth || container.scrollHeight > container.clientHeight;
+            if (isZoomed) {
+                // Якщо так, скидаємо масштаб і не перегортаємо сторінку
+                container.scrollTo(0, 0);
+                const page = pageCache.get(pageNum);
+                const scale = calculateOptimalScale(page);
+                const viewport = page.getViewport({ scale: scale });
+                canvas.style.width = Math.floor(viewport.width) + 'px';
+                canvas.style.height = Math.floor(viewport.height) + 'px';
+                currentScale = 1.0;
+                // Не перегортаємо сторінку, просто оновлюємо вигляд
+                return;
+            }
+            
             if (!pdfDoc) return;
             if (favoritesMode) {
                 const favoritePagesList = getFavoritePagesList();
                 const currentIndex = favoritePagesList.indexOf(pageNum);
-
                 if (currentIndex < favoritePagesList.length - 1) {
                     pageNum = favoritePagesList[currentIndex + 1];
                     queueRenderPage(pageNum);
@@ -1700,7 +1499,8 @@
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(function() {
                 if (pdfDoc && !pageRendering) {
-                    renderQuality = isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 1.5);
+                    const newIsMobile = window.innerWidth <= 767;
+                    renderQuality = newIsMobile ? Math.min(window.devicePixelRatio || 1, 2.5) : Math.min(window.devicePixelRatio || 1, 1.5);
                     renderPage(pageNum);
                     hideTooltips();
                 }
@@ -1710,7 +1510,56 @@
                 }
             }, 100);
         });
+        
+        // Відстеження масштабування
+        const pdfContainer = document.querySelector('.pdf-container');
+        let initialPinchDistance = null;
+        let initialCanvasWidth = 0;
 
+        pdfContainer.addEventListener('touchstart', function(e) {
+            if (e.touches.length === 2) {
+                initialPinchDistance = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+                initialCanvasWidth = canvas.offsetWidth;
+            }
+        }, { passive: false });
+
+        pdfContainer.addEventListener('touchmove', function(e) {
+            if (e.touches.length === 2) {
+                e.preventDefault();
+                const currentPinchDistance = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+                if (initialPinchDistance) {
+                    let scaleFactor = currentPinchDistance / initialPinchDistance;
+                    let newWidth = initialCanvasWidth * scaleFactor;
+                    
+                    const originalWidth = canvas.width / (renderQuality || 1);
+                    const originalHeight = canvas.height / (renderQuality || 1);
+                    const viewportRatio = originalWidth / originalHeight;
+                    
+                    const newHeight = newWidth / viewportRatio;
+
+                    // Обмежуємо максимальне та мінімальне масштабування
+                    const minScale = 1.0;
+                    const maxScale = isMobile ? 3.0 : 2.0;
+                    
+                    if (scaleFactor > maxScale) {
+                        scaleFactor = maxScale;
+                    } else if (scaleFactor < minScale) {
+                        scaleFactor = minScale;
+                    }
+                    
+                    canvas.style.width = (initialCanvasWidth * scaleFactor) + 'px';
+                    canvas.style.height = (initialCanvasWidth * scaleFactor / viewportRatio) + 'px';
+                }
+            }
+        }, { passive: false });
+
+        pdfContainer.addEventListener('touchend', function(e) {
+            initialPinchDistance = null;
+            const newScale = canvas.offsetWidth / initialCanvasWidth;
+            currentScale = newScale; // Оновлюємо поточний масштаб
+        });
+
+        // Жести для перегортання
         let touchStartX = 0;
         let touchStartTime = 0;
         document.addEventListener('touchstart', function(e) {
@@ -1726,8 +1575,10 @@
                 const touchEndTime = Date.now();
                 const deltaX = touchEndX - touchStartX;
                 const deltaTime = touchEndTime - touchStartTime;
+                const container = document.querySelector('.pdf-container');
+                const isZoomed = container.scrollWidth > container.clientWidth || container.scrollHeight > container.clientHeight;
 
-                if (deltaTime < 300 && Math.abs(deltaX) > 50) {
+                if (deltaTime < 300 && Math.abs(deltaX) > 50 && !isZoomed) {
                     if (deltaX > 0) {
                         prevPage();
                     } else {
