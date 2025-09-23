@@ -124,7 +124,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding-top: 80px;
+            padding-top: 80px; /* Виправлено: додано відступ, щоб контент не перекривався шапкою */
             height: 100%;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
@@ -629,7 +629,6 @@
                 e.preventDefault();
             }
         }, { passive: false });
-        // ВИДАЛЕНО: обмеження на touchstart/touchmove для дозволу масштабування.
 
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
@@ -639,7 +638,7 @@
         let pageNumPending = null;
         let favoritesMode = false;
         let currentPdf = '';
-        let currentScale = 1.0; // Додана змінна для відстеження масштабу
+        let currentScale = 1.0;
         const canvas = document.getElementById('pdf-canvas');
         const canvasNext = document.getElementById('pdf-canvas-next');
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
@@ -1002,7 +1001,7 @@
             pdfDoc = null;
             pageNum = 1;
             favoritesMode = false;
-            currentScale = 1.0; // Скидаємо масштаб при поверненні
+            currentScale = 1.0;
             updateNavigation();
             updateFavoriteButton();
             hideTooltips();
@@ -1117,7 +1116,6 @@
             const page = pageCache.get(num);
             const container = document.querySelector('.pdf-container');
             
-            // Якщо масштаб був змінений вручну, ми не будемо перераховувати його, а просто застосуємо поточний
             const scale = currentScale === 1.0 ? calculateOptimalScale(page) : currentScale;
             
             const viewport = page.getViewport({ scale: scale });
@@ -1154,7 +1152,6 @@
             renderTask.promise.then(function() {
                 pageRendering = false;
                 
-                // Це нова логіка, яка перемикає канваси
                 canvas.classList.add('canvas-hidden');
                 setTimeout(() => {
                     canvas.width = targetCanvas.width;
@@ -1183,18 +1180,6 @@
                 pageRendering = false;
                 hideTooltips();
             });
-        }
-
-        // Функція для скидання масштабу
-        function resetZoom() {
-            const container = document.querySelector('.pdf-container');
-            container.scrollTo(0, 0); // Скидаємо скрол
-            const currentZoom = container.style.zoom || 1;
-            if (currentZoom !== 1) {
-                container.style.zoom = 1;
-                return true; // Повертаємо true, якщо масштаб був скинутий
-            }
-            return false;
         }
 
         function updateNavigation() {
@@ -1337,22 +1322,6 @@
         }
 
         function prevPage() {
-            const container = document.querySelector('.pdf-container');
-            // Перевіряємо, чи був змінений масштаб
-            const isZoomed = container.scrollWidth > container.clientWidth || container.scrollHeight > container.clientHeight;
-            if (isZoomed) {
-                // Якщо так, скидаємо масштаб і не перегортаємо сторінку
-                container.scrollTo(0, 0);
-                const page = pageCache.get(pageNum);
-                const scale = calculateOptimalScale(page);
-                const viewport = page.getViewport({ scale: scale });
-                canvas.style.width = Math.floor(viewport.width) + 'px';
-                canvas.style.height = Math.floor(viewport.height) + 'px';
-                currentScale = 1.0;
-                // Не перегортаємо сторінку, просто оновлюємо вигляд
-                return;
-            }
-            
             if (!pdfDoc) return;
             if (favoritesMode) {
                 const favoritePagesList = getFavoritePagesList();
@@ -1370,22 +1339,6 @@
         }
 
         function nextPage() {
-            const container = document.querySelector('.pdf-container');
-            // Перевіряємо, чи був змінений масштаб
-            const isZoomed = container.scrollWidth > container.clientWidth || container.scrollHeight > container.clientHeight;
-            if (isZoomed) {
-                // Якщо так, скидаємо масштаб і не перегортаємо сторінку
-                container.scrollTo(0, 0);
-                const page = pageCache.get(pageNum);
-                const scale = calculateOptimalScale(page);
-                const viewport = page.getViewport({ scale: scale });
-                canvas.style.width = Math.floor(viewport.width) + 'px';
-                canvas.style.height = Math.floor(viewport.height) + 'px';
-                currentScale = 1.0;
-                // Не перегортаємо сторінку, просто оновлюємо вигляд
-                return;
-            }
-            
             if (!pdfDoc) return;
             if (favoritesMode) {
                 const favoritePagesList = getFavoritePagesList();
@@ -1511,7 +1464,6 @@
             }, 100);
         });
         
-        // Відстеження масштабування
         const pdfContainer = document.querySelector('.pdf-container');
         let initialPinchDistance = null;
         let initialCanvasWidth = 0;
@@ -1537,7 +1489,6 @@
                     
                     const newHeight = newWidth / viewportRatio;
 
-                    // Обмежуємо максимальне та мінімальне масштабування
                     const minScale = 1.0;
                     const maxScale = isMobile ? 3.0 : 2.0;
                     
@@ -1556,10 +1507,9 @@
         pdfContainer.addEventListener('touchend', function(e) {
             initialPinchDistance = null;
             const newScale = canvas.offsetWidth / initialCanvasWidth;
-            currentScale = newScale; // Оновлюємо поточний масштаб
+            currentScale = newScale;
         });
 
-        // Жести для перегортання
         let touchStartX = 0;
         let touchStartTime = 0;
         document.addEventListener('touchstart', function(e) {
@@ -1575,10 +1525,9 @@
                 const touchEndTime = Date.now();
                 const deltaX = touchEndX - touchStartX;
                 const deltaTime = touchEndTime - touchStartTime;
-                const container = document.querySelector('.pdf-container');
-                const isZoomed = container.scrollWidth > container.clientWidth || container.scrollHeight > container.clientHeight;
-
-                if (deltaTime < 300 && Math.abs(deltaX) > 50 && !isZoomed) {
+                
+                // Перевірка на свайп, лише якщо не відбувається масштабування
+                if (deltaTime < 300 && Math.abs(deltaX) > 50 && Math.abs(currentScale - 1.0) < 0.01) {
                     if (deltaX > 0) {
                         prevPage();
                     } else {
